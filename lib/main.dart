@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import 'package:oman_001/main_home/main_home.dart';
+import 'package:oman_001/main_my/main_myprofile.dart';
+import 'package:oman_001/main_oman/main_oman.dart';
+import 'package:oman_001/main_search/main_search.dart';
+import 'package:oman_001/main_store/main_store.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+BuildContext? testContext;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -10,106 +20,248 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Make Fullscreen Mode..
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
     return MaterialApp(
-      title: 'OMan',
+      title: 'Persistent Bottom Navigation Bar example project',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'OMan Demo Home Page'),
+      home: MainMenu(),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/first': (context) => MainSearchScreen(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/second': (context) => MainOmanScreen(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+// ----------------------------------------- Main denu ----------------------------------------- //
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MainMenu extends StatefulWidget {
+  final BuildContext? menuScreenContext;
+  const MainMenu({Key? key, this.menuScreenContext}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _State createState() => _State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _State extends State<MainMenu> {
+  PersistentTabController? _controller;
+  bool _hideNavBar = false;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _controller = PersistentTabController(initialIndex: 0);
+    _hideNavBar = false;
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      MainHomeScreen(
+        menuScreenContext: widget.menuScreenContext,
+        hideStatus: _hideNavBar,
+        onScreenHideButtonPressed: () {
+          setState(() {
+            _hideNavBar = !_hideNavBar;
+          });
+        },
+      ),
+      MainSearchScreen(
+        menuScreenContext: widget.menuScreenContext,
+        hideStatus: _hideNavBar,
+        onScreenHideButtonPressed: () {
+          setState(() {
+            _hideNavBar = !_hideNavBar;
+          });
+        },
+      ),
+      MainOmanScreen(
+        menuScreenContext: widget.menuScreenContext,
+        hideStatus: _hideNavBar,
+        onScreenHideButtonPressed: () {
+          setState(() {
+            _hideNavBar = !_hideNavBar;
+          });
+        },
+      ),
+      MainStoreScreen(
+        menuScreenContext: widget.menuScreenContext,
+        hideStatus: _hideNavBar,
+        onScreenHideButtonPressed: () {
+          setState(() {
+            _hideNavBar = !_hideNavBar;
+          });
+        },
+      ),
+      MainMyScreen(
+        menuScreenContext: widget.menuScreenContext,
+        hideStatus: _hideNavBar,
+        onScreenHideButtonPressed: () {
+          setState(() {
+            _hideNavBar = !_hideNavBar;
+          });
+        },
+      )];
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.home),
+        title: "Home",
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.search),
+        title: ("Search"),
+        activeColorPrimary: Colors.teal,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.feedback),
+        title: ("OMan"),
+        activeColorPrimary: Colors.deepOrange,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.store),
+        title: ("Store"),
+        activeColorPrimary: Colors.indigo,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.account_circle),
+        title: ("My"),
+        activeColorPrimary: Colors.purple,
+        inactiveColorPrimary: Colors.grey,
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      appBar: AppBar(title: const Text('Navigation Bar Demo')),
+      drawer: Drawer(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              Text('This is the Drawer'),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: PersistentTabView.custom(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        confineInSafeArea: true,
+        itemCount: 5,
+        handleAndroidBackButtonPress: true,
+        stateManagement: true,
+        hideNavigationBar: _hideNavBar,
+        screenTransitionAnimation: ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        customWidget: CustomNavBarWidget(
+          items: _navBarsItems(),
+          onItemSelected: (index) {
+            setState(() {
+              _controller!.index = index; // THIS IS CRITICAL!! Don't miss it!
+            });
+          },
+          selectedIndex: _controller!.index,
+        ),
+      ),
     );
   }
 }
+
+class CustomNavBarWidget extends StatelessWidget {
+  final int? selectedIndex;
+  final List<PersistentBottomNavBarItem>? items;
+  final ValueChanged<int>? onItemSelected;
+
+  const CustomNavBarWidget({
+    Key? key,
+    this.selectedIndex,
+    @required this.items,
+    this.onItemSelected,
+  }) : super(key: key);
+
+  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected) {
+    return Container(
+      alignment: Alignment.center,
+      height: kBottomNavigationBarHeight,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Flexible(
+            child: IconTheme(
+              data: IconThemeData(
+                  size: 26.0,
+                  color: isSelected
+                      ? (item.activeColorSecondary ?? item.activeColorPrimary)
+                      : item.inactiveColorPrimary ?? item.activeColorPrimary),
+              child: isSelected ? item.icon : item.inactiveIcon ?? item.icon,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Material(
+              type: MaterialType.transparency,
+              child: FittedBox(
+                  child: Text(
+                    item.title!,
+                    style: TextStyle(
+                        color: isSelected
+                            ? (item.activeColorSecondary ?? item.activeColorPrimary)
+                            : item.inactiveColorPrimary,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.0),
+                  )),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      child: SizedBox(
+        width: double.infinity,
+        height: kBottomNavigationBarHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: items!.map((item) {
+            int index = items!.indexOf(item);
+            return Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  onItemSelected!(index);
+                },
+                child: _buildItem(item, selectedIndex == index),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+
