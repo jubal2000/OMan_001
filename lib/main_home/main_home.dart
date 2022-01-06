@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oman_001/main_home/player_modal.dart';
 import 'package:oman_001/main_home/player_overlay.dart';
+import 'package:oman_001/main_home/user_overlay.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
@@ -76,28 +77,8 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
                         setState(() {
                           // const snackBar = SnackBar(content: Text('Tap'));
                           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          _showPlayer = !_showPlayer;
-                          print("--> showPlayer : $_showPlayer");
-                          // showPlayer ? pushDynamicScreen(context, screen: _playerModalScreen, withNavBar: true)
-                          //           : _playerModalScreen.close();
-
-                          // showModalBottomSheet(
-                          //     context: context,
-                          //     backgroundColor: Colors.white,
-                          //     useRootNavigator: false,
-                          //     builder: (context) =>
-                          //         Center(
-                          //             child: ElevatedButton(
-                          //               onPressed: () {
-                          //                 Navigator.pop(context);
-                          //               },
-                          //               child: Text(
-                          //                 "Exit",
-                          //                 style: TextStyle(color: Colors.white),
-                          //               ),
-                          //             )
-                          //         )
-                          //   );
+                            _showPlayer = !_showPlayer;
+                            print("--> showPlayer : $_showPlayer");
                           });
                         }
                     ),
@@ -110,13 +91,36 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
                           playedColor: Colors.purple
                       ),
                     ),
-                    Visibility(
-                      visible: _showPlayer,
-                      child: PlayerOverlayScreen(_controller, () {
-                        setState(() {
-                          _showPlayer = false;
-                        });
-                      })
+                    AnimatedOpacity (
+                      // If the widget is visible, animate to 0.0 (invisible).
+                      // If the widget is hidden, animate to 1.0 (fully visible).
+                      opacity: _showPlayer ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 500),
+                      child: IgnorePointer(
+                        ignoring: !_showPlayer,
+                          child: Row(
+                            children: <Widget> [
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: PlayerOverlayScreen(controller: _controller, onScreenClosed: () {
+                                  setState(() {
+                                    _showPlayer = false;
+                                  });
+                                })
+                              ),
+                              Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: UserOverlayScreen(controller: _controller, onScreenClosed: () {
+                                  setState(() {
+                                    _showPlayer = false;
+                                  });
+                                })
+                              )
+                            ),
+                          ]
+                        )
+                      )
                     )
                   ],
                 ),
@@ -130,25 +134,25 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // 재생/일시 중지 기능을 `setState` 호출로 감쌉니다. 이렇게 함으로써 올바른 아이콘이
-          // 보여집니다.
-          setState(() {
-            // 영상이 재생 중이라면, 일시 중지 시킵니다.
-            if (_controller!.value.isPlaying) {
-              _controller!.pause();
-            } else {
-              // 만약 영상이 일시 중지 상태였다면, 재생합니다.
-              _controller!.play();
-            }
-          });
-        },
-        // 플레이어의 상태에 따라 올바른 아이콘을 보여줍니다.
-        child: Icon(
-          _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        ),
-      ), // 이 마지막 콤마는 build 메서드에 자동 서식이 잘 적용될 수 있도록 도와줍니다.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // 재생/일시 중지 기능을 `setState` 호출로 감쌉니다. 이렇게 함으로써 올바른 아이콘이
+      //     // 보여집니다.
+      //     setState(() {
+      //       // 영상이 재생 중이라면, 일시 중지 시킵니다.
+      //       if (_controller!.value.isPlaying) {
+      //         _controller!.pause();
+      //       } else {
+      //         // 만약 영상이 일시 중지 상태였다면, 재생합니다.
+      //         _controller!.play();
+      //       }
+      //     });
+      //   },
+      //   // 플레이어의 상태에 따라 올바른 아이콘을 보여줍니다.
+      //   child: Icon(
+      //     _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      //   ),
+      // ), // 이 마지막 콤마는 build 메서드에 자동 서식이 잘 적용될 수 있도록 도와줍니다.
     );
   }
 }

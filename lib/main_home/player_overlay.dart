@@ -1,25 +1,31 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
-class PlayerOverlayScreen extends StatelessWidget {
-  final VideoPlayerController? _controller;
-  final Function? _onScreenClosed;
+class PlayerOverlayScreen extends StatefulWidget {
+  final VideoPlayerController? controller;
+  final Function? onScreenClosed;
 
-  PlayerOverlayScreen(this._controller, this._onScreenClosed);
+  const PlayerOverlayScreen({
+    Key? key,
+    this.controller,
+    this.onScreenClosed
+  }) : super(key: key);
 
+  @override
+  PlayerOverlayState createState() => PlayerOverlayState();
+}
+
+class PlayerOverlayState extends State<PlayerOverlayScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10.0),
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
-      color: Colors.grey.withOpacity(0.9),
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTapDown: (_) {
-          print("--> _onScreenClosed !!");
-          _onScreenClosed!();
-        },
+        height: MediaQuery.of(context).size.width * 0.3,
+        width: MediaQuery.of(context).size.width * 0.7,
+        margin: EdgeInsets.only(bottom: 10.0, left: 30),
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        color: Colors.grey.withOpacity(0.9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,16 +37,13 @@ class PlayerOverlayScreen extends StatelessWidget {
                   onPressed: () {
                     // 재생/일시 중지 기능을 `setState` 호출로 감쌉니다. 이렇게 함으로써 올바른 아이콘이
                     // 보여집니다.
-                    // 영상이 재생 중이라면, 일시 중지 시킵니다.
-                    if (_controller!.value.isPlaying) {
-                      _controller!.pause();
-                    } else {
-                      // 만약 영상이 일시 중지 상태였다면, 재생합니다.
-                      _controller!.play();
-                    }
+                    setState(() {
+                      widget.controller!.value.isPlaying ? widget.controller!
+                          .pause() : widget.controller!.play();
+                    });
                   },
                   child: Icon(
-                    _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                    widget.controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
                   )
                 ),
                 SizedBox(width: 5),
@@ -64,8 +67,7 @@ class PlayerOverlayScreen extends StatelessWidget {
             )
           ]
         )
-      )
-    );
+      );
   }
 }
 
