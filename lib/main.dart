@@ -1,3 +1,4 @@
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -52,6 +53,8 @@ class MainMenu extends StatefulWidget {
 class _State extends State<MainMenu> {
   PersistentTabController? _controller;
   bool _hideNavBar = false;
+  List<int>   _badgeCounts = List<int>.generate(5, (index) => index);
+  List<bool>  _badgeShows  = List<bool>.generate(5, (index) => true);
 
   @override
   void initState() {
@@ -109,45 +112,41 @@ class _State extends State<MainMenu> {
       )];
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  List<CustomNavigationBarItem> _navBarsItems() {
     return [
-      PersistentBottomNavBarItem(
+      CustomNavigationBarItem(
         icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
+        badgeCount: _badgeCounts[0],
+        showBadge: _badgeShows[0],
       ),
-      PersistentBottomNavBarItem(
+      CustomNavigationBarItem(
+        icon: Icon(Icons.shopping_bag),
+        badgeCount: _badgeCounts[1],
+        showBadge: _badgeShows[1],
+      ),
+      CustomNavigationBarItem(
+        icon: Icon(Icons.lightbulb_outline),
+        badgeCount: _badgeCounts[2],
+        showBadge: _badgeShows[2],
+      ),
+      CustomNavigationBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
-        activeColorPrimary: Colors.teal,
-        inactiveColorPrimary: Colors.grey,
+        badgeCount: _badgeCounts[3],
+        showBadge: _badgeShows[3],
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.feedback),
-        title: ("OMan"),
-        activeColorPrimary: Colors.deepOrange,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.store),
-        title: ("Store"),
-        activeColorPrimary: Colors.indigo,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
+      CustomNavigationBarItem(
         icon: Icon(Icons.account_circle),
-        title: ("My"),
-        activeColorPrimary: Colors.purple,
-        inactiveColorPrimary: Colors.grey,
+        badgeCount: _badgeCounts[4],
+        showBadge: _badgeShows[4],
       ),
     ];
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Navigation Bar Demo')),
+      appBar: CustomAppBar(_controller!.index),
       drawer: Drawer(
         child: Center(
           child: Column(
@@ -172,96 +171,111 @@ class _State extends State<MainMenu> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        customWidget: CustomNavBarWidget(
+        customWidget: CustomNavigationBar(
+          iconSize: 30.0,
+          selectedColor: Colors.white,
+          strokeColor: Color(0x30040307),
+          unSelectedColor: Colors.grey,
+          backgroundColor: Colors.black,
           items: _navBarsItems(),
-          onItemSelected: (index) {
+          currentIndex: _controller!.index,
+          onTap: (index) {
             setState(() {
-              _controller!.index = index; // THIS IS CRITICAL!! Don't miss it!
+              _controller!.index = index;
             });
           },
-          selectedIndex: _controller!.index,
         ),
       ),
     );
   }
 }
 
-class CustomNavBarWidget extends StatelessWidget {
-  final int? selectedIndex;
-  final List<PersistentBottomNavBarItem>? items;
-  final ValueChanged<int>? onItemSelected;
+class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+  final int _currentMenu;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  CustomAppBar(this._currentMenu, { Key? key}) : preferredSize = Size.fromHeight(160.0),
+        super(key: key);
 
-  const CustomNavBarWidget({
-    Key? key,
-    this.selectedIndex,
-    @required this.items,
-    this.onItemSelected,
-  }) : super(key: key);
-
-  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected) {
-    return Container(
-      alignment: Alignment.center,
-      height: kBottomNavigationBarHeight,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Flexible(
-            child: IconTheme(
-              data: IconThemeData(
-                  size: 26.0,
-                  color: isSelected
-                      ? (item.activeColorSecondary ?? item.activeColorPrimary)
-                      : item.inactiveColorPrimary ?? item.activeColorPrimary),
-              child: isSelected ? item.icon : item.inactiveIcon ?? item.icon,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: Material(
-              type: MaterialType.transparency,
-              child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: TextStyle(
-                        color: isSelected
-                            ? (item.activeColorSecondary ?? item.activeColorPrimary)
-                            : item.inactiveColorPrimary,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.0),
-                  )),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  @override
+  final Size preferredSize;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: SizedBox(
-        width: double.infinity,
-        height: kBottomNavigationBarHeight,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: items!.map((item) {
-            int index = items!.indexOf(item);
-            return Flexible(
-              child: GestureDetector(
-                onTap: () {
-                  onItemSelected!(index);
-                },
-                child: _buildItem(item, selectedIndex == index),
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Container(
+        height: 160.0,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.red,
+              width: MediaQuery.of(context).size.width,
+              height: 100.0,
+              child: Center(
+                child: Text(
+                  "AppBar",
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
               ),
-            );
-          }).toList(),
+            ),
+            Positioned(
+              top: 80.0,
+              left: 0.0,
+              right: 0.0,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1.0),
+                      border: Border.all(
+                          color: Colors.grey.withOpacity(0.5), width: 1.0),
+                      color: Colors.white),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          print("your menu action here");
+                          _scaffoldKey.currentState?.openDrawer();
+                        },
+                      ),
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Search",
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          print("your menu action here");
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.notifications,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          print("your menu action here");
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 }
-
 

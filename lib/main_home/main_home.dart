@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oman_001/main_home/player_modal.dart';
+import 'package:oman_001/utils/player_modal.dart';
 import 'package:oman_001/main_home/player_overlay.dart';
 import 'package:oman_001/main_home/user_overlay.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -33,8 +33,8 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
     _controller = VideoPlayerController.network(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4')
       ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
+        // 자동 start On / Off..
+        _controller!.pause();
       });
     _initializeVideoPlayerFuture = _controller!.initialize();
     // _rootContext = widget.menuScreenContext;
@@ -78,7 +78,6 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
                           // const snackBar = SnackBar(content: Text('Tap'));
                           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             _showPlayer = !_showPlayer;
-                            print("--> showPlayer : $_showPlayer");
                           });
                         }
                     ),
@@ -102,18 +101,18 @@ class VideoPlayerScreenState extends State<MainHomeScreen> {
                             children: <Widget> [
                               Align(
                                 alignment: Alignment.bottomLeft,
-                                child: PlayerOverlayScreen(controller: _controller, onScreenClosed: () {
+                                child: PlayerOverlayScreen(controller: _controller, onScreenClosed: (isShow) {
                                   setState(() {
-                                    _showPlayer = false;
+                                    _showPlayer = isShow;
                                   });
                                 })
                               ),
                               Expanded(
                               child: Align(
                                 alignment: Alignment.bottomRight,
-                                child: UserOverlayScreen(controller: _controller, onScreenClosed: () {
+                                child: UserOverlayScreen(onButtonSelect: (selectId) {
                                   setState(() {
-                                    _showPlayer = false;
+
                                   });
                                 })
                               )

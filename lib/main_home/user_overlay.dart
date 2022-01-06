@@ -4,13 +4,11 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class UserOverlayScreen extends StatefulWidget {
-  final VideoPlayerController? controller;
-  final Function? onScreenClosed;
+  final Function? onButtonSelect;
 
   const UserOverlayScreen({
     Key? key,
-    this.controller,
-    this.onScreenClosed
+    this.onButtonSelect
   }) : super(key: key);
 
   @override
@@ -18,31 +16,114 @@ class UserOverlayScreen extends StatefulWidget {
 }
 
 class UserOverlayState extends State<UserOverlayScreen> {
+  final double _iconSpace = 15;
+  final Size _iconSize = Size(30, 30);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(bottom: 10.0, right: 30),
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        color: Colors.yellow.withOpacity(0.9),
+        margin: EdgeInsets.only(bottom: 10.0, right: 20),
+        padding: EdgeInsets.symmetric(vertical: 20),
+        color: Colors.yellow.withOpacity(0),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             verticalDirection: VerticalDirection.up,
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                },
-                child: Icon(
-                  Icons.play_arrow,
-                )
+              SizedBox(
+                  height: _iconSize.width,
+                  width: _iconSize.height,
+                  child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                      },
+                      icon: Image.asset("ui/main_right/Good.png")
+                  )
               ),
-              SizedBox(width: 5),
-              ElevatedButton(
+              SizedBox(height: _iconSpace * 2),
+              SizedBox(
+                  height: _iconSize.width,
+                  width: _iconSize.height,
+                  child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                      },
+                      icon: Image.asset("ui/main_right/Shop_00.png")
+                  )
+              ),
+              SizedBox(height: _iconSpace* 1.5),
+              SizedBox(
+                  height: _iconSize.width,
+                  width: _iconSize.height,
+                  child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                      },
+                      icon: Image.asset("ui/main_right/Share.png")
+                  )
+              ),
+              SizedBox(height: _iconSpace),
+              SizedBox(
+                  width: _iconSize.width,
+                  height: _iconSize.height * 1.5,
+                  child: IconButton(
+                    padding: EdgeInsets.all(0),
+                    onPressed: () {
+                    },
+                    icon: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget> [
+                          Image.asset("ui/main_right/Comment.png"),
+                          SizedBox(height: 2),
+                          Text(
+                            "456",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          )
+                        ]
+                    ),
+                  )
+              ),
+              SizedBox(height: _iconSpace),
+              SizedBox(
+                width: _iconSize.width,
+                height: _iconSize.height * 1.5,
+                child: IconButton(
+                  padding: EdgeInsets.all(0),
                   onPressed: () {
                   },
-                  child: Icon(
-                    Icons.play_arrow,
-                  )
+                  icon: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget> [
+                      Image.asset("ui/main_right/Good.png"),
+                      SizedBox(height: 2),
+                      Text(
+                        "123",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      )
+                    ]
+                  ),
+                )
+              ),
+              SizedBox(height: _iconSpace * 1.25),
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    widget.onButtonSelect!(0);
+                  },
+                  icon: Image.asset("ui/main_right/Profile.png")
+                )
               ),
             ],
           )
