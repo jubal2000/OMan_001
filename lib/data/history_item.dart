@@ -26,8 +26,7 @@ class HistoryItem {
     type    = json['type']!;
 
     for (var item in json['comments']!) {
-      String jsonItem = item;
-      commentData!.add(jsonItem);
+      commentData?.add(item);
     }
   }
 

@@ -6,16 +6,12 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class MainHomeCard extends StatefulWidget {
-  UserItem user;
-  String historyId;
-  bool _isPlay = false;
+  final UserItem user;
+  final String historyId;
 
-  MainHomeCard({Key? key,
-    required this.user,
-    required this.historyId}) : super(key: key);
+  const MainHomeCard(this.user, this.historyId, {Key? key}) : super(key: key);
 
   play() {
-    _isPlay = true;
   }
 
   @override
@@ -33,15 +29,16 @@ class HomeVideoItem {
 
 class MainHomeCardState extends State<MainHomeCard> {
   Map<String, HomeVideoItem>? _itemList;
-  List<String>? _itemIdList;
+  final List<String> _itemIdList = [];
 
   @override
   void initState() {
+    print("--> initState : ${widget.user.historyData}");
     for (var item in widget.user.historyData!) {
       var control = VideoPlayerController.network(item.url!);
       var initialize = control.initialize();
       _itemList![item.id!] = HomeVideoItem(control, initialize);
-      _itemIdList!.add(item.id!);
+      _itemIdList.add(item.id!);
     }
     super.initState();
   }

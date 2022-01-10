@@ -55,13 +55,11 @@ class UserItem {
     likes     = json['likes']!;
 
     for (var item in json['history']!) {
-      var jsonItem = HistoryItem.fromJson(item);
-      historyData!.add(jsonItem);
+      historyData?.add(HistoryItem.fromJson(item));
     }
 
     for (var item in json['store']!) {
-      var jsonItem = GoodsItem.fromJson(item);
-      storeData!.add(jsonItem);
+      storeData?.add(GoodsItem.fromJson(item));
     }
 
     optionData    = [];

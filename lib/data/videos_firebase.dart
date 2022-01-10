@@ -13,21 +13,21 @@ class MainListAPI {
   }
 
   Future<List<HomeItem>> getLocalHomeList() async {
+    List<HomeItem> listItem = [];
     for (var element in homeDataDemo) {
-      HomeItem item = HomeItem.fromJson(element);
-      print("--> element : $item");
-      listData!.add(item);
+      listItem.add(HomeItem.fromJson(element));
+      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.name}");
     }
-    return listData!;
+    return listItem;
   }
 
   Future<List<HomeItem>> getHomeList() async {
+    List<HomeItem> listItem = [];
     var data = await FirebaseFirestore.instance.collection("Videos").get();
     for (var element in data.docs) {
-      HomeItem item = HomeItem.fromJson(element.data());
-      listData!.add(item);
+      listItem.add(HomeItem.fromJson(element.data()));
     }
-    return listData!;
+    return listItem;
   }
 
   // to firebase burkit..

@@ -61,15 +61,15 @@ Future<void> main() async {
   //   Firebase.app();
   // }
 
-  setUpLocator();
+  // setUpLocator();
   runApp(const MyApp());
 }
 
-void setUpLocator()
-{
-  // locator.registerLazySingleton<FeedViewModel>(() => FeedViewModel());
-  locator.registerSingleton<FeedViewModel>(FeedViewModel());
-}
+// void setUpLocator()
+// {
+//   // locator.registerLazySingleton<FeedViewModel>(() => FeedViewModel());
+//   locator.registerSingleton<FeedViewModel>(FeedViewModel());
+// }
 
 BuildContext? testContext;
 
@@ -114,10 +114,10 @@ class MainMenu extends StatefulWidget {
   const MainMenu({Key? key, this.menuScreenContext}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  MainMenuState createState() => MainMenuState();
 }
 
-class _State extends State<MainMenu> {
+class MainMenuState extends State<MainMenu> {
   PersistentTabController? _controller;
   bool _hideNavBar = false;
   List<int>   _badgeCounts = List<int>.generate(5, (index) => index);
@@ -125,9 +125,9 @@ class _State extends State<MainMenu> {
 
   @override
   void initState() {
-    super.initState();
     _controller = PersistentTabController(initialIndex: 0);
     _hideNavBar = false;
+    super.initState();
   }
 
   List<Widget> _buildScreens() {
