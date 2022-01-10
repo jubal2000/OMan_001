@@ -34,7 +34,7 @@ class MainHomeCardState extends State<MainHomeCard> {
   @override
   void initState() {
     print("--> initState : ${widget.user.historyData}");
-    for (var item in widget.user.historyData!) {
+    for (var item in widget.user.historyData) {
       var control = VideoPlayerController.network(item.url!);
       var initialize = control.initialize();
       _itemList![item.id!] = HomeVideoItem(control, initialize);
@@ -50,13 +50,13 @@ class MainHomeCardState extends State<MainHomeCard> {
         initialPage: 0,
         viewportFraction: 1,
       ),
-      itemCount: _itemList!.length,
+      itemCount: _itemList?.length,
       onPageChanged: (index) {
-        _itemList![index]!.controller.play();
+        _itemList?[index]!.controller.play();
       },
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
-        var itemId = _itemIdList![index];
+        var itemId = _itemIdList[index];
         return MainHomeCardPlayer(itemInfo: _itemList![itemId]!);
       },
     );

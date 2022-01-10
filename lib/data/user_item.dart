@@ -15,8 +15,8 @@ class UserItem {
   String? token;   // connection check token..
   int   ? likes;
 
-  List<HistoryItem>? historyData;
-  List<GoodsItem>?   storeData;
+  List<HistoryItem>  historyData  = [];
+  List<GoodsItem>    storeData    = [];
   List<String>?      optionData; // TODO
   List<String>?      followingData; // TODO
   List<String>?      followerData; // TODO
@@ -52,20 +52,22 @@ class UserItem {
     desc      = json['desc']!;
     pushId    = json['pushId']!;
     token     = json['token']!;
-    likes     = json['likes']!;
+    likes     = int.parse(json['likes'].toString());
 
-    for (var item in json['history']!) {
-      historyData?.add(HistoryItem.fromJson(item));
-    }
-
-    for (var item in json['store']!) {
-      storeData?.add(GoodsItem.fromJson(item));
-    }
-
+    historyData   = [];
+    storeData     = [];
     optionData    = [];
     followingData = [];
     followerData  = [];
     commentData   = [];
+
+    for (var item in json['history']!) {
+      historyData.add(HistoryItem.fromJson(item));
+    }
+
+    for (var item in json['store']!) {
+      storeData.add(GoodsItem.fromJson(item));
+    }
 
     // optionData = json['option'],
     // followingData = json['following'],

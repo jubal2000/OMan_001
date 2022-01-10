@@ -5,7 +5,7 @@ class HistoryItem {
   String? url;
   int   ? likes;
   int   ? type;    // 0: photo, 1: video, 2: music
-  List<String>? commentData;
+  List<String> commentData = [];
 
   HistoryItem({
         required this.id,
@@ -18,15 +18,21 @@ class HistoryItem {
       });
 
   HistoryItem.fromJson(Map<dynamic, dynamic> json) {
-    id      = json['id']!;
-    title   = json['title']!;
-    desc    = json['desc']!;
-    url     = json['url']!;
-    likes   = json['likes']!;
-    type    = json['type']!;
+    try {
+      id = json['id']!;
+      title = json['title']!;
+      desc = json['desc']!;
+      url = json['url']!;
+      likes = int.parse(json['likes'].toString());
+      type = int.parse(json['type'].toString());
 
-    for (var item in json['comments']!) {
-      commentData?.add(item);
+      commentData = [];
+      // for (var item in json['comments']!) {
+      //   commentData?.add(item);
+      // }
+    }
+    catch(e) {
+      print("--> HistoryItem Error : $e");
     }
   }
 
