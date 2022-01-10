@@ -81,7 +81,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
           return Container(
               height: _height,
               width: _width,
-              margin: EdgeInsets.only(bottom: 10, left: 20),
+              margin: EdgeInsets.only(bottom: 10, left: 10),
               padding: EdgeInsets.all(10),
               color: Colors.grey.withOpacity(0),
               child: Column(
@@ -93,7 +93,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                       width: 130,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage("ui/player_button_bg_mini_00.png"), fit: BoxFit.fill),
+                          image: DecorationImage(image: AssetImage("assets/ui/player_button_bg_mini_00.png"), fit: BoxFit.fill),
                         ),
                         child: Row(
                           children: <Widget>[
@@ -109,8 +109,8 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                                   });
                                 },
                                 icon: Image.asset(_isPlaying
-                                    ? "ui/main_player_01.png"
-                                    : "ui/main_player_00.png")
+                                    ? "assets/ui/main_player_01.png"
+                                    : "assets/ui/main_player_00.png")
                               )
                             ),
                             SizedBox(width: 10),
@@ -119,7 +119,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14.0,
+                                fontSize: 12.0,
                               ),
                             ),
                             Text(
@@ -127,7 +127,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 12.0,
+                                fontSize: 11.0,
                               ),
                             ),
                           ],

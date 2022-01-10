@@ -22,7 +22,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(bottom: 10.0, right: 20),
+        margin: EdgeInsets.only(bottom: 10.0, right: 10),
         padding: EdgeInsets.symmetric(vertical: 20),
         color: Colors.yellow.withOpacity(0),
         child: Align(
@@ -38,10 +38,10 @@ class UserOverlayState extends State<UserOverlayScreen> {
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                       },
-                      icon: Image.asset("ui/main_right/Good.png")
+                      icon: Image.asset("assets/ui/main_right/More.png")
                   )
               ),
-              SizedBox(height: _iconSpace * 2),
+              SizedBox(height: _iconSpace),
               SizedBox(
                   height: _iconSize.width,
                   width: _iconSize.height,
@@ -49,7 +49,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                       },
-                      icon: Image.asset("ui/main_right/Shop_00.png")
+                      icon: Image.asset("assets/ui/main_right/Shop_00.png")
                   )
               ),
               SizedBox(height: _iconSpace* 1.5),
@@ -60,13 +60,13 @@ class UserOverlayState extends State<UserOverlayScreen> {
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                       },
-                      icon: Image.asset("ui/main_right/Share.png")
+                      icon: Image.asset("assets/ui/main_right/Share.png")
                   )
               ),
               SizedBox(height: _iconSpace),
               SizedBox(
                   width: _iconSize.width,
-                  height: _iconSize.height * 1.5,
+                  height: _iconSize.height * 1.75,
                   child: IconButton(
                     padding: EdgeInsets.all(0),
                     onPressed: () {
@@ -74,7 +74,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                     icon: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget> [
-                          Image.asset("ui/main_right/Comment.png"),
+                          Image.asset("assets/ui/main_right/Comment.png"),
                           SizedBox(height: 2),
                           Text(
                             "456",
@@ -91,7 +91,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
               SizedBox(height: _iconSpace),
               SizedBox(
                 width: _iconSize.width,
-                height: _iconSize.height * 1.5,
+                height: _iconSize.height * 1.75,
                 child: IconButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () {
@@ -99,7 +99,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                   icon: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget> [
-                      Image.asset("ui/main_right/Good.png"),
+                      Image.asset("assets/ui/main_right/Good.png"),
                       SizedBox(height: 2),
                       Text(
                         "123",
@@ -122,7 +122,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                   onPressed: () {
                     widget.onButtonSelect!(0);
                   },
-                  icon: Image.asset("ui/main_right/Profile.png")
+                  icon: Image.asset("assets/ui/main_right/Profile.png")
                 )
               ),
             ],

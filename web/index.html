@@ -37,10 +37,34 @@
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
-    var serviceWorkerVersion = null;
+<!--    var firebaseConfig = {-->
+<!--      apiKey: "AIzaSyBhuFu_G7rtnyhxS0d1U5IuP6mPlmmUKPI",-->
+<!--      authDomain: "oman-01.firebaseapp.com",-->
+<!--      databaseURL: "https://oman-01.firebaseio.com",-->
+<!--      projectId: "oman-01",-->
+<!--      storageBucket: "oman-01.appspot.com",-->
+<!--      messagingSenderId: "787744327503",-->
+<!--      appId: "1:787744327503:web:3dd24be27582e1c742273a",-->
+<!--      measurementId: "G-8FWH38YHNY"-->
+<!--    };-->
+
+<!--&lt;!&ndash;          apiKey: "AIzaSyBhuFu_G7rtnyhxS0d1U5IuP6mPlmmUKPI",&ndash;&gt;-->
+<!--&lt;!&ndash;          authDomain: "oman-01.firebaseapp.com",&ndash;&gt;-->
+<!--&lt;!&ndash;          projectId: "oman-01",&ndash;&gt;-->
+<!--&lt;!&ndash;          storageBucket: "oman-main-data-0000",&ndash;&gt;-->
+<!--&lt;!&ndash;          messagingSenderId: "787744327503",&ndash;&gt;-->
+<!--&lt;!&ndash;          appId: "1:787744327503:web:3dd24be27582e1c742273a",&ndash;&gt;-->
+<!--&lt;!&ndash;          measurementId: "G-8FWH38YHNY"&ndash;&gt;-->
+
+<!--  // Initialize Firebase-->
+<!--  firebase.initializeApp(firebaseConfig);-->
+
+  var serviceWorkerVersion = null;
     var scriptLoaded = false;
     function loadMainDartJs() {
       if (scriptLoaded) {
+
+
         return;
       }
       scriptLoaded = true;
