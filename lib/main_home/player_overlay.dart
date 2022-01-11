@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oman_001/data/app_data.dart';
 import 'package:oman_001/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
@@ -32,7 +33,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
   var _width      = 0.0;
   var _curPos     = Duration();
   var _maxPos     = Duration();
-  var _isPlaying  = false;
+  var _isPlaying  = AppData.isMainPlay;
   var _isActive   = false;
 
   get _listener => () {
@@ -118,6 +119,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                                     _isPlaying ? widget
                                         .controller!
                                         .pause() : { widget.controller!.play(), _curPos = Duration() };
+                                    AppData.isMainPlay = _isPlaying;
                                   });
                                 },
                                 icon: Image.asset(_isPlaying

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:oman_001/data/app_data.dart';
 import 'package:oman_001/data/user_item.dart';
 import 'package:oman_001/main_home/player_overlay.dart';
 import 'package:oman_001/main_home/user_overlay.dart';
@@ -8,16 +9,17 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class MainHomeCard extends StatefulWidget {
+  PageController pageController = PageController(viewportFraction: 1, keepPage: true);
+  final Map<String, MainHomeCardPlayer> _itemList = {};
+  final List<String> _itemIdList = [];
   final UserItem user;
   final String historyId;
-  final Map<String, HomeVideoItem> _itemList = {};
-  final List<String> _itemIdList = [];
 
   MainHomeCard(this.user, this.historyId, {Key? key}) : super(key: key) {
     for (var item in user.historyData) {
       var control = VideoPlayerController.network(item.url!);
       var initialize = control.initialize();
-      _itemList[item.id!] = HomeVideoItem(control, initialize);
+      _itemList[item.id!] = MainHomeCardPlayer(pageController, control, initialize);
       _itemIdList.add(item.id!);
     }
   }
@@ -36,17 +38,7 @@ class MainHomeCard extends StatefulWidget {
   MainHomeCardState createState() => MainHomeCardState();
 }
 
-class HomeVideoItem {
-  VideoPlayerController controller;
-  Future<void> initializeVideoPlayerFuture;
-  HomeVideoItem (
-      this.controller,
-      this.initializeVideoPlayerFuture
-      );
-}
-
 class MainHomeCardState extends State<MainHomeCard> {
-  PageController pageController = PageController(viewportFraction: 1, keepPage: true);
   var _startPos = Offset(0, 0);
   var _isDragging = false;
   var _itemIndexOrg = 0;
@@ -60,12 +52,14 @@ class MainHomeCardState extends State<MainHomeCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: PageView.builder(
-        controller: pageController,
+        controller: widget.pageController,
         physics: NeverScrollableScrollPhysics(),
         itemCount: widget._itemList.length,
         onPageChanged: (index) {
-          print("--> page changed : $index / $_itemIndexOrg");
-          widget._itemList[index]?.controller.play();
+          print("--> page changed : $index / $_itemIndexOrg / ${AppData.isMainPlay}");
+          if (AppData.isMainPlay) {
+            widget._itemList[index]?.controller.play();
+          }
           if (_itemIndexOrg >= 0) {
             widget._itemList[_itemIndexOrg]?.controller.pause();
           }
@@ -75,8 +69,10 @@ class MainHomeCardState extends State<MainHomeCard> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           var itemId = widget._itemIdList[index];
-          widget._itemList[index]?.controller.play();
-          return MainHomeCardPlayer(itemInfo: widget._itemList[itemId]!, controller: pageController);
+          if (AppData.isMainPlay) {
+            widget._itemList[itemId]?.controller.play();
+          }
+          return widget._itemList[itemId]!;
         },
       ),
       onHorizontalDragStart: (pos) {
@@ -87,9 +83,9 @@ class MainHomeCardState extends State<MainHomeCard> {
           if (!_isDragging) return;
           // print("--> page : ${controller.page!.toInt()} / ${_startPos.dx} < ${pos.localPosition.dx}");
           if (_startPos.dx < pos.localPosition.dx) {
-            pageController.animateToPage(pageController.page!.toInt()-1, duration: Duration(milliseconds: 250), curve: Curves.easeInQuad);
+            widget.pageController.animateToPage(widget.pageController.page!.toInt()-1, duration: Duration(milliseconds: 250), curve: Curves.easeInQuad);
           } else {
-            pageController.animateToPage(pageController.page!.toInt()+1, duration: Duration(milliseconds: 250), curve: Curves.easeInQuad);
+            widget.pageController.animateToPage(widget.pageController.page!.toInt()+1, duration: Duration(milliseconds: 250), curve: Curves.easeInQuad);
           }
           _isDragging = false;
       },
@@ -98,12 +94,14 @@ class MainHomeCardState extends State<MainHomeCard> {
 }
 
 class MainHomeCardPlayer extends StatefulWidget {
-  final HomeVideoItem itemInfo;
-  final PageController controller;
+  final PageController pageController;
+  VideoPlayerController controller;
+  Future<void> initializeVideoPlayerFuture;
 
-  const MainHomeCardPlayer({ Key? key,
-    required this.itemInfo,
-    required this.controller})
+  MainHomeCardPlayer(
+    this.pageController,
+    this.controller,
+    this.initializeVideoPlayerFuture, { Key? key })
       : super(key: key);
 
   @override
@@ -111,8 +109,6 @@ class MainHomeCardPlayer extends StatefulWidget {
 }
 
 class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
-  var _showPlayer = true;
-
   @override
   void initState() {
     super.initState();
@@ -122,7 +118,7 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: widget.itemInfo.initializeVideoPlayerFuture,
+        future: widget.initializeVideoPlayerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
@@ -136,20 +132,20 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
                       behavior: HitTestBehavior.translucent,
                       child: Center(
                           child: AspectRatio(
-                              aspectRatio: widget.itemInfo.controller.value.aspectRatio,
-                              child: VideoPlayer(widget.itemInfo.controller)
+                              aspectRatio: widget.controller.value.aspectRatio,
+                              child: VideoPlayer(widget.controller)
                           )
                       ),
                       onTapDown: (_) {
                         setState(() {
                           // const snackBar = SnackBar(content: Text('Tap'));
                           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          _showPlayer = !_showPlayer;
+                          AppData.isShowPlayerInfo = !AppData.isShowPlayerInfo;
                         });
                       },
                   ),
                   VideoProgressIndicator(
-                    widget.itemInfo.controller,
+                    widget.controller,
                     allowScrubbing: true,
                     colors: VideoProgressColors(
                         backgroundColor: Colors.grey,
@@ -160,17 +156,17 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
                   AnimatedOpacity (
                     // If the widget is visible, animate to 0.0 (invisible).
                     // If the widget is hidden, animate to 1.0 (fully visible).
-                    opacity: _showPlayer ? 1.0 : 0.0,
+                    opacity: AppData.isShowPlayerInfo ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 500),
                     child: IgnorePointer(
-                      ignoring: !_showPlayer,
+                      ignoring: !AppData.isShowPlayerInfo,
                       child: Row(
                         children: <Widget> [
                           Align(
                               alignment: Alignment.bottomLeft,
-                              child: PlayerOverlayScreen(controller: widget.itemInfo.controller, onScreenClosed: (isShow) {
+                              child: PlayerOverlayScreen(controller: widget.controller, onScreenClosed: (isShow) {
                                 setState(() {
-                                  _showPlayer = isShow;
+                                  AppData.isShowPlayerInfo = isShow;
                                 });
                               })
                           ),

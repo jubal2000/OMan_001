@@ -4,6 +4,7 @@ class AppData {
   final int SCROLL_SPEED = 250;
   static var isMainDataReady = false;
   static var isShowPlayerInfo = true;
+  static var isMainPlay = true;
 
 
   factory AppData() {
