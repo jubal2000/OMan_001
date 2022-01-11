@@ -28,16 +28,15 @@ class PlayerOverlayScreen extends StatefulWidget {
 }
 
 class PlayerOverlayState extends State<PlayerOverlayScreen> {
-  double _height = 0;
-  double _width = 0;
-  bool _isPlaying = false;
-  Duration _curPos = Duration();
-  Duration _maxPos = Duration();
+  var _height     = 0.0;
+  var _width      = 0.0;
+  var _curPos     = Duration();
+  var _maxPos     = Duration();
+  var _isPlaying  = false;
+  var _isActive   = false;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.controller!.addListener(() {
+  get _listener => () {
+    if (_isActive) {
       setState(() {
         _isPlaying = widget.controller!.value.isPlaying;
         _curPos = widget.controller!.value.position;
@@ -48,7 +47,20 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
           widget.onScreenClosed!(true);
         }
       });
-    });
+    }
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_isActive) widget.controller!.addListener(_listener);
+    _isActive = true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isActive = false;
   }
 
   @override

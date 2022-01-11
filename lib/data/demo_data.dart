@@ -27,7 +27,15 @@ var homeDataDemo = [
           "title"   : "title 2",
           "desc"    : "desc 2",
           "url"     : "https://firebasestorage.googleapis.com/v0/b/videostreaming-test.appspot.com/o/vid%2FSnaptik_6842407707551599878_carlos-barrios%20(1).mp4?alt=media&token=965f5080-2771-4477-bd9d-defc7b581c5d",
-          "likes"   : 15,
+          "likes"   : 12,
+          "comments": ["comment 1...", "comment 2...", "comment 3...", "comment 4...", "comment 5..."]
+        },
+        {
+          "id"      : "13",
+          "title"   : "title 3",
+          "desc"    : "desc 3",
+          "url"     : "https://firebasestorage.googleapis.com/v0/b/videostreaming-test.appspot.com/o/vid%2FSnaptik_6856769842385620229_alex.mp4?alt=media&token=b70d853b-760a-45ee-b5d3-44cef7e4db7f",
+          "likes"   : 18,
           "comments": ["comment 1...", "comment 2...", "comment 3...", "comment 4...", "comment 5..."]
         }
       ],

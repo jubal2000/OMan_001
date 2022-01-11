@@ -205,51 +205,55 @@ class MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: MainAppBar(_controller!.index),
-        drawer: Drawer(
-          child: SizedBox(
-              height: 500,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text('This is the Drawer'),
-                  ],
-                ),
-              )
+      child: Stack(
+        children: [
+          Scaffold(
+            drawer: Drawer(
+              child: SizedBox(
+                  height: 500,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        Text('This is the Drawer'),
+                      ],
+                    ),
+                  )
+              ),
+            ),
+            body: PersistentTabView.custom(
+              context,
+              controller: _controller,
+              screens: _buildScreens(),
+              confineInSafeArea: true,
+              itemCount: 5,
+              handleAndroidBackButtonPress: true,
+              stateManagement: true,
+              hideNavigationBar: _hideNavBar,
+              screenTransitionAnimation: ScreenTransitionAnimation(
+                animateTabTransition: true,
+                curve: Curves.ease,
+                duration: Duration(milliseconds: 200),
+              ),
+              customWidget: CustomNavigationBar(
+                iconSize: 30.0,
+                selectedColor: Colors.white,
+                strokeColor: Color(0x30040307),
+                unSelectedColor: Colors.grey,
+                backgroundColor: Colors.black,
+                items: _navBarsItems(),
+                currentIndex: _controller!.index,
+                onTap: (index) {
+                  setState(() {
+                    _controller!.index = index;
+                  });
+                },
+              ),
+            )
           ),
-        ),
-        body: PersistentTabView.custom(
-          context,
-          controller: _controller,
-          screens: _buildScreens(),
-          confineInSafeArea: true,
-          itemCount: 5,
-          handleAndroidBackButtonPress: true,
-          stateManagement: true,
-          hideNavigationBar: _hideNavBar,
-          screenTransitionAnimation: ScreenTransitionAnimation(
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
-          customWidget: CustomNavigationBar(
-            iconSize: 30.0,
-            selectedColor: Colors.white,
-            strokeColor: Color(0x30040307),
-            unSelectedColor: Colors.grey,
-            backgroundColor: Colors.black,
-            items: _navBarsItems(),
-            currentIndex: _controller!.index,
-            onTap: (index) {
-              setState(() {
-                _controller!.index = index;
-              });
-            },
-          ),
-        )
-      ),
+          MainAppBar(_controller!.index),
+        ]
+      )
     );
   }
 }
@@ -268,9 +272,10 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        body: Container(
+    return Material(
+      key: _scaffoldKey,
+      color: Colors.transparent,
+      child: Container(
           height: _height,
           padding: EdgeInsets.symmetric(horizontal: 20),
           color: Colors.black.withOpacity(0),
@@ -282,7 +287,6 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
                 child: IconButton(
                   icon: Image.asset("assets/ui/main_top/Logo_00.png"),
                   onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
                   },
                 )
               ),
@@ -326,7 +330,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
             ],
           )
-        )
+      )
     );
   }
 }
