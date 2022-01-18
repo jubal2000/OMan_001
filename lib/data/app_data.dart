@@ -29,6 +29,7 @@ class AppData {
   static var storeMode = StoreMode.talent;
 
   static var MainTheme = ThemeData(
+    canvasColor: Colors.white,
     backgroundColor: Colors.black,
     brightness: Brightness.dark,
     primaryColor: Colors.white,

@@ -17,27 +17,27 @@ class MainSearchScreen extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: DefaultTabController(
-        length: tabList.length,
-        child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: defaultTargetPlatform == TargetPlatform.android ? 0 : 40,
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-              bottom: TabBar(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                indicatorColor: Colors.purple,
-                tabs: tabList.map((item) => item.getTab()).toList(),
+          length: tabList.length,
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: defaultTargetPlatform == TargetPlatform.android ? 0 : 40,
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+                bottom: TabBar(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: Colors.purple,
+                  tabs: tabList.map((item) => item.getTab()).toList(),
+                ),
+              ),
+              body: TabBarView(
+                children: tabList,
               ),
             ),
-            body: TabBarView(
-              children: tabList,
-            ),
           ),
-        ),
-      );
-   }
+        );
+    }
 }
 
 class MainSearchTab extends StatefulWidget {

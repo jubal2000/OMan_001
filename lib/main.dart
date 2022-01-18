@@ -161,6 +161,7 @@ class MainMenuState extends State<MainMenu> {
     return SafeArea(
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
+            theme: AppData.MainTheme,
             home: Stack(
                 children: [
                   DefaultTabController(

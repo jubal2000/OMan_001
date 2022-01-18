@@ -106,6 +106,19 @@ class MainAppBarState extends State<MainAppBar> {
                   child: Image.asset(widget.currentMenu == MainMenuID.home ? "assets/ui/main_top/Logo_02.png" : "assets/ui/main_top/Logo_01.png"),
                 ),
               ),
+              Visibility(
+                visible: widget.currentMenu == MainMenuID.my,
+                child: Container(
+                  // color: Colors.red,
+                    height: _iconSize,
+                    width: _iconSize,
+                    child: IconButton(
+                      icon: Image.asset("assets/ui/main_top/Setup_01.png"),
+                      onPressed: () {
+                      },
+                    )
+                ),
+              ),
               Expanded(
                   child: Stack(
                     children: [
@@ -376,8 +389,9 @@ class MainAppBarState extends State<MainAppBar> {
   }
 
   Widget get searchListModal {
-    return SingleChildScrollView(
-        child: Container(
+    return Container(
+        height: 200,
+        child: SingleChildScrollView(
           child: Column(
               children: _newHistoryList.map((item) => SizedBox(
                   height: 35,
@@ -395,7 +409,8 @@ class MainAppBarState extends State<MainAppBar> {
                       })
               )).toList()
           ),
-          decoration: BoxDecoration(
+        ),
+        decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -411,7 +426,6 @@ class MainAppBarState extends State<MainAppBar> {
                 offset: Offset(0, 3), // changes position of shadow
               ),
             ],
-          ),
         )
     );
   }
