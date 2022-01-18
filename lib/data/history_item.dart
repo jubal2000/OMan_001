@@ -19,20 +19,18 @@ class HistoryItem {
 
   HistoryItem.fromJson(Map<dynamic, dynamic> json) {
     try {
-      id = json['id']!;
-      title = json['title']!;
-      desc = json['desc']!;
-      url = json['url']!;
-      likes = int.parse(json['likes'].toString());
-      type = int.parse(json['type'].toString());
+      id        = json['id'   ];
+      title     = json['title'];
+      desc      = json['desc' ];
+      url       = json['url'  ];
+      likes     = int.parse(json['likes'].toString());
+      type      = int.parse(json['type' ].toString());
 
-      commentData = [];
-      // for (var item in json['comments']!) {
-      //   commentData?.add(item);
-      // }
-    }
-    catch(e) {
-      print("--> HistoryItem Error : $e");
+      for (var item in json['comments']) {
+        commentData.add(item);
+      }
+    } catch (e) {
+      print("~~> Error : $id -> $e");
     }
   }
 

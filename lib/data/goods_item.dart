@@ -1,28 +1,48 @@
-import 'package:video_player/video_player.dart';
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 
 class GoodsItem {
   String id;
   String title;
   String desc;
-  double sale;
+  String ribbon;
+  String imageUrl;
+
+  String category1;
+  String category2;
+
   double price;
   double priceOrg;
-  int    like;
-  String category;
+  double saleRatio;
+  double distance;
+  int trades;
+  int comments;
+  int likes;
+
   List<String> commentData  = []; // TODO
   List<String> imageData    = []; // TODO
 
-  VideoPlayerController? controller;
-
   GoodsItem(
-      { required this.id,
+      {
+        required this.id,
         required this.title,
         required this.desc,
-        required this.sale,
+        required this.ribbon,
+        required this.imageUrl,
+
+        required this.category1,
+        required this.category2,
+
         required this.price,
         required this.priceOrg,
-        required this.like,
-        required this.category,
+        required this.saleRatio,
+        required this.distance,
+
+        required this.trades,
+        required this.comments,
+        required this.likes,
+
         required this.commentData,
         required this.imageData,
       });
@@ -31,26 +51,37 @@ class GoodsItem {
       : id          = json['id'],
         title       = json['title'],
         desc        = json['desc'],
-        sale        = json['sale'],
+        ribbon      = json['ribbon'],
+        imageUrl    = json['imageUrl'],
+        category1   = json['category1'],
+        category2   = json['category2'],
         price       = json['price'],
         priceOrg    = json['priceOrg'],
-        like        = json['like'],
-        category    = json['category'],
-        commentData = json['comments'],
-        imageData   = json['images'];
+        saleRatio   = json['saleRatio'],
+        distance    = json['distance'],
+        trades      = json['trades'],
+        comments    = json['comments'],
+        likes       = json['likes'];
+        // commentData = json['commentData'],
+        // imageData   = json['imageData'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id']        = id;
-    data['title']     = title;
-    data['desc']      = desc;
-    data['sale']      = sale;
-    data['price']     = price;
-    data['priceOrg']  = priceOrg;
-    data['like']      = like;
-    data['comments']  = commentData;
-    data['category']  = category;
-    data['images']    = imageData;
+    data['id']          = id;
+    data['title']       = title;
+    data['desc']        = desc;
+    data['ribbon']      = ribbon;
+    data['imageUrl']    = imageUrl;
+    data['category1']   = category1;
+    data['category2']   = category2;
+    data['price']       = price;
+    data['priceOrg']    = priceOrg;
+    data['saleRatio']   = saleRatio;
+    data['trades']      = trades;
+    data['comments']    = comments;
+    data['likes']       = likes;
+    // data['commentData'] = commentData;
+    // data['imageData']   = imageData;
     return data;
   }
 }

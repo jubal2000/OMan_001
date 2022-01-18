@@ -17,8 +17,9 @@ class MainHomeCard extends StatefulWidget {
 
   MainHomeCard(this.user, this.historyId, {Key? key}) : super(key: key) {
     for (var item in user.historyData) {
-      var control = VideoPlayerController.network(item.url!);
+      var control = item.url!.contains("http") ?  VideoPlayerController.network(item.url!) : VideoPlayerController.asset(item.url!);
       var initialize = control.initialize();
+      control.setVolume(0.2);
       _itemList[item.id!] = MainHomeCardPlayer(pageController, control, initialize);
       _itemIdList.add(item.id!);
     }
@@ -154,8 +155,6 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
                     ),
                   ),
                   AnimatedOpacity (
-                    // If the widget is visible, animate to 0.0 (invisible).
-                    // If the widget is hidden, animate to 1.0 (fully visible).
                     opacity: AppData.isShowPlayerInfo ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 500),
                     child: IgnorePointer(

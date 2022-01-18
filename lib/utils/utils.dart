@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 extension DurationFormatter on Duration {
   /// Returns a day, hour, minute, second string representation of this `Duration`.
   ///
@@ -30,6 +33,38 @@ extension DurationFormatter on Duration {
   }
 }
 
+class SearchHistoryModal extends StatefulWidget {
+  SearchHistoryModal({Key? key}) : super (key: key);
 
+  @override
+  SearchHistoryModalState createState() => SearchHistoryModalState();
+}
 
+class SearchHistoryModalState extends State<SearchHistoryModal> {
+  var _isSearchOn = false;
+  List<String> _newHistoryList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+        visible: _isSearchOn,
+        child: SingleChildScrollView(
+            child: Container(
+              // color: Colors.white,
+                child: Column(
+                    children: _newHistoryList.map((item) =>
+                        Container(
+                            height: 30,
+                            child: ListTile(
+                                title: Text(item),
+                                onTap: () {
+                                  print("--> select : $item");
+                                })
+                        )).toList()
+                )
+            )
+        )
+    );
+  }
+}
 

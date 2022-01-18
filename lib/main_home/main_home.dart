@@ -15,7 +15,7 @@ class MainHomeScreen extends StatefulWidget {
   MainHomeState createState() => MainHomeState();
 }
 
-class MainHomeState extends State<MainHomeScreen> {
+class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientMixin<MainHomeScreen> {
   final locator = GetIt.instance;
   final PageController controller = PageController(viewportFraction: 1, keepPage: true);
   Future<List<HomeItem>>? _calculation;
@@ -26,13 +26,14 @@ class MainHomeState extends State<MainHomeScreen> {
   var _orgPageIndex = -1;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
     if (!AppData.isMainDataReady) {
       _calculation = MainListAPI().getLocalHomeList();
     }
-    controller.addListener(() {
-    });
   }
 
   @override
@@ -40,7 +41,8 @@ class MainHomeState extends State<MainHomeScreen> {
     return FutureBuilder(
       future: _calculation,
       builder: (BuildContext context, AsyncSnapshot<List<HomeItem>> snapshot) {
-        if (snapshot.hasData) {
+        print("--> MainHomeState : ${snapshot.hasData} / ${AppData.isMainDataReady} / ${_homeList.length}");
+        if (snapshot.hasData || AppData.isMainDataReady) {
           if (!AppData.isMainDataReady) {
             _homeList.clear();
             for (var item in snapshot.data!) {
@@ -69,7 +71,6 @@ class MainHomeState extends State<MainHomeScreen> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   index = index % _homeList.length;
-                  print("--> itemBuilder : $index / ${_homeList.length}");
                   return GestureDetector(
                       // child: MainHomeCard(_homeList[index].user, _homeList[index].historyId),
                     child: _homeList[index],

@@ -42,6 +42,10 @@ dependencies:
   cached_network_image: ^3.0.0
   firebase_core : ^1.10.6
   cloud_firestore: ^3.1.5
+  flutter_glow: ^0.2.0
+  getwidget: ^2.0.4
+  flutter_staggered_grid_view: ^0.6.0
+  badges: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +74,8 @@ flutter:
     - assets/ui/main_menu/
     - assets/ui/main_top/
     - assets/ui/main_right/
+    - assets/ui/widget/
+    - assets/sample/
 
   fonts:
     - family: NotoSans

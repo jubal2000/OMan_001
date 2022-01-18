@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:oman_001/data/goods_item.dart';
 import 'package:oman_001/data/history_item.dart';
 
 import 'demo_data.dart';
@@ -14,26 +15,39 @@ class MainListAPI {
 
   Future<List<HomeItem>> getLocalHomeList() async {
     List<HomeItem> listItem = [];
-    for (var element in homeDataDemo) {
+    for (var element in demoData["home_data"]!) {
       listItem.add(HomeItem.fromJson(element));
       print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.name}");
     }
     return listItem;
   }
+  // Future<List<HomeItem>> getHomeList() async {
+  //   List<HomeItem> listItem = [];
+  //   var data = await FirebaseFirestore.instance.collection("Videos").get();
+  //   for (var element in data.docs) {
+  //     listItem.add(HomeItem.fromJson(element.data()));
+  //   }
+  //   return listItem;
+  // }
+  //
+  // // to firebase burkit..
+  // Future<void> addDemoData() async {
+  //   for (var video in demoData["home_data"]!) {
+  //     await FirebaseFirestore.instance.collection("Videos").add(video);
+  //   }
+  // }
+}
 
-  Future<List<HomeItem>> getHomeList() async {
-    List<HomeItem> listItem = [];
-    var data = await FirebaseFirestore.instance.collection("Videos").get();
-    for (var element in data.docs) {
-      listItem.add(HomeItem.fromJson(element.data()));
+
+class StoreListAPI {
+  Future<List<GoodsItem>> getLocalGoodsList() async {
+    List<GoodsItem> listItem = [];
+    print("--> getLocalGoodsList : ${demoData["goods_data"]}");
+    for (var element in demoData["goods_data"]!) {
+      listItem.add(GoodsItem.fromJson(element));
+      print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
     }
     return listItem;
   }
 
-  // to firebase burkit..
-  Future<void> addDemoData() async {
-    for (var video in homeDataDemo) {
-      await FirebaseFirestore.instance.collection("Videos").add(video);
-    }
-  }
 }

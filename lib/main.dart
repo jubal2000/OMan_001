@@ -1,10 +1,8 @@
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:oman_001/screens/feed_viewmodel.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:oman_001/main_home/main_home.dart';
 import 'package:oman_001/main_my/main_myprofile.dart';
@@ -12,8 +10,8 @@ import 'package:oman_001/main_oman/main_oman.dart';
 import 'package:oman_001/main_search/main_search.dart';
 import 'package:oman_001/main_store/main_store.dart';
 
-import 'data/home_item.dart';
-import 'data/videos_firebase.dart';
+import 'data/app_data.dart';
+import 'main_top.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -24,6 +22,8 @@ Future<void> main() async {
   ));
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  AppData.isMainPlay = AppData.isAutoPlay;
 
   //   if (Firebase.apps.isEmpty) {
   //   FirebaseApp app = await Firebase.initializeApp(
@@ -83,18 +83,9 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
 
     return MaterialApp(
-      title: 'Example project',
-      theme: ThemeData(
-        backgroundColor: Colors.black,
-        brightness: Brightness.dark,
-        primaryColor: Colors.white,
-        fontFamily: 'NotoSans',
-        textTheme: const TextTheme(
-          headline1: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-          headline2: TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic),
-          bodyText1: TextStyle(fontSize: 11.0),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      title: 'OMan v0.0.1',
+      theme: AppData.MainTheme,
       home: MainMenu(),
       // initialRoute: '/',
       // routes: {
@@ -118,308 +109,88 @@ class MainMenu extends StatefulWidget {
 }
 
 class MainMenuState extends State<MainMenu> {
-  PersistentTabController? _controller;
-  bool _hideNavBar = false;
-  List<int>   _badgeCounts = List<int>.generate(5, (index) => index);
-  List<bool>  _badgeShows  = List<bool>.generate(5, (index) => true);
+  TabController? _controller;
+  final List<int>   _badgeCounts = List<int>.generate(5, (index) => index);
+  final List<bool>  _badgeShows  = List<bool>.generate(5, (index) => true);
+  final _iconSize = 20.0;
+  int _currentMenu = 0;
+
+  final List<List<String>> _iconList = [
+    ["assets/ui/main_menu/Home_0.png"   ,"assets/ui/main_menu/Home_1.png"   ],
+    ["assets/ui/main_menu/Search_0.png" ,"assets/ui/main_menu/Search_1.png" ],
+    ["assets/ui/main_menu/Oman_0.png"   ,"assets/ui/main_menu/Oman_1.png"   ],
+    ["assets/ui/main_menu/Shop_0.png"   ,"assets/ui/main_menu/Shop_1.png"   ],
+    ["assets/ui/main_menu/My_0.png"     ,"assets/ui/main_menu/My_1.png"     ],
+  ];
 
   @override
   void initState() {
-    _controller = PersistentTabController(initialIndex: 0);
-    _hideNavBar = false;
     super.initState();
   }
 
-  List<Widget> _buildScreens() {
-    return [
-      MainHomeScreen(),
-      MainSearchScreen(
-        menuScreenContext: widget.menuScreenContext,
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainOmanScreen(
-        menuScreenContext: widget.menuScreenContext,
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainStoreScreen(
-        menuScreenContext: widget.menuScreenContext,
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainMyScreen(
-        menuScreenContext: widget.menuScreenContext,
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      )
-    ];
-  }
+  final List<Widget> _buildScreens = [
+    MainHomeScreen(),
+    MainSearchScreen(),
+    MainOmanScreen(),
+    MainStoreScreen(),
+    MainMyScreen()
+  ];
 
-  List<CustomNavigationBarItem> _navBarsItems() {
-    return [
-      CustomNavigationBarItem(
-        icon: _controller!.index == 0 ? Image.asset("assets/ui/main_menu/Home_1.png") : Opacity(opacity: 0.5, child: Image.asset("assets/ui/main_menu/Home_0.png")),
-        badgeCount: _badgeCounts[0],
-        showBadge: _badgeShows[0],
-      ),
-      CustomNavigationBarItem(
-        icon: _controller!.index == 1 ? Image.asset("assets/ui/main_menu/Search_1.png") : Opacity(opacity: 0.5, child: Image.asset("assets/ui/main_menu/Search_0.png")),
-        badgeCount: _badgeCounts[1],
-        showBadge: _badgeShows[1],
-      ),
-      CustomNavigationBarItem(
-        icon: _controller!.index == 2 ? Image.asset("assets/ui/main_menu/Oman_1.png") : Opacity(opacity: 0.5, child: Image.asset("assets/ui/main_menu/Oman_0.png")),
-        badgeCount: _badgeCounts[2],
-        showBadge: _badgeShows[2],
-      ),
-      CustomNavigationBarItem(
-        icon: _controller!.index == 3 ? Image.asset("assets/ui/main_menu/Shop_1.png") : Opacity(opacity: 0.5, child: Image.asset("assets/ui/main_menu/Shop_0.png")),
-        badgeCount: _badgeCounts[3],
-        showBadge: _badgeShows[3],
-      ),
-      CustomNavigationBarItem(
-        icon: _controller!.index == 4 ? Image.asset("assets/ui/main_menu/My_1.png") : Opacity(opacity: 0.5, child: Image.asset("assets/ui/main_menu/My_0.png")),
-        badgeCount: _badgeCounts[4],
-        showBadge: _badgeShows[4],
-      ),
-    ];
+  List<Tab> _navBarsItems() {
+    List<Tab> _list = [];
+    for (var i=0; i<_iconList.length; i++) {
+      _list.add( Tab(
+          child: Badge(
+            position: BadgePosition(top:-15.0, start:12.0),
+            badgeContent: Text(_badgeCounts[i].toString()),
+            showBadge: _badgeShows[i],
+            child: SizedBox(
+                width:  _iconSize,
+                height: _iconSize,
+                child: _currentMenu == i ? Image.asset(_iconList[i][1]) : Opacity(opacity: 0.5, child: Image.asset(_iconList[i][0]))
+            ),
+          )
+        )
+      );
+    }
+    return _list;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Stack(
-        children: [
-          Scaffold(
-            drawer: Drawer(
-              child: SizedBox(
-                  height: 500,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Text('This is the Drawer'),
-                      ],
-                    ),
-                  )
-              ),
-            ),
-            body: PersistentTabView.custom(
-              context,
-              controller: _controller,
-              screens: _buildScreens(),
-              confineInSafeArea: true,
-              itemCount: 5,
-              handleAndroidBackButtonPress: true,
-              stateManagement: true,
-              hideNavigationBar: _hideNavBar,
-              screenTransitionAnimation: ScreenTransitionAnimation(
-                animateTabTransition: true,
-                curve: Curves.ease,
-                duration: Duration(milliseconds: 200),
-              ),
-              customWidget: CustomNavigationBar(
-                iconSize: 30.0,
-                selectedColor: Colors.white,
-                strokeColor: Color(0x30040307),
-                unSelectedColor: Colors.grey,
-                backgroundColor: Colors.black,
-                items: _navBarsItems(),
-                currentIndex: _controller!.index,
-                onTap: (index) {
-                  setState(() {
-                    _controller!.index = index;
-                  });
-                },
-              ),
-            )
-          ),
-          MainAppBar(_controller!.index),
-        ]
-      )
-    );
-  }
-}
-
-class MainAppBar extends StatelessWidget with PreferredSizeWidget {
-  var _currentMenu;
-  final _height = 60.0;
-  final _iconSize = 40.0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
-  MainAppBar(this._currentMenu, { Key? key}) : preferredSize = Size.fromHeight(60.0),
-        super(key: key);
-
-  @override
-  final Size preferredSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      key: _scaffoldKey,
-      color: Colors.transparent,
-      child: Container(
-          height: _height,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          color: Colors.black.withOpacity(0),
-          child: Row(
-            children: <Widget> [
-              SizedBox(
-                height: _height,
-                width: _height,
-                child: IconButton(
-                  icon: Image.asset("assets/ui/main_top/Logo_00.png"),
-                  onPressed: () {
-                  },
-                )
-              ),
-              Expanded(
-                child: Text(
-                  ""
-                )
-              ),
-              Row(
-                children: <Widget> [
-                  SizedBox(
-                    height: _iconSize,
-                    width: _iconSize,
-                    child: IconButton(
-                      icon: Image.asset("assets/ui/main_top/Contents.png"),
-                      onPressed: () {
-                      },
-                    )
-                  ),
-                  SizedBox(width: 5),
-                  SizedBox(
-                      height: _iconSize,
-                      width: _iconSize,
-                      child: IconButton(
-                        icon: Image.asset("assets/ui/main_top/Message.png"),
-                        onPressed: () {
-                        },
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Stack(
+                children: [
+                  DefaultTabController(
+                      length: _buildScreens.length,
+                      child: Scaffold(
+                        backgroundColor: Colors.black,
+                        body: TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
+                          children: _buildScreens,
+                        ),
+                        bottomNavigationBar: TabBar(
+                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(width: 2.0, color: Colors.purple),
+                                insets: EdgeInsets.symmetric(horizontal:20.0)
+                            ),
+                            onTap: (index) {
+                              setState(() {
+                                _currentMenu = index;
+                              });
+                            },
+                            controller: _controller,
+                            tabs: _navBarsItems()
+                        ),
                       )
                   ),
-                  SizedBox(width: 5),
-                  SizedBox(
-                      height: _iconSize,
-                      width: _iconSize,
-                      child: IconButton(
-                        icon: Image.asset("assets/ui/main_top/Shopping.png"),
-                        onPressed: () {
-                        },
-                      )
-                  ),
-                ],
-              ),
-            ],
-          )
-      )
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  final int _currentMenu;
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  CustomAppBar(this._currentMenu, { Key? key}) : preferredSize = Size.fromHeight(160.0),
-        super(key: key);
-
-  @override
-  final Size preferredSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Container(
-        height: 160.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              color: Colors.red,
-              width: MediaQuery.of(context).size.width,
-              height: 100.0,
-              child: Center(
-                child: Text(
-                  "AppBar",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 80.0,
-              left: 0.0,
-              right: 0.0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(1.0),
-                      border: Border.all(
-                          color: Colors.grey.withOpacity(0.5), width: 1.0),
-                      color: Colors.white),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          print("your menu action here");
-                          _scaffoldKey.currentState?.openDrawer();
-                        },
-                      ),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "Search",
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          print("your menu action here");
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.notifications,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          print("your menu action here");
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                  MainAppBar(_buildScreens, _currentMenu),
+                ]
             )
-          ],
-        ),
-      ),
+        )
     );
   }
 }

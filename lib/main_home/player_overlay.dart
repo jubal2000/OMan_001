@@ -39,6 +39,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
   get _listener => () {
     if (_isActive) {
       setState(() {
+        if (widget.controller == null) return;
         _isPlaying = widget.controller!.value.isPlaying;
         _curPos = widget.controller!.value.position;
         if (_curPos.compareTo(_maxPos) == 0) {
@@ -46,6 +47,8 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
           _isPlaying = false;
           // 플레이가 끝나면 자동으로 overlay 화면 보여줌..
           widget.onScreenClosed!(true);
+        } else if (!AppData.isMainPlay && _isPlaying) {
+            widget.controller!.pause();
         }
       });
     }
@@ -122,7 +125,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                                     AppData.isMainPlay = _isPlaying;
                                   });
                                 },
-                                icon: Image.asset(_isPlaying
+                                icon: Image.asset(_isPlaying && AppData.isMainPlay
                                     ? "assets/ui/main_player_01.png"
                                     : "assets/ui/main_player_00.png")
                               )
