@@ -99,6 +99,8 @@ class MainSearchTabState extends State<MainSearchTab> with AutomaticKeepAliveCli
     'assets/sample/10.jpeg',
   ];
 
+  final _scrollController = PageController(viewportFraction: 1, keepPage: true);
+
   @override
   bool get wantKeepAlive => true;
 
@@ -121,6 +123,7 @@ class MainSearchTabState extends State<MainSearchTab> with AutomaticKeepAliveCli
     switch (widget.selectedTab) {
       case 0:{
         return MasonryGridView.count(
+          controller: _scrollController,
           crossAxisCount: 3,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,

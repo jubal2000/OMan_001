@@ -36,6 +36,8 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
     "assets/sample/33.jpeg",
   ];
 
+  final _scrollController = PageController(viewportFraction: 1, keepPage: true);
+
   @override
   bool get wantKeepAlive => true;
 
@@ -45,30 +47,31 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
         debugShowCheckedModeBanner: false,
         theme: AppData.MainTheme,
         home: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.all(0),
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  BannerScrollViewer(
-                      _bannerList,
-                      title: "투데이핫이슈",
-                      titleStyle: AppData.MainTheme.textTheme.headline2!,
-                      showArrow: true
-                  ),
-                  RowScrollViewer(
-                     title: "# 최근 뜨는 모델",
-                     itemList: _modelList,
-                  ),
-                  RowScrollViewer(
-                    title: "# 최근 데뷰했어요",
-                    itemList: _newbieList,
-                  ),
-                ],
-              ),
+        controller: _scrollController,
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.all(0),
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                BannerScrollViewer(
+                    _bannerList,
+                    title: "투데이핫이슈",
+                    titleStyle: AppData.MainTheme.textTheme.headline2!,
+                    showArrow: true
+                ),
+                RowScrollViewer(
+                   title: "# 최근 뜨는 모델",
+                   itemList: _modelList,
+                ),
+                RowScrollViewer(
+                  title: "# 최근 데뷰했어요",
+                  itemList: _newbieList,
+                ),
+              ],
             ),
-        )
+          ),
+      )
     );
   }
 }

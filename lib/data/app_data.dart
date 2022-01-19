@@ -32,7 +32,8 @@ class AppData {
     canvasColor: Colors.white,
     backgroundColor: Colors.black,
     brightness: Brightness.dark,
-    primaryColor: Colors.white,
+    primaryColor: Colors.black,
+    iconTheme: IconThemeData(color: Colors.black),
     fontFamily: 'NotoSans',
     textTheme: TextTheme(
       headline1: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.black),

@@ -162,7 +162,7 @@ class MainStoreTabState extends State<MainStoreTab> with AutomaticKeepAliveClien
   ];
 
   List<CategoryViewerItem>? _categoryItem;
-  // List<GoodsItemCard>? _goodsItem;
+  final _scrollController = PageController(viewportFraction: 1, keepPage: true);
 
   @override
   bool get wantKeepAlive => true;
@@ -184,6 +184,7 @@ class MainStoreTabState extends State<MainStoreTab> with AutomaticKeepAliveClien
     switch (widget.selectedTab) {
       case 0:{
         return SingleChildScrollView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(0,5,0,0),
           child: Container(

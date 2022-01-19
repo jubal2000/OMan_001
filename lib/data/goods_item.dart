@@ -4,47 +4,47 @@ import 'package:flutter/cupertino.dart';
 
 class GoodsItem {
   String id;
-  String title;
-  String desc;
-  String ribbon;
-  String imageUrl;
+  String? title;
+  String? desc;
+  String? ribbon;
+  String? imageUrl;
 
-  String category1;
-  String category2;
+  String? category1;
+  String? category2;
 
-  double price;
-  double priceOrg;
-  double saleRatio;
-  double distance;
+  double? price;
+  double? priceOrg;
+  double? saleRatio;
+  double? distance;
   int trades;
   int comments;
   int likes;
 
-  List<String> commentData  = []; // TODO
-  List<String> imageData    = []; // TODO
+  List<String>? commentData; // TODO
+  List<String>? imageData; // TODO
 
   GoodsItem(
       {
         required this.id,
-        required this.title,
-        required this.desc,
-        required this.ribbon,
-        required this.imageUrl,
+        this.title,
+        this.desc,
+        this.ribbon,
+        this.imageUrl,
 
-        required this.category1,
-        required this.category2,
+        this.category1,
+        this.category2,
 
-        required this.price,
-        required this.priceOrg,
-        required this.saleRatio,
-        required this.distance,
+        this.price,
+        this.priceOrg,
+        this.saleRatio,
+        this.distance,
 
-        required this.trades,
-        required this.comments,
-        required this.likes,
+        this.commentData,
+        this.imageData,
 
-        required this.commentData,
-        required this.imageData,
+        this.trades = 0,
+        this.comments = 0,
+        this.likes = 0,
       });
 
   GoodsItem.fromJson(Map<dynamic, dynamic> json)

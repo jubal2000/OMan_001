@@ -126,8 +126,7 @@ class MainAppBarState extends State<MainAppBar> {
                         visible: widget.currentMenu == MainMenuID.search,
                         child: Container(
                         // color: Colors.yellow,
-                        alignment: Alignment.topCenter,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: EdgeInsets.fromLTRB(10, 2, 5, 0),
                         child: Column(
                           children:[
                             Stack(
@@ -137,6 +136,7 @@ class MainAppBarState extends State<MainAppBar> {
                                   height: _height * 0.6,
                                   // color: Colors.green,
                                   alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.only(right: 8),
                                   child: Row(
                                     children: [
                                       Image.asset("assets/ui/main_top/Search_Bar_00_L.png"),
@@ -150,6 +150,7 @@ class MainAppBarState extends State<MainAppBar> {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   padding: EdgeInsets.only(left: 8),
+                                  // color: Colors.yellow,
                                   child: Row(
                                     children: [
                                       Opacity(
@@ -157,49 +158,46 @@ class MainAppBarState extends State<MainAppBar> {
                                         child: Icon(
                                           Icons.search,
                                           size: 20.0,
+                                          color: Colors.black,
                                         )
                                       ),
                                       Expanded(
                                         child: Container(
-                                          // color: Colors.yellow,
-                                          padding: EdgeInsets.only(left: 5.0),
+                                          // color: Colors.blue.withOpacity(0.5),
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.only(left: 5.0),
                                             child: SingleChildScrollView(
-                                              // child: Focus(
-                                              //   onFocusChange: (focus) {
-                                              //     setState(() {
-                                              //       _isSearchOn = focus;
-                                              //       print("--> focus $focus");
-                                              //     });
-                                              //   },
-                                                child: TextField(
-                                                  focusNode: _focusNode1,
-                                                  controller: _searchTextController,
-                                                  maxLines: 1,
-                                                  keyboardType: TextInputType.text,
-                                                  style: AppData.MainTheme.textTheme.headline2,
-                                                  decoration: InputDecoration(
-                                                    hintText: '검색',
-                                                    hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
-                                                    border: InputBorder.none,
-                                                  ),
-                                                  onChanged: (text) {
-                                                    setState(() {
-                                                      _searchText = text;
-                                                      _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(text.toLowerCase())).toList();
-                                                    }
-                                                  );
-                                                },
-                                              )
+                                              child: TextField(
+                                                focusNode: _focusNode1,
+                                                controller: _searchTextController,
+                                                maxLines: 1,
+                                                keyboardType: TextInputType.text,
+                                                style: AppData.MainTheme.textTheme.headline2,
+                                                decoration: InputDecoration(
+                                                  hintText: '검색',
+                                                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                                                  border: InputBorder.none,
+                                                ),
+                                                onChanged: (text) {
+                                                  setState(() {
+                                                    _searchText = text;
+                                                    _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(text.toLowerCase())).toList();
+                                                  }
+                                                );
+                                              },
                                             )
-                                          // )
+                                          )
                                         )
                                       ),
-                                      Opacity(
+                                    Container(
+                                      // color: Colors.green.withOpacity(0.5),
+                                      child: Opacity(
                                         opacity: _searchText.isNotEmpty ? 0.2 : 0,
                                         child: IconButton(
                                           icon: Icon(
                                             Icons.close,
                                             size: 20.0,
+                                            color: Colors.black,
                                           ), onPressed: () {
                                             setState(() {
                                               _searchTextController.clear();
@@ -208,6 +206,7 @@ class MainAppBarState extends State<MainAppBar> {
                                           },
                                         )
                                       ),
+                                    ),
                                     ]
                                   )
                                 ),
@@ -229,7 +228,7 @@ class MainAppBarState extends State<MainAppBar> {
                               height: _height * 0.6,
                               // color: Colors.yellow,
                               alignment: Alignment.topCenter,
-                              margin: EdgeInsets.only(left: _height * 1.2, right: 10, top: 10),
+                              margin: EdgeInsets.only(left: _height * 1.2, right: 10, top: 9),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -244,23 +243,23 @@ class MainAppBarState extends State<MainAppBar> {
                                   Container(
                                     padding: EdgeInsets.only(left: _height * 1.8, right: defaultTargetPlatform == TargetPlatform.android ? 3 : 8),
                                       alignment: Alignment.topCenter,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            // color: Colors.yellow,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            child: SingleChildScrollView(
-                                              child: TextField(
-                                                style: AppData.MainTheme.textTheme.headline2,
-                                                focusNode: _focusNode2,
-                                                controller: _searchTextController,
-                                                maxLines: 1,
-                                                keyboardType: TextInputType.text,
-                                                decoration: InputDecoration(
-                                                  hintText: '검색',
-                                                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
-                                                  border: InputBorder.none,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              // color: Colors.yellow,
+                                              padding: EdgeInsets.only(left: 5.0),
+                                              child: SingleChildScrollView(
+                                                child: TextField(
+                                                  style: AppData.MainTheme.textTheme.headline2,
+                                                  focusNode: _focusNode2,
+                                                  controller: _searchTextController,
+                                                  maxLines: 1,
+                                                  keyboardType: TextInputType.text,
+                                                  decoration: InputDecoration(
+                                                    hintText: '검색',
+                                                    hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                                                    border: InputBorder.none,
                                                 ),
                                                 onChanged: (text) {
                                                   setState(() {
@@ -278,6 +277,7 @@ class MainAppBarState extends State<MainAppBar> {
                                               icon: Icon(
                                                 _searchText.isEmpty ? Icons.search : Icons.close,
                                                 size: 20.0,
+                                                color: Colors.black,
                                               ), onPressed: () {
                                               setState(() {
                                                 _searchTextController.clear();
@@ -333,17 +333,18 @@ class MainAppBarState extends State<MainAppBar> {
                                   ),
                                 ),
                               ]
-                              )
-                            ),
-                          ],
-                        ),
+                            )
+                          ),
+                        ],
                       ),
+                    ),
                   ]
                 ),
               ),
               Container(
                 // color: Colors.blue,
                 alignment: Alignment.topCenter,
+               padding: EdgeInsets.only(top: 5),
                child: Row(
                 children: <Widget> [
                   Visibility(
@@ -389,26 +390,80 @@ class MainAppBarState extends State<MainAppBar> {
   }
 
   Widget get searchListModal {
+    PageController _controller = PageController(viewportFraction: 1, keepPage: true);
+
     return Container(
-        height: 200,
-        child: SingleChildScrollView(
-          child: Column(
-              children: _newHistoryList.map((item) => SizedBox(
-                  height: 35,
-                  child: ListTile(
-                      title: Text(item),
-                      contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 15),
-                      dense: true,
-                      onTap: () {
-                        setState(() {
-                          print("--> select : $item");
-                          _searchTextController.text = item;
-                          _searchText = item;
-                          _isSearchOn = false;
-                        });
-                      })
-              )).toList()
-          ),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        constraints: BoxConstraints(
+            minHeight: 20, minWidth: double.infinity, maxHeight: MediaQuery.of(context).size.height * 0.3
+        ),
+        child: ListView.builder(
+          // padding: EdgeInsets.all(10.0),
+          controller: _controller,
+          itemCount: _newHistoryList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  child: Container(
+                    color: Colors.transparent,
+                    width: double.infinity,
+                    child: Column (
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text(_newHistoryList[index], style: AppData.MainTheme.textTheme.headline1),
+                        ),
+                        Visibility(
+                          visible: index < _newHistoryList.length-1,
+                          child: Divider(
+                            indent: 20,
+                            endIndent: 20,
+                            color: Colors.grey
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _searchTextController.text = _newHistoryList[index];
+                      _searchText = _newHistoryList[index];
+                      _isSearchOn = false;
+                    });
+                  }
+                ),
+              );
+            },
+      // child: Column(
+          //     children: _newHistoryList.map((item) => SizedBox(
+          //         height: 35,
+          //         child: Column (
+          //           children: [
+          //             ListTile(
+          //               title: Text(item),
+          //               contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+          //               minVerticalPadding: 10,
+          //               dense: true,
+          //               onTap: () {
+          //                 setState(() {
+          //                   print("--> select : $item");
+          //                   _searchTextController.text = item;
+          //                   _searchText = item;
+          //                   _isSearchOn = false;
+          //                 });
+          //             }),
+          //             Divider(
+          //               indent: 20,
+          //               endIndent: 20,
+          //               color: Colors.grey
+          //             )
+          //         ])
+          //     )).toList()
+          // ),
         ),
         decoration: BoxDecoration(
             color: Colors.white,
