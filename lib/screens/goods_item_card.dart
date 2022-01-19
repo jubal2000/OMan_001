@@ -254,21 +254,19 @@ class GoodsItemCardState extends State<GoodsItemCard> {
       return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("${widget.goodsData.price}원", style: widget.priceStyle),
+            Text("${widget.goodsData.price!.toInt()}원", style: widget.priceStyle),
             SizedBox(width: 5),
-            Text("${widget.goodsData.priceOrg}원", style: TextStyle(fontSize: widget.priceOrgStyle.fontSize, color: widget.priceOrgStyle.color, decoration: TextDecoration.lineThrough)),
+            Text("${widget.goodsData.priceOrg!.toInt()}원", style: TextStyle(fontSize: widget.priceOrgStyle.fontSize, color: widget.priceOrgStyle.color, decoration: TextDecoration.lineThrough)),
             Expanded(
               child: SizedBox(),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.sms, size: 15, color: Colors.grey.withOpacity(0.5)),
-                SizedBox(width: 5),
                 Text("${widget.goodsData.comments}", style: widget.descStyle),
-                SizedBox(width: 10),
                 Icon(Icons.favorite, size: 15, color: Colors.grey.withOpacity(0.5)),
-                SizedBox(width: 5),
                 Text("${widget.goodsData.likes}", style: widget.descStyle),
               ]
             ),

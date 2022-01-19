@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -247,7 +248,7 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                                 _currentTab = index;
                               });
                             },
-                            padding: EdgeInsets.symmetric(horizontal: 100),
+                            padding: EdgeInsets.symmetric(horizontal: 60),
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.grey,
                             indicatorColor: Colors.purple,
@@ -264,56 +265,6 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                     ),
                   ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 30),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //         children: [
-                //           IconButton(
-                //               onPressed:() {
-                //                 setState(() {
-                //                   _currentTab = 0;
-                //                 });
-                //               },
-                //               icon: const Icon(Icons.border_all, color: Colors.grey)
-                //           ),
-                //           IconButton(
-                //               onPressed:() {
-                //                 setState(() {
-                //                   _currentTab = 1;
-                //                 });
-                //               },
-                //               icon: const Icon(Icons.folder_open, color: Colors.grey)
-                //           ),
-                //           IconButton(
-                //               onPressed:() {
-                //                 setState(() {
-                //                   _currentTab = 2;
-                //                 });
-                //               },
-                //               icon: const Icon(Icons.store, color: Colors.grey)
-                //           ),
-                //         ],
-                //       ),
-                //       SizedBox(height: 10),
-                //       // Container(
-                //       //   child: PageView.builder(
-                //       //     controller: _tabController,
-                //       //     itemCount: _tabList.length,
-                //       //     onPageChanged: (index) {
-                //       //
-                //       //     },
-                //       //     itemBuilder: (context, index) {
-                //       //       return _tabList[index];
-                //       //     },
-                //       //   )
-                //       // ),
-                //     ]
-                //   ),
-                // ),
               ]
             ),
           ),
@@ -321,23 +272,64 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
       }
       case 1: {
         return SingleChildScrollView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.fromLTRB(0,5,0,0),
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                BannerScrollViewer(
-                    _bannerList[1],
-                    rowHeight: 250,
-                    showArrow: false
+          padding: EdgeInsets.fromLTRB(15,15,20,15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ShoppingTopItem("assets/ui/my_coupon_00.png", "내 쿠폰", Colors.orange.withOpacity(0.5)),
+                  ShoppingTopItem("assets/ui/my_likes_00.png", "찜", Colors.pinkAccent.withOpacity(0.5)),
+                  ShoppingTopItem("assets/ui/my_rank_00.png", "등급", Colors.deepPurpleAccent.withOpacity(0.5)),
+                ]
+              ),
+              SizedBox(height: 30),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                child: Text("나의 쇼핑 정보", style: AppData.MainTheme.textTheme.headline1),
+              ),
+              SizedBox(height: 10),
+              ShoppingMidItem("최근 본 상품"),
+              ShoppingMidItem("상품 리뷰 내역"),
+              ShoppingMidItem("주문배송내역 조회"),
+              ShoppingMidItem("배송지 관리"),
+              SizedBox(height: 30),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("진행중인 주문", style: AppData.MainTheme.textTheme.headline1),
+                    SizedBox(width: 5),
+                    Text("(최근 3개월)", style: AppData.MainTheme.textTheme.bodyText1),
+                  ],
                 ),
-                SizedBox(height: 10),
-                Column(
-                  children: AppData.goodsList,
-                )
-              ],
-            ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ShoppingBotItem("입금\n대기", 1),
+                    botArrow,
+                    ShoppingBotItem("결제\n완료", 0),
+                    botArrow,
+                    ShoppingBotItem("배송\n준비", 2),
+                    botArrow,
+                    ShoppingBotItem("배송\n중", 1),
+                    botArrow,
+                    ShoppingBotItem("배송\n완료", 1),
+                    botArrow,
+                    ShoppingBotItem("리뷰\n쓰기", 0),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       }
@@ -345,6 +337,99 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
         return Center();
       }
     }
+  }
+
+  Widget get botArrow {
+    return Container(
+      height: 80,
+      padding: EdgeInsets.only(top: 15),
+      alignment: Alignment.topCenter,
+      child: Image.asset("assets/ui/my_arrow_00.png", width: 20, height: 30, color: Colors.purple),
+    );
+  }
+}
+
+class ShoppingTopItem extends StatelessWidget {
+  ShoppingTopItem(this.iconUrl, this.title, this.backgroundColor, {Key? key}) : super(key: key);
+
+  String iconUrl;
+  String title;
+  Color  backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          width: 110,
+          height: 110,
+          color: backgroundColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 80,
+                child: Image.asset(iconUrl),
+                padding: EdgeInsets.all(10),
+              ),
+              Text(title, style: TextStyle(fontSize: 14,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold)),
+            ]
+        ),
+      ),
+    );
+  }
+}
+
+class ShoppingMidItem extends StatelessWidget {
+  ShoppingMidItem(this.title, {Key? key}) : super(key: key);
+
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          height: 40,
+          width: double.infinity,
+          color: Colors.grey.withOpacity(0.25),
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.all(10),
+          child: Text(title, style: AppData.MainTheme.textTheme.headline2),
+        ),
+      ),
+    );
+  }
+}
+
+class ShoppingBotItem extends StatelessWidget {
+  ShoppingBotItem(this.title, this.count, {Key? key}) : super(key: key);
+
+  String title;
+  int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      width: 40,
+      // color: Colors.grey.withOpacity(0.25),
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title, style: AppData.MainTheme.textTheme.headline2, textAlign: TextAlign.center),
+          SizedBox(height: 5),
+          Text("$count", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purple)),
+        ]
+      ),
+    );
   }
 }
 
