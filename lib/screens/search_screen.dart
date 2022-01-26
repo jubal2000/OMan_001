@@ -28,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       width: 350,
                       height: 40,
                       child: Row(
-                        children: [
+                        children: const [
                           SizedBox(
                             width: 10,
                           ),

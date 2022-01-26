@@ -114,6 +114,12 @@ class PlayerModalScreen extends ModalRoute<void> {
       )
     );
   }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 }
 
 

@@ -36,7 +36,7 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
     "assets/sample/33.jpeg",
   ];
 
-  final _scrollController = PageController(viewportFraction: 1, keepPage: true);
+  final _controller = PageController(viewportFraction: 1, keepPage: true);
 
   @override
   bool get wantKeepAlive => true;
@@ -47,7 +47,7 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
         debugShowCheckedModeBanner: false,
         theme: AppData.MainTheme,
         home: SingleChildScrollView(
-        controller: _scrollController,
+        controller: _controller,
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.all(0),
           child: Container(
@@ -73,5 +73,11 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
           ),
       )
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

@@ -6,6 +6,7 @@ class GoodsItem {
   String id;
   String? title;
   String? desc;
+  String? option;
   String? ribbon;
   String? imageUrl;
 
@@ -22,12 +23,14 @@ class GoodsItem {
 
   List<String>? commentData; // TODO
   List<String>? imageData; // TODO
+  List<String>? optionData; // TODO
 
   GoodsItem(
       {
         required this.id,
         this.title,
         this.desc,
+        this.option,
         this.ribbon,
         this.imageUrl,
 
@@ -61,7 +64,8 @@ class GoodsItem {
         distance    = json['distance'],
         trades      = json['trades'],
         comments    = json['comments'],
-        likes       = json['likes'];
+        likes       = json['likes'],
+        option      = "option: texttexttexttexttexttexttext..";
         // commentData = json['commentData'],
         // imageData   = json['imageData'];
 

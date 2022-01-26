@@ -10,10 +10,10 @@ class MainListAPI {
   List<HomeItem>? listData;
 
   load() async {
-    listData = await getLocalHomeList();
+    listData = await getAsyncLocalHomeList();
   }
 
-  Future<List<HomeItem>> getLocalHomeList() async {
+  Future<List<HomeItem>> getAsyncLocalHomeList() async {
     List<HomeItem> listItem = [];
     for (var element in demoData["home_data"]!) {
       listItem.add(HomeItem.fromJson(element));
@@ -21,7 +21,17 @@ class MainListAPI {
     }
     return listItem;
   }
-  // Future<List<HomeItem>> getHomeList() async {
+
+  List<HomeItem> getLocalHomeList() {
+    List<HomeItem> listItem = [];
+    for (var element in demoData["home_data"]!) {
+      listItem.add(HomeItem.fromJson(element));
+      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.name}");
+    }
+    return listItem;
+  }
+
+// Future<List<HomeItem>> getHomeList() async {
   //   List<HomeItem> listItem = [];
   //   var data = await FirebaseFirestore.instance.collection("Videos").get();
   //   for (var element in data.docs) {
@@ -38,9 +48,14 @@ class MainListAPI {
   // }
 }
 
-
 class StoreListAPI {
-  Future<List<GoodsItem>> getLocalGoodsList() async {
+  List<GoodsItem>? listData;
+
+  load() async {
+    listData = await getAsyncLocalGoodsList();
+  }
+
+  Future<List<GoodsItem>> getAsyncLocalGoodsList() async {
     List<GoodsItem> listItem = [];
     print("--> getLocalGoodsList : ${demoData["goods_data"]}");
     for (var element in demoData["goods_data"]!) {
@@ -50,4 +65,13 @@ class StoreListAPI {
     return listItem;
   }
 
+  List<GoodsItem> getLocalGoodsList() {
+    List<GoodsItem> listItem = [];
+    print("--> getLocalGoodsList : ${demoData["goods_data"]}");
+    for (var element in demoData["goods_data"]!) {
+      listItem.add(GoodsItem.fromJson(element));
+      print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
+    }
+    return listItem;
+  }
 }

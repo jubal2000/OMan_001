@@ -52,12 +52,6 @@ class BannerScrollState extends State<BannerScrollViewer> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (widget.autoScroll && _timer == null) {
       _timer = Timer.periodic(Duration(seconds: widget.autoScrollTime), (timer) {
@@ -152,5 +146,12 @@ class BannerScrollState extends State<BannerScrollViewer> {
           ),
         ],
     );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 }

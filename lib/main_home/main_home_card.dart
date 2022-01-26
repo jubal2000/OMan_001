@@ -9,7 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class MainHomeCard extends StatefulWidget {
-  PageController pageController = PageController(viewportFraction: 1, keepPage: true);
+  var pageController = PageController(viewportFraction: 1, keepPage: true);
   final Map<String, MainHomeCardPlayer> _itemList = {};
   final List<String> _itemIdList = [];
   final UserItem user;
@@ -92,6 +92,12 @@ class MainHomeCardState extends State<MainHomeCard> {
       },
     );
   }
+
+  // @override
+  // void dispose() {
+  //   widget.pageController.dispose();
+  //   super.dispose();
+  // }
 }
 
 class MainHomeCardPlayer extends StatefulWidget {

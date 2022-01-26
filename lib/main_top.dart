@@ -1,8 +1,13 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oman_001/main_my/setup_screen.dart';
 import 'package:oman_001/main_store/main_store.dart';
+import 'package:oman_001/screens/main_cart_screen.dart';
+import 'package:oman_001/screens/messages_screen.dart';
+import 'package:oman_001/utils/utils.dart';
 
 import 'data/app_data.dart';
 
@@ -21,12 +26,11 @@ class MainAppBarState extends State<MainAppBar> {
   final _height = 50.0;
   final _iconSize = 40.0;
   var _searchText = "";
-  var _isSearchOn = false;
 
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final _scaffoldKey = GlobalKey();
   List<String>? filteredSearchHistory;
 
-  static List<String> _searchHistory = [
+  static final List<String> _searchHistory = [
     "Apple",
     "Apricot",
     "Banana",
@@ -50,41 +54,41 @@ class MainAppBarState extends State<MainAppBar> {
   List<String> _newHistoryList = List.from(_searchHistory);
 
   final _searchTextController = TextEditingController();
-  final _focusNode1 = FocusNode();
-  final _focusNode2 = FocusNode();
+  // final _focusNode1 = FocusNode();
+  // final _focusNode2 = FocusNode();
 
-  @override
-  void initState() {
-    super.initState();
-    _focusNode1.addListener(() {
-      setState(() {
-        print(_focusNode1.hasFocus);
-        if (_focusNode1.hasFocus) {
-          _isSearchOn = true;
-        } else {
-          Future.delayed(const Duration(milliseconds: 200), () {
-            setState(() {
-              _isSearchOn = false;
-            });
-          });
-        }
-      });
-    });
-    _focusNode2.addListener(() {
-      setState(() {
-        print(_focusNode2.hasFocus);
-        if (_focusNode2.hasFocus) {
-          _isSearchOn = true;
-        } else {
-          Future.delayed(const Duration(milliseconds: 200), () {
-            setState(() {
-              _isSearchOn = false;
-            });
-          });
-        }
-      });
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _focusNode1.addListener(() {
+  //     setState(() {
+  //       print(_focusNode1.hasFocus);
+  //       if (_focusNode1.hasFocus) {
+  //         AppData.isSearchOn = true;
+  //       } else {
+  //         Future.delayed(const Duration(milliseconds: 200), () {
+  //           setState(() {
+  //             AppData.isSearchOn = false;
+  //           });
+  //         });
+  //       }
+  //     });
+  //   });
+  //   _focusNode2.addListener(() {
+  //     setState(() {
+  //       print(_focusNode2.hasFocus);
+  //       if (_focusNode2.hasFocus) {
+  //         AppData.isSearchOn = true;
+  //       } else {
+  //         Future.delayed(const Duration(milliseconds: 200), () {
+  //           setState(() {
+  //             AppData.isSearchOn = false;
+  //           });
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class MainAppBarState extends State<MainAppBar> {
       key: _scaffoldKey,
       color: Colors.transparent,
       child: Container(
-          height: _isSearchOn ? MediaQuery.of(context).size.height : _height,
+          height: AppData.isSearchOn ? MediaQuery.of(context).size.height : _height,
           padding: EdgeInsets.symmetric(horizontal: 15),
           alignment: Alignment.topCenter,
           // color: _isSearchOn ? Colors.black.withOpacity(0.5) : Colors.transparent,
@@ -115,6 +119,8 @@ class MainAppBarState extends State<MainAppBar> {
                     child: IconButton(
                       icon: Image.asset("assets/ui/main_top/Setup_01.png"),
                       onPressed: () {
+                        // AppData.mainDrawerKey.currentState?.openDrawer();
+                        Navigator.of(context).push(SecondPageRoute(SetupScreen()));
                       },
                     )
                 ),
@@ -164,56 +170,63 @@ class MainAppBarState extends State<MainAppBar> {
                                       Expanded(
                                         child: Container(
                                           // color: Colors.blue.withOpacity(0.5),
-                                            alignment: Alignment.center,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            child: SingleChildScrollView(
-                                              child: TextField(
-                                                focusNode: _focusNode1,
-                                                controller: _searchTextController,
-                                                maxLines: 1,
-                                                keyboardType: TextInputType.text,
-                                                style: AppData.MainTheme.textTheme.headline2,
-                                                decoration: InputDecoration(
-                                                  hintText: '검색',
-                                                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
-                                                  border: InputBorder.none,
-                                                ),
-                                                onChanged: (text) {
-                                                  setState(() {
-                                                    _searchText = text;
-                                                    _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(text.toLowerCase())).toList();
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.only(left: 5.0),
+                                          child: SingleChildScrollView(
+                                            child: TextField(
+                                              // focusNode: _focusNode1,
+                                              controller: _searchTextController,
+                                              maxLines: 1,
+                                              keyboardType: TextInputType.text,
+                                              style: AppData.MainTheme.textTheme.headline2,
+                                              decoration: InputDecoration(
+                                                hintText: '검색',
+                                                hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                                                border: InputBorder.none,
+                                              ),
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  _searchText = text;
+                                                  _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(_searchText.toLowerCase())).toList();
+                                                  AppData.isSearchOn = _newHistoryList.isNotEmpty;
                                                   }
                                                 );
+                                              },
+                                              onTap: () {
+                                                setState(() {
+                                                  _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(_searchText.toLowerCase())).toList();
+                                                  AppData.isSearchOn = _newHistoryList.isNotEmpty;
+                                                });
                                               },
                                             )
                                           )
                                         )
                                       ),
-                                    Container(
-                                      // color: Colors.green.withOpacity(0.5),
-                                      child: Opacity(
-                                        opacity: _searchText.isNotEmpty ? 0.2 : 0,
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.close,
-                                            size: 20.0,
-                                            color: Colors.black,
-                                          ), onPressed: () {
-                                            setState(() {
-                                              _searchTextController.clear();
-                                              _searchText = "";
-                                            });
-                                          },
-                                        )
+                                      Container(
+                                        // color: Colors.green.withOpacity(0.5),
+                                        child: Opacity(
+                                          opacity: _searchText.isNotEmpty ? 0.2 : 0,
+                                          child: IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              size: 20.0,
+                                              color: Colors.black,
+                                            ), onPressed: () {
+                                              setState(() {
+                                                _searchTextController.clear();
+                                                _searchText = "";
+                                              });
+                                            },
+                                          )
+                                        ),
                                       ),
-                                    ),
                                     ]
                                   )
                                 ),
                               ]
                             ),
                             Visibility(
-                              visible: _isSearchOn,
+                              visible: AppData.isSearchOn,
                                 child: searchListModal,
                             ),
                             ]
@@ -252,7 +265,7 @@ class MainAppBarState extends State<MainAppBar> {
                                               child: SingleChildScrollView(
                                                 child: TextField(
                                                   style: AppData.MainTheme.textTheme.headline2,
-                                                  focusNode: _focusNode2,
+                                                  // focusNode: _focusNode2,
                                                   controller: _searchTextController,
                                                   maxLines: 1,
                                                   keyboardType: TextInputType.text,
@@ -264,14 +277,21 @@ class MainAppBarState extends State<MainAppBar> {
                                                 onChanged: (text) {
                                                   setState(() {
                                                     _searchText = text;
-                                                    _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(text.toLowerCase())).toList();
+                                                    _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(_searchText.toLowerCase())).toList();
+                                                    AppData.isSearchOn = _newHistoryList.isNotEmpty;
                                                   });
                                                 },
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _newHistoryList = _searchHistory.where((string) => string.toLowerCase().contains(_searchText.toLowerCase())).toList();
+                                                      AppData.isSearchOn = _newHistoryList.isNotEmpty;
+                                                    });
+                                                  },
+                                                )
                                               )
                                             )
-                                          )
-                                        ),
-                                        Opacity(
+                                          ),
+                                          Opacity(
                                             opacity: 0.2,
                                             child: IconButton(
                                               icon: Icon(
@@ -290,7 +310,7 @@ class MainAppBarState extends State<MainAppBar> {
                                     )
                                   ),
                                   Visibility(
-                                    visible: _isSearchOn,
+                                    visible: AppData.isSearchOn,
                                     child: searchListModal,
                                   ),
                                 ]
@@ -349,17 +369,37 @@ class MainAppBarState extends State<MainAppBar> {
                 children: <Widget> [
                   Visibility(
                     visible: widget.currentMenu == MainMenuID.home,
-                    child: SizedBox(
-                      height: _iconSize,
-                      width: _iconSize,
-                      child: IconButton(
-                        icon: Image.asset("assets/ui/main_top/Add_00.png", width: _iconSize, height: _iconSize),
-                        onPressed: () {
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        customButton: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: Image.asset("assets/ui/main_top/Add_00.png"),
+                        ),
+                        customItemsIndexes: const [3],
+                        customItemsHeight: 8,
+                        items: [
+                          ...MenuItems.firstItems.map(
+                                (item) =>
+                                DropdownMenuItem<MenuItem>(
+                                  value: item,
+                                  child: MenuItems.buildItem(item),
+                                ),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          MenuItems.onChanged(context, value as MenuItem);
                         },
-                      )
-                    ),
+                        itemHeight: 45,
+                        dropdownWidth: 140,
+                        buttonHeight: _iconSize,
+                        buttonWidth: _iconSize,
+                        itemPadding: const EdgeInsets.only(left: 16, right: 16),
+                        offset: const Offset(0, 8),
+                      ),
+                    )
                   ),
-                  SizedBox(width: 3),
+                  SizedBox(width: 13),
                   Container(
                     // color: Colors.red,
                       height: _iconSize,
@@ -367,6 +407,7 @@ class MainAppBarState extends State<MainAppBar> {
                       child: IconButton(
                         icon: Image.asset("assets/ui/main_top/" + (widget.currentMenu == MainMenuID.home ? "Message_00.png" : "Message_01.png")),
                         onPressed: () {
+                          Navigator.of(context).push(SecondPageRoute(MessagesScreen()));
                         },
                       )
                   ),
@@ -377,6 +418,7 @@ class MainAppBarState extends State<MainAppBar> {
                       child: IconButton(
                         icon: Image.asset("assets/ui/main_top/" + (widget.currentMenu == MainMenuID.home ? "Shopping_00.png" : "Shopping_01.png")),
                         onPressed: () {
+                          Navigator.of(context).push(SecondPageRoute(MainCartScreen()));
                         },
                     )
                   ),
@@ -390,19 +432,23 @@ class MainAppBarState extends State<MainAppBar> {
   }
 
   Widget get searchListModal {
-    PageController _controller = PageController(viewportFraction: 1, keepPage: true);
+    // PageController _controller = PageController(viewportFraction: 1, keepPage: true);
+  var _itemHeight = 46.0;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        constraints: BoxConstraints(
-            minHeight: 20, minWidth: double.infinity, maxHeight: MediaQuery.of(context).size.height * 0.3
-        ),
+        padding: EdgeInsets.symmetric(vertical: 10),
+        height: _newHistoryList.length * _itemHeight > 300 ? 300 : _newHistoryList.length * _itemHeight < 10 ? 10 : _newHistoryList.length * _itemHeight,
+        // constraints: BoxConstraints(
+        //     minHeight: 20, minWidth: double.infinity, maxHeight: 300
+        // ),
         child: ListView.builder(
           // padding: EdgeInsets.all(10.0),
-          controller: _controller,
+          padding: EdgeInsets.zero,
+          // controller: _controller,
           itemCount: _newHistoryList.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
+              height: _itemHeight,
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
@@ -430,40 +476,15 @@ class MainAppBarState extends State<MainAppBar> {
                   ),
                   onTap: () {
                     setState(() {
-                      _searchTextController.text = _newHistoryList[index];
                       _searchText = _newHistoryList[index];
-                      _isSearchOn = false;
+                      _searchTextController.text = _searchText;
+                      _searchTextController.selection = TextSelection.fromPosition(TextPosition(offset: _searchText.length));
+                      AppData.isSearchOn = false;
                     });
                   }
                 ),
               );
             },
-      // child: Column(
-          //     children: _newHistoryList.map((item) => SizedBox(
-          //         height: 35,
-          //         child: Column (
-          //           children: [
-          //             ListTile(
-          //               title: Text(item),
-          //               contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-          //               minVerticalPadding: 10,
-          //               dense: true,
-          //               onTap: () {
-          //                 setState(() {
-          //                   print("--> select : $item");
-          //                   _searchTextController.text = item;
-          //                   _searchText = item;
-          //                   _isSearchOn = false;
-          //                 });
-          //             }),
-          //             Divider(
-          //               indent: 20,
-          //               endIndent: 20,
-          //               color: Colors.grey
-          //             )
-          //         ])
-          //     )).toList()
-          // ),
         ),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -487,8 +508,9 @@ class MainAppBarState extends State<MainAppBar> {
 
   @override
   void dispose() {
-    _focusNode1.dispose();
-    _focusNode2.dispose();
+    _searchTextController.dispose();
+    // _focusNode1.dispose();
+    // _focusNode2.dispose();
     super.dispose();
   }
 }

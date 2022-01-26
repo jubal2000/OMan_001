@@ -42,13 +42,15 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
         if (widget.controller == null) return;
         _isPlaying = widget.controller!.value.isPlaying;
         _curPos = widget.controller!.value.position;
-        if (_curPos.compareTo(_maxPos) == 0) {
+        // print("--> _listener : $_isPlaying - $_curPos / $_maxPos");
+
+        if (_curPos == _maxPos) {
           _curPos = Duration();
           _isPlaying = false;
           // 플레이가 끝나면 자동으로 overlay 화면 보여줌..
           widget.onScreenClosed!(true);
-        } else if (!AppData.isMainPlay && _isPlaying) {
-            widget.controller!.pause();
+        // } else if (!AppData.isMainPlay && _isPlaying) {
+        //     widget.controller!.pause();
         }
       });
     }
@@ -119,10 +121,10 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                                 padding: EdgeInsets.all(0),
                                 onPressed: () {
                                   setState(() {
-                                    _isPlaying ? widget
-                                        .controller!
-                                        .pause() : { widget.controller!.play(), _curPos = Duration() };
-                                    AppData.isMainPlay = _isPlaying;
+                                    print("--> _isPlaying : ${widget.controller!.value.isPlaying}");
+                                    widget.controller!.value.isPlaying ?
+                                    { widget.controller!.pause(), AppData.isMainPlay = false } :
+                                    { widget.controller!.play(), AppData.isMainPlay = true, _curPos = Duration() };
                                   });
                                 },
                                 icon: Image.asset(_isPlaying && AppData.isMainPlay

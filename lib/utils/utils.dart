@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:oman_001/data/app_data.dart';
 
 extension DurationFormatter on Duration {
   /// Returns a day, hour, minute, second string representation of this `Duration`.
@@ -68,3 +71,193 @@ class SearchHistoryModalState extends State<SearchHistoryModal> {
   }
 }
 
+class WidgetSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const WidgetSize({
+    Key? key,
+    required this.onChange,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  _WidgetSizeState createState() => _WidgetSizeState();
+}
+
+class _WidgetSizeState extends State<WidgetSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance?.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    var newSize = renderBox.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
+  }
+}
+
+class ListItemEx extends StatelessWidget {
+  ListItemEx(this.title, {Key? key, this.isTitle = false, this.isLast = false}) : super(key: key);
+
+  String title;
+  bool isTitle;
+  bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isTitle) {
+      return Container(
+          height: 50,
+          color: Colors.grey.withOpacity(0.1),
+          padding: EdgeInsets.symmetric(horizontal: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(title, style: AppData.MainTheme.textTheme.headline1),
+            ],
+          )
+      );
+    } else {
+      return Container(
+          height: 50,
+          color: Colors.white,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: [
+                        Text(title, style: AppData.MainTheme.textTheme.headline2),
+                        Expanded(child: SizedBox(height: 1)),
+                        Image.asset("assets/ui/arrow_right_00.png", width: 15, height: 40, color: Colors.black.withOpacity(0.75)),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: !isLast,
+                  child: Divider(
+                    height: 1,
+                    color: Colors.grey.withOpacity(0.3),
+                    indent: 0,
+                    endIndent: 0,
+                  ),
+                ),
+              ]
+          )
+      );
+      // return Padding(
+      //   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.circular(8),
+      //     child: Container(
+      //       height: 40,
+      //       width: double.infinity,
+      //       color: Colors.grey.withOpacity(0.25),
+      //       alignment: Alignment.centerLeft,
+      //       padding: EdgeInsets.all(10),
+      //       child: Text(title, style: AppData.MainTheme.textTheme.headline2),
+      //     ),
+      //   ),
+      // );
+    }
+  }
+}
+
+class MenuItem {
+  final String text;
+  final IconData icon;
+  final bool isLast;
+
+  const MenuItem({
+    required this.text,
+    required this.icon,
+    this.isLast = false
+  });
+}
+
+class MenuItems {
+  static const List<MenuItem> firstItems = [content, store, live];
+  static const List<MenuItem> secondItems = [];
+
+  static const content = MenuItem(text: '컨텐트', icon: Icons.window);
+  static const store = MenuItem(text: '스토어', icon: Icons.store);
+  static const live = MenuItem(text: '라이브', icon: Icons.live_tv, isLast: true);
+
+  static Widget buildItem(MenuItem item) {
+    return Column(
+    children: [
+      Expanded(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: Row(
+            children: [
+                Icon(
+                    item.icon,
+                    color: Colors.grey,
+                    size: 22
+                ),
+                SizedBox(width: 10),
+                Text(item.text, style: AppData.MainTheme.textTheme.headline2),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: !item.isLast,
+          child: Divider(
+            height: 1,
+            color: Colors.grey.withOpacity(0.3),
+            indent: 0,
+            endIndent: 0,
+          ),
+        ),
+      ]
+    );
+  }
+
+  static onChanged(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.content:
+      //Do something
+        break;
+      case MenuItems.store:
+      //Do something
+        break;
+      case MenuItems.live:
+      //Do something
+        break;
+    }
+  }
+}
+
+class SecondPageRoute extends CupertinoPageRoute {
+  SecondPageRoute(this.widget)
+      : super(builder: (BuildContext context) => widget);
+
+  Widget widget;
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return FadeTransition(opacity: animation, child: widget);
+  }
+}

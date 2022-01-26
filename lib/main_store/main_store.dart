@@ -19,7 +19,7 @@ class MainStoreScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _state;
 }
 
-class MainStoreState extends State<MainStoreScreen> with AutomaticKeepAliveClientMixin<MainStoreScreen>  {
+class MainStoreState extends State<MainStoreScreen> with AutomaticKeepAliveClientMixin<MainStoreScreen> {
   final PageController _controller = PageController(viewportFraction: 1, keepPage: true);
   Future<List<GoodsItem>>? _calculation;
 
@@ -47,10 +47,10 @@ class MainStoreState extends State<MainStoreScreen> with AutomaticKeepAliveClien
 
   @override
   void initState() {
-    if (!AppData.isStoreDataReady) {
-      _calculation = StoreListAPI().getLocalGoodsList();
-    }
     super.initState();
+    if (!AppData.isStoreDataReady) {
+      _calculation = StoreListAPI().getAsyncLocalGoodsList();
+    }
   }
 
   @override
@@ -109,6 +109,12 @@ class MainStoreState extends State<MainStoreScreen> with AutomaticKeepAliveClien
           }
         }
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -241,5 +247,11 @@ class MainStoreTabState extends State<MainStoreTab> with AutomaticKeepAliveClien
         return Center();
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

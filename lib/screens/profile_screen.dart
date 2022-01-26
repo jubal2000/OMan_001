@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Icon(Icons.person_add_alt_1_outlined),
                   Text(
                     "Salvador Valverde",
@@ -65,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
-                        children: [
+                        children: const [
                           Text(
                             "36",
                             style: TextStyle(
@@ -88,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: 15),
                       ),
                       Column(
-                        children: [
+                        children: const [
                           Text(
                             "13",
                             style: TextStyle(
@@ -111,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: 15),
                       ),
                       Column(
-                        children: [
+                        children: const [
                           Text(
                             "143",
                             style: TextStyle(

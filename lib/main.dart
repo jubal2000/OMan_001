@@ -6,9 +6,12 @@ import 'package:get_it/get_it.dart';
 
 import 'package:oman_001/main_home/main_home.dart';
 import 'package:oman_001/main_my/main_myprofile.dart';
+import 'package:oman_001/main_my/setup_screen.dart';
 import 'package:oman_001/main_oman/main_oman.dart';
 import 'package:oman_001/main_search/main_search.dart';
 import 'package:oman_001/main_store/main_store.dart';
+import 'package:oman_001/utils/utils.dart';
+import 'package:oman_001/widgets/search_widget.dart';
 
 import 'data/app_data.dart';
 import 'main_top.dart';
@@ -128,6 +131,15 @@ class MainMenuState extends State<MainMenu> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // caching images..
+    for (var item in AppData.searchImageList) {
+      precacheImage(AssetImage(item), context);
+    }
+  }
+
   final List<Widget> _buildScreens = [
     MainHomeScreen(),
     MainSearchScreen(),
@@ -159,7 +171,13 @@ class MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: MaterialApp(
+        child: GestureDetector(
+            onTap: () {
+              setState(() {
+                AppData.setSearchEnable(false);
+              });
+            },
+            child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: AppData.MainTheme,
             home: Stack(
@@ -167,32 +185,43 @@ class MainMenuState extends State<MainMenu> {
                   DefaultTabController(
                       length: _buildScreens.length,
                       child: Scaffold(
+                        key: AppData.mainScreenKey,
                         backgroundColor: Colors.black,
+                        // drawer: Drawer(
+                        //   child: SetupScreen(),
+                        // ),
                         body: TabBarView(
                           physics: NeverScrollableScrollPhysics(),
                           children: _buildScreens,
                         ),
                         bottomNavigationBar: TabBar(
-                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(width: 2.0, color: Colors.purple),
-                                insets: EdgeInsets.symmetric(horizontal:20.0)
-                            ),
-                            onTap: (index) {
-                              setState(() {
-                                _currentMenu = index;
-                              });
-                            },
-                            controller: _controller,
-                            tabs: _navBarsItems()
-                        ),
-                      )
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          indicator: UnderlineTabIndicator(
+                              borderSide: BorderSide(width: 2.0, color: Colors.purple),
+                              insets: EdgeInsets.symmetric(horizontal:20.0)
+                          ),
+                          onTap: (index) {
+                            setState(() {
+                              _currentMenu = index;
+                            });
+                          },
+                          controller: _controller,
+                          tabs: _navBarsItems()
+                      ),
+                    )
                   ),
                   MainAppBar(_buildScreens, _currentMenu),
                 ]
             )
         )
+        ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 }
 

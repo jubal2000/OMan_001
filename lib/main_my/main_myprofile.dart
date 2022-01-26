@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:oman_001/data/app_data.dart';
 import 'package:oman_001/data/goods_item.dart';
 import 'package:oman_001/screens/banner_scrollviewer.dart';
-import 'package:oman_001/screens/category_viewer.dart';
 import 'package:oman_001/screens/goods_item_card.dart';
+import 'package:oman_001/utils/utils.dart';
 
 class MainMyScreen extends StatefulWidget {
   const MainMyScreen({ Key? key }) : super(key: key);
@@ -32,7 +34,7 @@ class MainMyState extends State<MainMyScreen> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppData.MainTheme,
         home: DefaultTabController(
@@ -105,8 +107,18 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
     MyProfileTab(2, "스토어"),
   ];
 
+  final List<ListItemEx> _myMenuList = [
+    ListItemEx("나의 쇼핑 정보", isTitle: true),
+    ListItemEx("최근 본 상품"),
+    ListItemEx("상품 리뷰 내역"),
+    ListItemEx("주문배송내역 조회"),
+    ListItemEx("배송지 관리", isLast: true),
+  ];
+
   final _msgTextController = TextEditingController();
   final _scrollController = PageController(viewportFraction: 1, keepPage: true);
+
+  var _tabviewHeight = 1600.0;
 
   List<Widget> _shareLink = [];
   var _currentTab = 0;
@@ -133,6 +145,12 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
       "할 말이 없을 때도 쓰기도 한다."
       "왜 하필 asdf인가 하면, QWERTY 자판 기준으로 키보드에 제일 먼저 왼손이 닿는 부위가 순서대로 A, S, D, F이기 때문이다.[1] 드보락 자판에서는 이 부분이 aoeu가 되며, 콜맥 자판에서는 arst가 된다. 비슷한 경우로 ㅁㄴㅇㄹ과 qwer 따위도 존재한다."
       "HTML에서 색상코드를 #asdf로 주면 이런 색상(■, 실제 코드 #A0DF00)으로 인식한다. 색상코드가 4자리로 주어진 경우 HTML에서는 앞 2자리를 R,";
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _tabviewHeight = AppData.myProfileTabViewHeight;
+        print("--> $_tabviewHeight");
+      });
+    });
   }
 
   @override
@@ -143,7 +161,6 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
           controller: _scrollController,
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(0,5,0,0),
-          child: Container(
             child: Column(
               children: [
                 BannerScrollViewer(
@@ -234,13 +251,11 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                   ],
                 ),
                 SizedBox(height: 20),
-                Container(
-                  // color: Colors.green,
-                  child: DefaultTabController(
+                DefaultTabController(
                     length: _tabList.length,
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: 40,
                           child: TabBar(
                             onTap: (index) {
@@ -255,30 +270,34 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                             tabs: _tabList.map((item) => item.getTab()).toList(),
                           ),
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height,
+                        SizedBox(
+                          height: _tabviewHeight,
                           child: TabBarView(
                             children: _tabList,
-                          )
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
               ]
             ),
-          ),
         );
       }
       case 1: {
         return SingleChildScrollView(
           controller: _scrollController,
           physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.fromLTRB(15,15,20,15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Divider(
+                height: 1,
+                color: Colors.grey.withOpacity(0.3),
+                indent: 0,
+                endIndent: 0,
+              ),
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -288,20 +307,27 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                 ]
               ),
               SizedBox(height: 30),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: Text("나의 쇼핑 정보", style: AppData.MainTheme.textTheme.headline1),
+              ListView.builder(
+                  shrinkWrap: true, // use this
+                  scrollDirection: Axis.vertical,
+                  itemCount: _myMenuList.length,
+                  itemBuilder : (BuildContext context, int index) => _myMenuList[index]
               ),
-              SizedBox(height: 10),
-              ShoppingMidItem("최근 본 상품"),
-              ShoppingMidItem("상품 리뷰 내역"),
-              ShoppingMidItem("주문배송내역 조회"),
-              ShoppingMidItem("배송지 관리"),
-              SizedBox(height: 30),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              //   child: Text("나의 쇼핑 정보", style: AppData.MainTheme.textTheme.headline1),
+              // ),
+              // SizedBox(height: 10),
+              // ShoppingMidItem("최근 본 상품"),
+              // ShoppingMidItem("상품 리뷰 내역"),
+              // ShoppingMidItem("주문배송내역 조회"),
+              // ShoppingMidItem("배송지 관리"),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                height: 50,
+                color: Colors.grey.withOpacity(0.1),
+                padding: EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text("진행중인 주문", style: AppData.MainTheme.textTheme.headline1),
                     SizedBox(width: 5),
@@ -311,7 +337,7 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
               ),
               SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -344,8 +370,14 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
       height: 80,
       padding: EdgeInsets.only(top: 15),
       alignment: Alignment.topCenter,
-      child: Image.asset("assets/ui/my_arrow_00.png", width: 20, height: 30, color: Colors.purple),
+      child: Image.asset("assets/ui/my_arrow_00.png", width: 15, height: 30, color: Colors.purple),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 
@@ -383,30 +415,6 @@ class ShoppingTopItem extends StatelessWidget {
   }
 }
 
-class ShoppingMidItem extends StatelessWidget {
-  ShoppingMidItem(this.title, {Key? key}) : super(key: key);
-
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          height: 40,
-          width: double.infinity,
-          color: Colors.grey.withOpacity(0.25),
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.all(10),
-          child: Text(title, style: AppData.MainTheme.textTheme.headline2),
-        ),
-      ),
-    );
-  }
-}
-
 class ShoppingBotItem extends StatelessWidget {
   ShoppingBotItem(this.title, this.count, {Key? key}) : super(key: key);
 
@@ -417,16 +425,15 @@ class ShoppingBotItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      width: 40,
+      width: 35,
       // color: Colors.grey.withOpacity(0.25),
       alignment: Alignment.center,
-      padding: EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(title, style: AppData.MainTheme.textTheme.headline2, textAlign: TextAlign.center),
+          Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black)),
           SizedBox(height: 5),
-          Text("$count", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purple)),
+          Text("$count", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.purple)),
         ]
       ),
     );
@@ -449,7 +456,7 @@ class MyProfileTab extends StatefulWidget {
 }
 
 class MyProfileTabState extends State<MyProfileTab> {
-  List<String> imageList = [
+  final List<String> _imageList = [
     'assets/sample/1.jpeg',
     'assets/sample/2.jpeg',
     'assets/sample/3.jpeg',
@@ -484,7 +491,9 @@ class MyProfileTabState extends State<MyProfileTab> {
     GoodsItem(id: "8", title: "9.새로운 상품을 소개합니다!!", desc: "핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!", imageUrl: "assets/sample/9.jpeg", ribbon: "", price: 8000.0, priceOrg: 10000.0, saleRatio: 5.0, likes: 124, comments: 132),
   ];
 
-  final _gridbarController = PageController(viewportFraction: 1, keepPage: true);
+  final _tabController1 = PageController(viewportFraction: 1, keepPage: true);
+  final _tabController2 = PageController(viewportFraction: 1, keepPage: true);
+  final _edgeInsets = EdgeInsets.fromLTRB(20, 10, 20, 20);
 
   @override
   bool get wantKeepAlive => true;
@@ -495,47 +504,65 @@ class MyProfileTabState extends State<MyProfileTab> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // caching images..
-    for (var item in imageList) {
-      precacheImage(AssetImage(item), context);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     switch (widget.selectedTab) {
       case 0:{
-        return MasonryGridView.count(
-          crossAxisCount: 3,
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 2,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-          itemCount: imageList.length,
-          itemBuilder: (BuildContext context, int index) =>
-              Card(
-                // child: FittedBox(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(imageList[index]),
+        var axisMax = 3;
+        var axisSpacing = 10.0;
+        var itemHeight = MediaQuery.of(context).size.width / axisMax;
+        var itemCount = _imageList.length / axisMax;
+        AppData.myProfileTabViewHeight = itemHeight * itemCount - (axisSpacing * (itemCount - 1)) + _edgeInsets.top + _edgeInsets.bottom + 30;
+        return GridView.builder(
+            controller: _tabController1,
+            itemCount: _imageList.length,
+            physics: NeverScrollableScrollPhysics(),
+            padding: _edgeInsets,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: axisMax, //1 개의 행에 보여줄 item 개수
+              mainAxisSpacing: axisSpacing, //수평 Padding
+              crossAxisSpacing: axisSpacing, //수직 Padding
+            ),
+            itemBuilder: (BuildContext context, int index) =>
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                  color: Colors.grey.withOpacity(0.1),
+                    child: Image.asset(_imageList[index]),
                   )
-                // child: Image.network(imageList[index]),
-                //   fit: BoxFit.fill,
-                // ),
-              ),
+                )
         );
+      //   return MasonryGridView.count(
+      //     controller: _tabController1,
+      //     itemCount: imageList.length,
+      //     crossAxisCount: 3,
+      //     mainAxisSpacing: 2,
+      //     crossAxisSpacing: 2,
+      //     padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      //     itemBuilder: (BuildContext context, int index) {
+      //       return Card(
+      //           child: ClipRRect(
+      //             borderRadius: BorderRadius.circular(8.0),
+      //             child: Image.asset(imageList[index]),
+      //           )
+      //       );
+      //     }
+      //   );
       }
       case 2: {
+        var axisMax = 2;
+        var axisSpacing = 10.0;
+        var itemHeight = MediaQuery.of(context).size.width / axisMax;
+        var itemCount = _imageList.length / axisMax;
+        AppData.myProfileTabViewHeight = itemHeight * itemCount - (axisSpacing * (itemCount - 1)) + _edgeInsets.top + _edgeInsets.bottom + 30;
         return GridView.builder(
-            controller: _gridbarController,
+            controller: _tabController2,
             itemCount: _goodsList.length,
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+            physics: NeverScrollableScrollPhysics(),
+            padding: _edgeInsets,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-              childAspectRatio: 1, //item 의 가로 1, 세로 2 의 비율
-              mainAxisSpacing: 10, //수평 Padding
-              crossAxisSpacing: 10, //수직 Padding
+              crossAxisCount: axisMax, //1 개의 행에 보여줄 item 개수
+              mainAxisSpacing: axisSpacing, //수평 Padding
+              crossAxisSpacing: axisSpacing, //수직 Padding
             ),
             itemBuilder: (BuildContext context, int index) =>
                 GoodsItemSquareCard(_goodsList[index], sellType: GoodsItemCardSellType.goods, backgroundColor: Colors.grey.withOpacity(0.1))
@@ -545,5 +572,12 @@ class MyProfileTabState extends State<MyProfileTab> {
         return Center();
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _tabController1.dispose();
+    _tabController2.dispose();
+    super.dispose();
   }
 }

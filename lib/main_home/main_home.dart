@@ -17,7 +17,7 @@ class MainHomeScreen extends StatefulWidget {
 
 class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientMixin<MainHomeScreen> {
   final locator = GetIt.instance;
-  final PageController controller = PageController(viewportFraction: 1, keepPage: true);
+  final _controller = PageController(viewportFraction: 1, keepPage: true);
   Future<List<HomeItem>>? _calculation;
   final List<MainHomeCard> _homeList = [];
 
@@ -32,7 +32,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
   void initState() {
     super.initState();
     if (!AppData.isMainDataReady) {
-      _calculation = MainListAPI().getLocalHomeList();
+      _calculation = MainListAPI().getAsyncLocalHomeList();
     }
   }
 
@@ -53,7 +53,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
           return Stack(
             children: [
               PageView.builder(
-                controller: controller,
+                controller: _controller,
                 itemCount: _homeList.length,
                 onPageChanged: (index) {
                   print("--> onPageChanged : $index");
@@ -82,9 +82,9 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
                         if (!_isDragging) return;
                         // print("--> page : ${controller.page!.toInt()} / ${_startPos.dx} < ${pos.localPosition.dx}");
                         if (_startPos.dy < pos.localPosition.dy) {
-                          controller.animateToPage(controller.page!.toInt()-1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
+                          _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
                         } else {
-                          controller.animateToPage(controller.page!.toInt()+1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
+                          _controller.animateToPage(_controller.page!.toInt()+1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
                         }
                         _isDragging = false;
                       },
@@ -135,9 +135,9 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
      );
     }
 
-  // @override
-  // void dispose() {
-  //   controller.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }

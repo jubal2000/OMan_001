@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:oman_001/data/app_data.dart';
 
 class MainSearchScreen extends StatelessWidget {
   final List<MainSearchTab> tabList = [
@@ -14,30 +16,27 @@ class MainSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: DefaultTabController(
-          length: tabList.length,
-          child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: defaultTargetPlatform == TargetPlatform.android ? 0 : 40,
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-                bottom: TabBar(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: Colors.purple,
-                  tabs: tabList.map((item) => item.getTab()).toList(),
-                ),
-              ),
-              body: TabBarView(
-                children: tabList,
-              ),
+    return DefaultTabController(
+      length: tabList.length,
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: defaultTargetPlatform == TargetPlatform.android ? 0 : 40,
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+            bottom: TabBar(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.purple,
+              tabs: tabList.map((item) => item.getTab()).toList(),
             ),
           ),
-        );
-    }
+          body: TabBarView(
+            children: tabList,
+          ),
+        ),
+      );
+  }
 }
 
 class MainSearchTab extends StatefulWidget {
@@ -56,50 +55,7 @@ class MainSearchTab extends StatefulWidget {
 }
 
 class MainSearchTabState extends State<MainSearchTab> with AutomaticKeepAliveClientMixin<MainSearchTab> {
-  List<String> imageList = [
-    'assets/sample/1.jpeg',
-    'assets/sample/2.jpeg',
-    'assets/sample/3.jpeg',
-    'assets/sample/4.jpeg',
-    'assets/sample/5.jpeg',
-    'assets/sample/6.jpeg',
-    'assets/sample/7.jpeg',
-    'assets/sample/8.jpeg',
-    'assets/sample/9.jpeg',
-    'assets/sample/10.jpeg',
-    'assets/sample/1.jpeg',
-    'assets/sample/2.jpeg',
-    'assets/sample/3.jpeg',
-    'assets/sample/4.jpeg',
-    'assets/sample/5.jpeg',
-    'assets/sample/6.jpeg',
-    'assets/sample/7.jpeg',
-    'assets/sample/8.jpeg',
-    'assets/sample/9.jpeg',
-    'assets/sample/10.jpeg',
-    'assets/sample/1.jpeg',
-    'assets/sample/2.jpeg',
-    'assets/sample/3.jpeg',
-    'assets/sample/4.jpeg',
-    'assets/sample/5.jpeg',
-    'assets/sample/6.jpeg',
-    'assets/sample/7.jpeg',
-    'assets/sample/8.jpeg',
-    'assets/sample/9.jpeg',
-    'assets/sample/10.jpeg',
-    'assets/sample/1.jpeg',
-    'assets/sample/2.jpeg',
-    'assets/sample/3.jpeg',
-    'assets/sample/4.jpeg',
-    'assets/sample/5.jpeg',
-    'assets/sample/6.jpeg',
-    'assets/sample/7.jpeg',
-    'assets/sample/8.jpeg',
-    'assets/sample/9.jpeg',
-    'assets/sample/10.jpeg',
-  ];
-
-  final _scrollController = PageController(viewportFraction: 1, keepPage: true);
+  final _controller = PageController(viewportFraction: 1, keepPage: true);
 
   @override
   bool get wantKeepAlive => true;
@@ -112,10 +68,6 @@ class MainSearchTabState extends State<MainSearchTab> with AutomaticKeepAliveCli
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // caching images..
-    for (var item in imageList) {
-      precacheImage(AssetImage(item), context);
-    }
   }
 
   @override
@@ -123,29 +75,40 @@ class MainSearchTabState extends State<MainSearchTab> with AutomaticKeepAliveCli
     switch (widget.selectedTab) {
       case 0:{
         return MasonryGridView.count(
-          controller: _scrollController,
+          controller: _controller,
+          itemCount: AppData.searchImageList.length,
           crossAxisCount: 3,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
-          itemCount: imageList.length,
-          itemBuilder: (BuildContext context, int index) =>
-              Card(
-                // child: FittedBox(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(imageList[index]),
-                  )
-                // child: Image.network(imageList[index]),
-                //   fit: BoxFit.fill,
-                // ),
-              ),
+          itemBuilder: (BuildContext context, int index) {
+            if (AppData.searchImageList[index].contains("http")) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  imageUrl: AppData.searchImageList[index],
+                ),
+              );
+            } else {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.asset(AppData.searchImageList[index]),
+              );
+            }
+          }
         );
       }
       default:{
         return Center();
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 

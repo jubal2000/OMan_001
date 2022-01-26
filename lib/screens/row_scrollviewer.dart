@@ -80,4 +80,10 @@ class RowScrollState extends State<RowScrollViewer> {
         )
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
