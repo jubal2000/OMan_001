@@ -17,7 +17,7 @@ class MainListAPI {
     List<HomeItem> listItem = [];
     for (var element in demoData["home_data"]!) {
       listItem.add(HomeItem.fromJson(element));
-      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.name}");
+      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.nickname}");
     }
     return listItem;
   }
@@ -26,7 +26,7 @@ class MainListAPI {
     List<HomeItem> listItem = [];
     for (var element in demoData["home_data"]!) {
       listItem.add(HomeItem.fromJson(element));
-      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.name}");
+      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.nickname}");
     }
     return listItem;
   }
@@ -57,20 +57,20 @@ class StoreListAPI {
 
   Future<List<GoodsItem>> getAsyncLocalGoodsList() async {
     List<GoodsItem> listItem = [];
-    print("--> getLocalGoodsList : ${demoData["goods_data"]}");
+    // print("--> getLocalGoodsList : ${demoData["goods_data"]}");
     for (var element in demoData["goods_data"]!) {
       listItem.add(GoodsItem.fromJson(element));
-      print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
+      // print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
     }
     return listItem;
   }
 
   List<GoodsItem> getLocalGoodsList() {
     List<GoodsItem> listItem = [];
-    print("--> getLocalGoodsList : ${demoData["goods_data"]}");
+    // print("--> getLocalGoodsList : ${demoData["goods_data"]}");
     for (var element in demoData["goods_data"]!) {
       listItem.add(GoodsItem.fromJson(element));
-      print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
+      // print("--> getLocalGoodsList : ${listItem[listItem.length-1].imageUrl}");
     }
     return listItem;
   }
