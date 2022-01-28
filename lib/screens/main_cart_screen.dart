@@ -227,6 +227,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                     Text("${priceFormat.format(_sumPrice)}원", style: AppData.MainTheme.textTheme.headline2),
                                   ],
                                 ),
+                                SizedBox(height: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -234,6 +235,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                     Text("${priceFormat.format(_couponPrice)}원", style: AppData.MainTheme.textTheme.headline2),
                                   ],
                                 ),
+                                SizedBox(height: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -241,6 +243,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                     Text("${priceFormat.format(_transPee)}원", style: AppData.MainTheme.textTheme.headline2),
                                   ],
                                 ),
+                                SizedBox(height: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -252,7 +255,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                           ),
                         ),
                         Container(
-                            height: 40,
+                            height: 45,
                             width: double.infinity,
                             child: Row(
                               children: [

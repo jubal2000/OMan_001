@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oman_001/data/user_item.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class UserOverlayScreen extends StatefulWidget {
   final Function? onButtonSelect;
+  UserItem userInfo;
 
-  const UserOverlayScreen({
-    Key? key,
-    this.onButtonSelect
-  }) : super(key: key);
+  UserOverlayScreen(
+      this.userInfo,
+      { Key? key, this.onButtonSelect }) : super(key: key);
 
   @override
   UserOverlayState createState() => UserOverlayState();
@@ -77,7 +78,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                           Image.asset("assets/ui/main_right/Comment.png"),
                           SizedBox(height: 2),
                           Text(
-                            "456",
+                            "${widget.userInfo.commentData!.length}",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,
@@ -102,7 +103,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                       Image.asset("assets/ui/main_right/Good.png"),
                       SizedBox(height: 2),
                       Text(
-                        "123",
+                        "${widget.userInfo.likes}",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.grey,
@@ -114,16 +115,21 @@ class UserOverlayState extends State<UserOverlayScreen> {
                 )
               ),
               SizedBox(height: _iconSpace * 1.25),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: IconButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    widget.onButtonSelect!(0);
-                  },
-                  icon: Image.asset("assets/ui/main_right/Profile.png")
-                )
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: const Color(0xff7c94b6),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.userInfo.pic!),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.all( Radius.circular(50.0)),
+                  border: Border.all(
+                    color: Colors.red,
+                    width: 2.0,
+                  ),
+                ),
               ),
             ],
           )

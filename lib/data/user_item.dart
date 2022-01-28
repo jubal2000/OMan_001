@@ -15,58 +15,65 @@ class UserItem {
   String? token;   // connection check token..
   int   ? likes;
 
-  List<HistoryItem>  historyData  = [];
-  List<GoodsItem>    storeData    = [];
+  Map<String, HistoryItem>?  historyData;
+  Map<String, GoodsItem>?    storeData;
   List<String>?      optionData; // TODO
   List<String>?      followingData; // TODO
   List<String>?      followerData; // TODO
   List<String>?      commentData; // TODO
 
   UserItem(
-      { required this.id,
-        required this.userId,
-        required this.name,
-        required this.pic,
-        required this.picBack,
-        required this.gender,
-        required this.desc,
-        required this.pushId,
-        required this.token,
-        required this.likes,
-        required this.commentData,
+      this.id,
+      this.userId,
+      {
+        this.name,
+        this.pic,
+        this.picBack,
+        this.gender,
+        this.desc,
+        this.pushId,
+        this.token,
+        this.likes,
+        this.commentData,
 
-        required this.historyData,
-        required this.storeData,
-        required this.optionData,
-        required this.followingData,
-        required this.followerData,
+        this.historyData,
+        this.storeData,
+        this.optionData,
+        this.followingData,
+        this.followerData,
       });
 
   UserItem.fromJson(Map<dynamic, dynamic> json) {
-    id        = json['id']!;
-    userId    = json['userId']!;
-    name      = json['name']!;
-    pic       = json['pic']!;
-    picBack   = json['picBack']!;
-    gender    = json['gender']!;
-    desc      = json['desc']!;
-    pushId    = json['pushId']!;
-    token     = json['token']!;
-    likes     = int.parse(json['likes'].toString());
+    try {
+      id        = json['id']!;
+      userId    = json['userId']!;
+      name      = json['name']!;
+      pic       = json['pic']!;
+      picBack   = json['picBack']!;
+      gender    = json['gender']!;
+      desc      = json['desc']!;
+      pushId    = json['pushId']!;
+      token     = json['token']!;
+      likes     = int.parse(json['likes'].toString());
 
-    historyData   = [];
-    storeData     = [];
-    optionData    = [];
-    followingData = [];
-    followerData  = [];
-    commentData   = [];
+      historyData   = {};
+      storeData     = {};
+      optionData    = [];
+      followingData = [];
+      followerData  = [];
+      commentData   = [];
 
-    for (var item in json['history']!) {
-      historyData.add(HistoryItem.fromJson(item));
-    }
+      for (var item in json['history']!) {
+        var itemId = item['id'].toString();
+        historyData![itemId] = HistoryItem.fromJson(item);
+      }
 
-    for (var item in json['store']!) {
-      storeData.add(GoodsItem.fromJson(item));
+      for (var item in json['store']!) {
+        var itemId = item['id'].toString();
+        storeData![itemId] = GoodsItem.fromJson(item);
+      }
+    } catch(e) {
+      print("--> UserItem error : $e");
     }
 
     // optionData = json['option'],
