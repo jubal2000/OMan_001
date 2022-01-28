@@ -171,50 +171,50 @@ class MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: GestureDetector(
-            onTap: () {
-              setState(() {
-                AppData.setSearchEnable(false);
-              });
-            },
-            child: MaterialApp(
+      child: GestureDetector(
+          onTap: () {
+            setState(() {
+              AppData.setSearchEnable(false);
+            });
+          },
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: AppData.MainTheme,
             home: Stack(
-                children: [
-                  DefaultTabController(
-                      length: _buildScreens.length,
-                      child: Scaffold(
-                        key: AppData.mainScreenKey,
-                        backgroundColor: Colors.black,
-                        // drawer: Drawer(
-                        //   child: SetupScreen(),
-                        // ),
-                        body: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          children: _buildScreens,
-                        ),
-                        bottomNavigationBar: TabBar(
-                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          indicator: UnderlineTabIndicator(
-                              borderSide: BorderSide(width: 2.0, color: Colors.purple),
-                              insets: EdgeInsets.symmetric(horizontal:20.0)
-                          ),
-                          onTap: (index) {
-                            setState(() {
-                              _currentMenu = index;
-                            });
-                          },
-                          controller: _controller,
-                          tabs: _navBarsItems()
+              children: [
+                DefaultTabController(
+                    length: _buildScreens.length,
+                    child: Scaffold(
+                      key: AppData.mainScreenKey,
+                      backgroundColor: Colors.black,
+                      // drawer: Drawer(
+                      //   child: SetupScreen(),
+                      // ),
+                      body: TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        children: _buildScreens,
                       ),
-                    )
-                  ),
-                  MainAppBar(_buildScreens, _currentMenu),
-                ]
-            )
+                      bottomNavigationBar: TabBar(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(width: 2.0, color: Colors.purple),
+                            insets: EdgeInsets.symmetric(horizontal:20.0)
+                        ),
+                        onTap: (index) {
+                          setState(() {
+                            _currentMenu = index;
+                          });
+                        },
+                        controller: _controller,
+                        tabs: _navBarsItems()
+                    ),
+                  )
+                ),
+                MainAppBar(_buildScreens, _currentMenu),
+              ]
+          )
         )
-        ),
+      ),
     );
   }
 

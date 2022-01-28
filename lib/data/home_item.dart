@@ -1,17 +1,27 @@
 import 'user_item.dart';
 
 class HomeItem {
+  String? id;
   UserItem? user;
-  String? historyId;
 
-  HomeItem.fromJson(Map<dynamic, dynamic> json) :
-        user          = UserItem.fromJson(json['user']),
-        historyId     = json['historyId'];
+  HomeItem(
+      this.id,
+      this.user
+      );
+
+  HomeItem.fromJson(Map<dynamic, dynamic> json) {
+    try {
+      id = json['id'];
+      user = UserItem.fromJson(json['user']);
+    } catch (e) {
+      print("--> HomeItem error : $id -> $e");
+    }
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['user']      = user;
-    data['historyId'] = historyId;
+    data['id']      = id;
+    data['user']    = user;
     return data;
   }
 }

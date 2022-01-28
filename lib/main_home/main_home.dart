@@ -41,12 +41,11 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
     return FutureBuilder(
       future: _calculation,
       builder: (BuildContext context, AsyncSnapshot<List<HomeItem>> snapshot) {
-        print("--> MainHomeState : ${snapshot.hasData} / ${AppData.isMainDataReady} / ${_homeList.length}");
         if (snapshot.hasData || AppData.isMainDataReady) {
           if (!AppData.isMainDataReady) {
             _homeList.clear();
             for (var item in snapshot.data!) {
-              _homeList.add(MainHomeCard(item.user!, item.historyId!));
+              _homeList.add(MainHomeCard(item));
             }
             AppData.isMainDataReady = true;
           }

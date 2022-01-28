@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:oman_001/screens/goods_item_card.dart';
+import 'package:oman_001/utils/utils.dart';
 import 'package:oman_001/widgets/search_widget.dart';
 
 import 'goods_item.dart';
@@ -43,13 +44,19 @@ class AppData {
     brightness: Brightness.dark,
     primaryColor: Colors.black,
     unselectedWidgetColor: Colors.grey,
-    toggleableActiveColor: Colors.orange.shade800,
+    toggleableActiveColor: Colors.purple,
     iconTheme: IconThemeData(color: Colors.black),
-    fontFamily: 'NotoSans',
+    fontFamily: 'NotoSansKR',
     textTheme: TextTheme(
       headline1: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.black),
       headline2: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black),
       headline3: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.grey),
+      headline4: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Colors.white,
+        shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
+      ),
+      headline5: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.grey[200],
+        shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
+      ),
       subtitle1: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.black),
       subtitle2: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.black),
       bodyText1: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.normal, color: Colors.black),

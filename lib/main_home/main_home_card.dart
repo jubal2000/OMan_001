@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:oman_001/data/app_data.dart';
+import 'package:oman_001/data/history_item.dart';
+import 'package:oman_001/data/home_item.dart';
 import 'package:oman_001/data/user_item.dart';
 import 'package:oman_001/main_home/player_overlay.dart';
 import 'package:oman_001/main_home/user_overlay.dart';
@@ -9,21 +11,20 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class MainHomeCard extends StatefulWidget {
-  var pageController = PageController(viewportFraction: 1, keepPage: true);
-  final Map<String, MainHomeCardPlayer> _itemList = {};
-  final List<String> _itemIdList = [];
-  final UserItem user;
-  final String historyId;
-
-  MainHomeCard(this.user, this.historyId, {Key? key}) : super(key: key) {
-    for (var item in user.historyData) {
+  MainHomeCard(this.homeItem, {Key? key}) : super(key: key) {
+    homeItem.user!.historyData!.forEach((key, item) {
       var control = item.url!.contains("http") ?  VideoPlayerController.network(item.url!) : VideoPlayerController.asset(item.url!);
       var initialize = control.initialize();
       control.setVolume(0.2);
-      _itemList[item.id!] = MainHomeCardPlayer(pageController, control, initialize);
+      _itemList[item.id!] = MainHomeCardPlayer(pageController, control, initialize, homeItem.user!, key);
       _itemIdList.add(item.id!);
-    }
+    });
   }
+
+  var pageController = PageController(viewportFraction: 1, keepPage: true);
+  final Map<String, MainHomeCardPlayer> _itemList = {};
+  final List<String> _itemIdList = [];
+  final HomeItem homeItem;
 
   play() {
 
@@ -104,11 +105,16 @@ class MainHomeCardPlayer extends StatefulWidget {
   final PageController pageController;
   VideoPlayerController controller;
   Future<void> initializeVideoPlayerFuture;
+  UserItem userInfo;
+  String historyId;
 
   MainHomeCardPlayer(
     this.pageController,
     this.controller,
-    this.initializeVideoPlayerFuture, { Key? key })
+    this.initializeVideoPlayerFuture,
+    this.userInfo,
+    this.historyId,
+      { Key? key })
       : super(key: key);
 
   @override
@@ -169,7 +175,7 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
                         children: <Widget> [
                           Align(
                               alignment: Alignment.bottomLeft,
-                              child: PlayerOverlayScreen(controller: widget.controller, onScreenClosed: (isShow) {
+                              child: PlayerOverlayScreen(widget.userInfo.historyData![widget.historyId]!, controller: widget.controller, onScreenClosed: (isShow) {
                                 setState(() {
                                   AppData.isShowPlayerInfo = isShow;
                                 });
@@ -178,7 +184,7 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
                           Expanded(
                               child: Align(
                                   alignment: Alignment.bottomRight,
-                                  child: UserOverlayScreen(onButtonSelect: (selectId) {
+                                  child: UserOverlayScreen(widget.userInfo, onButtonSelect: (selectId) {
                                     setState(() {
 
                                     });
