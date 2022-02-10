@@ -350,7 +350,7 @@ class GoodsItemCardState extends State<GoodsItemCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(widget.goodsData.title!, style: widget.titleStyle, maxLines: 1),
-                              Text(widget.goodsData.optionStr!, style: widget.descStyle, maxLines: widget.descMaxLine),
+                              Text(widget.goodsData.optionStr, style: widget.descStyle, maxLines: widget.descMaxLine),
                               Expanded(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 
 import 'package:oman_001/main_home/main_home.dart';
 import 'package:oman_001/main_my/main_myprofile.dart';
@@ -10,8 +16,17 @@ import 'package:oman_001/main_my/setup_screen.dart';
 import 'package:oman_001/main_oman/main_oman.dart';
 import 'package:oman_001/main_search/main_search.dart';
 import 'package:oman_001/main_store/main_store.dart';
+import 'package:oman_001/utils/login_utils.dart';
+import 'package:oman_001/utils/network_utils.dart';
 import 'package:oman_001/utils/utils.dart';
 import 'package:oman_001/widgets/search_widget.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+
+import 'data/user_item.dart';
+import 'firebase_config.dart';
 
 import 'data/app_data.dart';
 import 'main_top.dart';
@@ -26,45 +41,45 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseConfig.platformOptions,
+  );
+
+  // for localhost Dev..
+  FirebaseFunctions.instance.useFunctionsEmulator("localhost", 5001);
+
+  // try {
+  //   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //       email: "barry.allen@example.com",
+  //       password: "SuperSecretPassword!"
+  //   );
+  // } on FirebaseAuthException catch (e) {
+  //   if (e.code == 'weak-password') {
+  //     print('The password provided is too weak.');
+  //   } else if (e.code == 'email-already-in-use') {
+  //     print('The account already exists for that email.');
+  //   }
+  // } catch (e) {
+  //   print(e);
+  // }
+
+  FirebaseAuth.instance
+      .authStateChanges()
+      .listen((user) {
+        if (user == null) {
+          print('--> User is currently signed out!');
+        } else {
+          AppData.loginUUID = user.uid;
+          print('--> User is signed in! : ${AppData.loginUUID}');
+        }
+      });
+
+  // signInWithGoogle().then((signInInfo) {
+  //   print('--> signInInfo : ${signInInfo}');
+  // });
+
   AppData.isMainPlay = AppData.isAutoPlay;
 
-  //   if (Firebase.apps.isEmpty) {
-  //   FirebaseApp app = await Firebase.initializeApp(
-  //     name: "[DEFAULT]",
-  //     options: FirebaseOptions(
-  //         apiKey: "AIzaSyBhuFu_G7rtnyhxS0d1U5IuP6mPlmmUKPI",
-  //         authDomain: "oman-01.firebaseapp.com",
-  //         projectId: "oman-01",
-  //         storageBucket: "oman-main-data-0000",
-  //         messagingSenderId: "787744327503",
-  //         appId: "1:787744327503:web:3dd24be27582e1c742273a",
-  //         measurementId: "G-8FWH38YHNY"
-  //     ),
-  //   );
-  //   print('--> Initialized : $app');
-  // } else {
-  //   FirebaseApp app = Firebase.app("[DEFAULT]");
-  //   print('--> FirebaseApp : $app');
-  // }
-
-  // if (Firebase.apps.isEmpty) {
-  //   await Firebase.initializeApp(
-  //     name: "OMan-01",
-  //     options: FirebaseOptions(
-  //         apiKey: "AIzaSyBhuFu_G7rtnyhxS0d1U5IuP6mPlmmUKPI",
-  //         authDomain: "oman-01.firebaseapp.com",
-  //         projectId: "oman-01",
-  //         storageBucket: "oman-main-data-0000",
-  //         messagingSenderId: "787744327503",
-  //         appId: "1:787744327503:web:3dd24be27582e1c742273a",
-  //         measurementId: "G-8FWH38YHNY"
-  //     ),
-  //   );
-  // } else {
-  //   Firebase.app();
-  // }
-
-  // setUpLocator();
   runApp(const MyApp());
 }
 
@@ -76,30 +91,52 @@ Future<void> main() async {
 
 BuildContext? testContext;
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  MyAppState createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  Future<UserItem>? _calculation;
+
+  @override
+  void initState() {
+    super.initState();
+    _calculation = getStartInfo(AppData.deviceType);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Make Fullscreen Mode..
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'OMan v0.0.1',
       theme: AppData.MainTheme,
-      home: MainMenu(),
-      // initialRoute: '/',
-      // routes: {
-      //   // When navigating to the "/" route, build the FirstScreen widget.
-      //   '/first': (context) => MainSearchScreen(),
-      //   // When navigating to the "/second" route, build the SecondScreen widget.
-      //   '/second': (context) => MainOmanScreen(),
-      // },
+      // home: MainMenu()
+      home: FutureBuilder(
+        future: _calculation,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          // print('--> snapshot : ${snapshot.hasData}');
+          if (snapshot.hasData) {
+            print('--> serverMain : ${AppData.startInfo!.serverMain}');
+            print('--> user name  : ${AppData.userInfo!.name}');
+            return MainMenu();
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        }
+      ),
     );
   }
 }
+
+// var url = Uri.parse(AppData.funcGetStartInfoItem);
+// var response = await http.post(
+// url, body: {'name': 'doodle', 'color': 'blue'});
+
 
 // ----------------------------------------- Main denu ----------------------------------------- //
 

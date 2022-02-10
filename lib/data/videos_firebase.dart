@@ -16,8 +16,9 @@ class MainListAPI {
   Future<List<HomeItem>> getAsyncLocalHomeList() async {
     List<HomeItem> listItem = [];
     for (var element in demoData["home_data"]!) {
-      listItem.add(HomeItem.fromJson(element));
-      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.nickname}");
+      var item = HomeItem.fromJson(element);
+      print("--> getAsyncLocalHomeList : ${item.user!.nickName}");
+      listItem.add(item);
     }
     return listItem;
   }
@@ -26,7 +27,7 @@ class MainListAPI {
     List<HomeItem> listItem = [];
     for (var element in demoData["home_data"]!) {
       listItem.add(HomeItem.fromJson(element));
-      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.nickname}");
+      print("--> getLocalHomeList : ${listItem[listItem.length-1].user?.nickName}");
     }
     return listItem;
   }

@@ -21,13 +21,18 @@ class GoodsItem {
   double? saleRatio;
   double? distance;
 
-  int trades = 0;
-  int comments = 0;
-  int likes = 0;
-
   List<String>? commentData; // TODO
   List<String>? imageData; // TODO
   List<String>? optionData; // TODO
+
+  DateTime? updateTime;
+  DateTime? createTime;
+
+  //-----------------------------------------------
+
+  int trades = 0;
+  int comments = 0;
+  int likes = 0;
 
   String optionStr = "option: texttexttexttexttexttexttext..";
 
@@ -57,14 +62,18 @@ class GoodsItem {
         this.trades = 0,
         this.comments = 0,
         this.likes = 0,
+
+        this.updateTime,
+        this.createTime,
       });
 
   GoodsItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id          = json['id'       ];
-      status      = int.parse(json['status'].toString());
-      userId      = json['userId'   ];
-      shopId      = json['shopId'   ];
+      id          = json['id'       ]!;
+      status      = int.parse(json['status']!.toString());
+      userId      = json['userId'   ]!;
+      shopId      = json['shopId'   ]!;
 
       title       = json['title'    ]!;
       desc        = json['desc'     ]!;
@@ -86,6 +95,9 @@ class GoodsItem {
       trades      = json['trades'   ]!;
       comments    = json['comments' ]!;
       likes       = json['likes'    ]!;
+
+      updateTime  = DateTime.parse(json['updateTime']!.toString());
+      createTime  = DateTime.parse(json['createTime']!.toString());
     } catch (e) {
       print("--> GoodsItem error : $id -> $e");
     }
@@ -93,33 +105,36 @@ class GoodsItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id']          = id;
-    data['status']      = status;
-    data['userId']      = userId;
-    data['shopId']      = shopId;
+    data['id'         ] ??= id;
+    data['status'     ] ??= status;
+    data['userId'     ] ??= userId;
+    data['shopId'     ] ??= shopId;
 
-    data['title']       = title;
-    data['desc']        = desc;
-    data['ribbon']      = ribbon;
-    data['imageUrl']    = imageUrl;
+    data['title'      ] ??= title;
+    data['desc'       ] ??= desc;
+    data['ribbon'     ] ??= ribbon;
+    data['imageUrl'   ] ??= imageUrl;
 
-    data['category1']   = category1;
-    data['category2']   = category2;
+    data['category1'  ] ??= category1;
+    data['category2'  ] ??= category2;
 
-    data['price']       = price;
-    data['priceOrg']    = priceOrg;
-    data['saleRatio']   = saleRatio;
-    data['distance']    = distance;
+    data['price'      ] ??= price;
+    data['priceOrg'   ] ??= priceOrg;
+    data['saleRatio'  ] ??= saleRatio;
+    data['distance'   ] ??= distance;
 
-    data['commentData'] = commentData;
-    data['imageData']   = imageData;
-    data['optionData']  = optionData;
+    data['commentData'] ??= commentData;
+    data['imageData'  ] ??= imageData;
+    data['optionData' ] ??= optionData;
 
-    data['trades']      = trades;
-    data['comments']    = comments;
-    data['likes']       = likes;
+    data['trades'     ] ??= trades;
+    data['comments'   ] ??= comments;
+    data['likes'      ] ??= likes;
     // data['commentData'] = commentData;
     // data['imageData']   = imageData;
+
+    data['updateTime' ] ??= updateTime;
+    data['createTime' ] ??= createTime;
     return data;
   }
 }

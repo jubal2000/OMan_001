@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:oman_001/data/app_data.dart';
+import 'package:oman_001/data/message_item.dart';
 import 'package:oman_001/utils/tik_tok_icons_icons.dart';
 import 'package:oman_001/widgets/search_widget.dart';
 
@@ -190,25 +191,6 @@ class MessageItemGroupState extends State<MessageItemGroup> {
           )
         ],
       ),
-    );
-  }
-}
-
-class MessageItem extends StatefulWidget {
-  MessageItem(this.message, this.time, {Key? key}) : super(key: key);
-
-  String message;
-  DateTime time;
-
-  @override
-  MessageItemState createState() => MessageItemState();
-}
-
-class MessageItemState extends State<MessageItem> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-
     );
   }
 }

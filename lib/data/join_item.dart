@@ -1,22 +1,23 @@
 class JoinItem {
-  int? id;
-  int? type;            //  0: join,  1: delete
+  String? id;
+  int?    status;           //  0: join,  1: delete
   String? message;
   DateTime? createTime;
 
   JoinItem(
       this.id,
-      this.type,
+      this.status,
       this.message,
       this.createTime,
       );
 
   JoinItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id          = int.parse(json['id'   ].toString());
-      type        = int.parse(json['type' ].toString());
-      message     = json['message']!;
-      createTime  = DateTime.parse(json['createTime'].toString());
+      id          = json['id'       ]!.toString();
+      status      = int.parse(json['status']!.toString());
+      message     = json['message'  ]!;
+      createTime  = DateTime.parse(json['createTime']!.toString());
     } catch (e) {
       print("--> JoinItem error : $id -> $e");
     }
@@ -24,10 +25,10 @@ class JoinItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id']          = id;
-    data['type']        = type;
-    data['message']     = message;
-    data['createTime']  = createTime.toString();
+    data['id'         ] ??= id;
+    data['status'     ] ??= status;
+    data['message'    ] ??= message;
+    data['createTime' ] ??= createTime.toString();
     return data;
   }
 }

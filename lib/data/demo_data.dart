@@ -5,7 +5,7 @@ var demoData =
       "id": "01",
       "user": {
         "id": "01",
-        "userId": "user 0001",
+        "nickName": "user 0001",
         "name": "J.Peterson",
         "pic": "https://langscoffeework.com/oman/sample/face_10.jpeg",
         "picBack": "",
@@ -70,7 +70,7 @@ var demoData =
       "id": "11",
       "user": {
         "id": "1",
-        "userId": "user 0001",
+        "nickName": "user 0002",
         "name": "J.Peterson",
         "pic": "assets/sample/face_12.jpeg",
         "picBack": "",
@@ -152,8 +152,8 @@ var demoData =
       "id": "21",
       "user": {
         "id": "2",
-        "userId": "user 0002",
-        "name": "김주현",
+        "nickName": "user 0003",
+        "name": "Tomas",
         "pic": "assets/sample/face_13.jpeg",
         "picBack": "",
         "gender": "",
@@ -217,8 +217,8 @@ var demoData =
       "id": "31",
       "user": {
         "id": "2",
-        "userId": "user 0002",
-        "name": "김주현",
+        "nickName": "user 0004",
+        "name": "주발거사",
         "pic": "assets/sample/face_14.jpeg",
         "picBack": "",
         "gender": "",
@@ -284,8 +284,8 @@ var demoData =
       "id": "41",
       "user": {
         "id": "3",
-        "userId": "user 0003",
-        "name": "Mark Jonson",
+        "nickName": "user 0003",
+        "name": "Marry Jonson",
         "pic": "assets/sample/face_15.jpeg",
         "picBack": "",
         "gender": "",

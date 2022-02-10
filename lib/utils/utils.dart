@@ -1,10 +1,67 @@
 import 'dart:collection';
+import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:oman_001/data/app_data.dart';
+
+// class INT {
+//   INT(this.value, {this.defaultValue = 1});
+//   final dynamic value;
+//   final dynamic defaultValue;
+//
+//   parse() {
+//     return value != null ? int.parse(value!.toString()) : defaultValue != null
+//       ? int.parse(defaultValue!.toString())
+//       : 0;
+//   }
+// }
+
+INT(dynamic value, {int defaultValue = 0}) {
+  return value != null && value.toString().isNotEmpty ? int.parse(value.toString()) : defaultValue;
+}
+
+STR(dynamic value, {dynamic defaultValue = ''}) {
+  return value != null ? value!.toString() : defaultValue != null ? defaultValue.toString() : '';
+}
+
+TME(dynamic value, {dynamic defaultValue = ''}) {
+  DateTime? result;
+  try {
+    result = value != null
+        ? value.runtimeType == String ? DateTime.parse(value.toString()) : DateTime.fromMillisecondsSinceEpoch(value['_seconds']*1000)
+        : defaultValue != null
+        ? DateTime.parse(defaultValue!.toString())
+        : null;
+  } catch (e) {
+    print("--> TME error : ${value.toString()} -> $e");
+  }
+  // print("--> TME result : ${result.toString()}");
+  return result;
+}
+
+MAP(dynamic value, dynamic data) {
+  if (value != null) {
+    for (var item in value) {
+      if (item['id'] != null) {
+        var itemId = item['id'].toString();
+        data![itemId] ??= data.fromJson(item);
+      }
+    }
+  }
+}
+
+ARR(dynamic value, dynamic data) {
+  if (value != null) {
+    for (var item in value) {
+        data!.add(data.fromJson(item));
+    }
+  }
+}
+
 
 extension DurationFormatter on Duration {
   /// Returns a day, hour, minute, second string representation of this `Duration`.

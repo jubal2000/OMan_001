@@ -1,11 +1,11 @@
 
 
 class BlockItem {
-  int? id;
+  String? id;
   int? status;
-  int? targetId;
-  int? userId;
-  String? title;
+  String? targetType;
+  String? targetId;
+  String? userId;
   String? desc;
   String? url;
   DateTime? createTime;
@@ -13,23 +13,24 @@ class BlockItem {
   BlockItem(
       this.id,
       this.status,
+      this.targetType,
       this.targetId,
       this.userId,
-      this.title,
       this.desc,
       this.url,
       this.createTime,
       );
 
   BlockItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id          = int.parse(json['id'       ].toString());
-      status      = int.parse(json['status'   ].toString());
-      targetId    = int.parse(json['targetId' ].toString());
-      userId      = int.parse(json['userId'   ].toString());
-      title       = json['title']!;
-      desc        = json['desc']!;
-      url         = json['url']!;
+      id          = json['id'         ]!;
+      status      = int.parse(json['status']!.toString());
+      targetType  = json['targetType' ]!;
+      targetId    = json['targetId'   ]!;
+      userId      = json['userId'     ]!;
+      desc        = json['desc'       ]!;
+      url         = json['url'        ]!;
       createTime  = DateTime.parse(json['createTime']!.toString());
     } catch (e) {
       print("--> BlockItem error : $id -> $e");
@@ -38,14 +39,14 @@ class BlockItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id']        ??= id;
-    data['status']    ??= status;
-    data['targetId']  ??= targetId;
-    data['userId']    ??= userId;
-    data['title']     ??= title;
-    data['desc']      ??= desc;
-    data['url']       ??= url;
-    data['createTime']   ??= createTime;
+    data['id'           ] ??= id;
+    data['status'       ] ??= status;
+    data['targetType'   ] ??= targetType;
+    data['targetId'     ] ??= targetId;
+    data['userId'       ] ??= userId;
+    data['desc'         ] ??= desc;
+    data['url'          ] ??= url;
+    data['createTime'   ] ??= createTime;
     return data;
   }
 }

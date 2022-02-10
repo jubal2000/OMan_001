@@ -1,33 +1,33 @@
 class FollowItem {
-  int? id;
-  int? status; // 1: normal  0: block
-  int? targetId;
-  int? userId;
-  int? type;
-  String? name;
-  String? pic;
+  String? id;
+  int?    status; // 1: normal  0: block
+  String? targetId;
+  String? userId;
+  int?    type;
   DateTime? createTime;
+
+  //--------------------------------------------
+
+  String name = "";
+  String pic  = "";
 
   FollowItem(
       this.id,
       this.targetId,
       this.userId,
       this.type,
-      this.name,
-      this.pic,
       this.createTime,
       );
 
   FollowItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id          = int.parse(json['id'].toString());
-      status      = int.parse(json['status'].toString());
-      targetId    = int.parse(json['targetId'].toString());
-      userId      = int.parse(json['userId'].toString());
-      type        = int.parse(json['type'].toString());
-      name        = json['name']!;
-      pic         = json['pic']!;
-      createTime  = DateTime.parse(json['type'].toString());
+      id          = json['id'       ]!;
+      status      = int.parse(json['status']!.toString());
+      targetId    = json['targetId' ]!;
+      userId      = json['userId'   ]!;
+      type        = int.parse(json['type']!.toString());
+      createTime  = DateTime.parse(json['createTime']!.toString());
     } catch (e) {
       print("--> FollowItem error : $id -> $e");
     }
@@ -35,14 +35,12 @@ class FollowItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id']          = id;
-    data['status']      = status;
-    data['targetId']    = targetId;
-    data['userId']      = userId;
-    data['type']        = type;
-    data['name']        = name;
-    data['pic']         = pic;
-    data['createTime']  = createTime;
+    data['id'         ] ??= id;
+    data['status'     ] ??= status;
+    data['targetId'   ] ??= targetId;
+    data['userId'     ] ??= userId;
+    data['type'       ] ??= type;
+    data['createTime' ] ??= createTime;
     return data;
   }
 }

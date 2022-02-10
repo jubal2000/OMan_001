@@ -1,20 +1,63 @@
+import 'package:oman_001/utils/utils.dart';
+
+import 'message_item.dart';
+import 'search_item.dart';
+import 'cart_item.dart';
+import 'order_item.dart';
 import 'review_item.dart';
-import 'ship_addr_item.dart';
+import 'address_item.dart';
 import 'trans_item.dart';
 import 'block_item.dart';
 import 'billing_item.dart';
 import 'comment_item.dart';
-import 'shop_item.dart';
+import 'store_item.dart';
 import 'follow_item.dart';
 import 'history_item.dart';
 import 'goods_item.dart';
 import 'list_item.dart';
 
 class UserItem {
+  //--------------------------------------------------------------
+  //
+  //  user data..
+  //
+
   String? id;
   int   ? status;
-  String? nickname;
+  String? nickName;
+
+  String? pic;
+  String? picBack;
+  String? message;    // 소개
+
+  int   ? likes;
+  int   ? comments;
+
+  Map<String, HistoryItem>?     historyData;    // 히스토리 목록..
+  Map<String, StoreItem>?       storeData;      // 샵정보 목록..  user > store > goods
+  Map<String, GoodsItem>?       goodsData;      // 상품 목록..
+
+  Map<String, FollowItem>?      followingData;  // 팔로잉 목록..
+  Map<String, FollowItem>?      followerData;   // 팔로워 목록..
+
+  Map<String, CommentItem>?     commentData;    // 코맨트 목록..
+  Map<String, SearchItem>?      searchData;     // 검색 목록..
+  Map<String, MessageItem>?     messageData;    // 대화 목록..
+
+  List<String>?    categoryData;    // 관심 주제 목록..
+  List<String>?    jobData;         // 직업 카테고리 목록..
+
+  DateTime? updateTime;
+  DateTime? createTime;
+
+  //--------------------------------------------------------------
+  //
+  //  my user only..
+  //
+
   String? password;
+  String? loginType;
+  String? loginId;
 
   String? name;
   String? nameEx;
@@ -23,50 +66,62 @@ class UserItem {
   String? phone;
   int   ? gender;
 
-  String? pic;
-  String? picBack;
-  String? message;    // 소개
-
   String? pushId;
   String? token;      // connection check token..
 
-  int   ? likes;
-  int   ? comments;
-
-  Map<String, HistoryItem>?     historyData;
-  Map<String, ShopItem>?        storeData; // 샵정보 목록..  user > shop > goods
-  Map<String, GoodsItem>?       goodsData; // 상품 목록..
-
   Map<String, String>?          optionData;     // 옵션 목록.. pushOn, autoPlay,
-  Map<String, FollowItem>?      followingData;  // 팔로잉 목록..
-  Map<String, FollowItem>?      followerData;   // 팔로워 목록..
+  Map<String, ReviewItem>?      reviewData;     // 리뷰 목록..
 
-  Map<String, CommentItem>?     commentData;  // 코맨트 목록..
-  Map<String, ReviewItem>?      reviewData;   // 리뷰 목록..
+  Map<String, BlockItem>?       blockData;      // 차단/신고 목록..
+  Map<String, BillingItem>?     billingData;    // 결제수단 목록..
+  Map<String, TransItem>?       transData;      // 배송정보 목록..
+  Map<String, AddressItem>?     shipAddrData;   // 배송주소 목록..
+  Map<String, CartItem>?        cartData;       // 쇼핑카트 목록..
+  Map<String, OrderItem>?       orderData;      // 주문 목록..
 
-  Map<String, BlockItem>?       blockData;    // 차단/신고 목록..
-  Map<String, BillingItem>?     billingData;  // 결제수단 목록..
-  Map<String, TransItem>?       transData;    // 배송정보 목록..
-  Map<String, ShipAddrItem>?    shipAddrData;    // 배송정보 목록..
-
-  Map<String, ListItem>?        socialData;   // 소셜 목록..
-  Map<String, ListItem>?        couponData;   // 쿠폰 목록..
-
-  List<String>?    categoryData;    // 선호 카테고리 목록..
-  List<String>?    jobData;         // 직업 카테고리 목록..
-  List<ListItem>?  goodsShowData;   // 최근 본 상품 목록..
+  Map<String, ListItem>?        socialData;     // 소셜 목록..
+  Map<String, ListItem>?        couponData;     // 쿠폰 목록..
+  Map<String, ListItem>?        viewData;       // 최근 본 상품 / 재능 목록..
 
   DateTime? loginTime;
   DateTime? logoutTime;
-  DateTime? createTime;
   DateTime? deleteTime;
+
 
   UserItem(
       this.id,
       this.status,
-      this.nickname,
+      this.nickName,
       {
+        this.pic,
+        this.picBack,
+        this.message,
+
+        this.likes,
+        this.comments,
+
+        this.historyData,
+        this.storeData,
+        this.goodsData,
+
+        this.followingData,
+        this.followerData,
+
+        this.commentData,
+        this.searchData,
+        this.messageData,
+
+        this.categoryData,
+        this.jobData,
+
+        this.updateTime,
+        this.createTime,
+
+        //---------------------------------------------------
+
         this.password,
+        this.loginType,
+        this.loginId,
 
         this.name,
         this.nameEx,
@@ -75,210 +130,258 @@ class UserItem {
         this.phone,
         this.gender,
 
-        this.pic,
-        this.picBack,
-        this.message,
-
         this.pushId,
         this.token,
-        this.likes,
-
-        this.comments,
-        this.reviewData,
-
-        this.historyData,
-        this.storeData,
-        this.goodsData,
 
         this.optionData,
-        this.followingData,
-        this.followerData,
-
-        this.commentData,
-        this.socialData,
+        this.reviewData,
 
         this.blockData,
         this.billingData,
         this.transData,
+        this.shipAddrData,
+        this.cartData,
+        this.orderData,
 
-        this.categoryData,
-        this.jobData,
+        this.socialData,
+        this.couponData,
+        this.viewData,
 
         this.loginTime,
         this.logoutTime,
-        this.createTime,
         this.deleteTime,
       });
 
   UserItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id        = json['id']!;
-      status    = int.parse(json['status'].toString());
-      nickname  = json['nickname']!;
-      password  = json['password']!;
+      id          = STR(json['id'         ]);
+      status      = INT(json['status'     ], defaultValue: 1);
+      nickName    = STR(json['nickName'   ]);
 
-      name      = json['name']!;
-      nameEx    = json['nameEx']!;
-      birth     = json['birth']!;
-      email     = json['email']!;
-      phone     = json['phone']!;
-      gender    = json['gender']!;
+      pic         = STR(json['pic'        ]);
+      picBack     = STR(json['picBack'    ]);
+      message     = STR(json['message'    ]);
 
-      pic       = json['pic']!;
-      picBack   = json['picBack']!;
-      message   = json['message']!;
+      likes       = INT(json['likes'      ]);
+      comments    = INT(json['comments'   ]);
 
-      pushId    = json['pushId']!;
-      token     = json['token']!;
-      likes     = int.parse(json['likes'].toString());
-      comments  = int.parse(json['comments'].toString());
+      historyData = {};
+      MAP(json['historyData'], HistoryItem);
 
-      historyData   = {};
-      storeData     = {};
-      goodsData     = {};
-      optionData    = {};
+      // historyData = {};
+      // for (var item in json['historyData']!) {
+      //   var itemId = item['id'].toString();
+      //   historyData![itemId] ??= HistoryItem.fromJson(item);
+      // }
 
-      followingData = {};
-      followerData  = {};
+      // storeData = {};
+      // for (var item in json['storeData']!) {
+      //   var itemId = item['id'].toString();
+      //   storeData![itemId] ??= item['value']!;
+      // }
+      //
+      // goodsData = {};
+      // for (var item in json['goodsData']!) {
+      //   var itemId = item['id'].toString();
+      //   goodsData![itemId] ??= GoodsItem.fromJson(item);
+      // }
+      //
+      // followingData = {};
+      // for (var item in json['followingData']!) {
+      //   var itemId = item['id'].toString();
+      //   followingData![itemId] ??= FollowItem.fromJson(item);
+      // }
+      //
+      // followerData = {};
+      // for (var item in json['followerData']!) {
+      //   var itemId = item['id'].toString();
+      //   followerData![itemId] ??= FollowItem.fromJson(item);
+      // }
+      //
+      // commentData = {};
+      // for (var item in json['commentData']!) {
+      //   var itemId = item['id'].toString();
+      //   commentData![itemId] ??= CommentItem.fromJson(item);
+      // }
+      //
+      // searchData = {};
+      // for (var item in json['searchData']!) {
+      //   var itemId = item['id'].toString();
+      //   searchData![itemId] ??= SearchItem.fromJson(item);
+      // }
+      //
+      // messageData = {};
+      // for (var item in json['messageData']!) {
+      //   var itemId = item['id'].toString();
+      //   messageData![itemId] ??= MessageItem.fromJson(item);
+      // }
+      //
+      // categoryData = [];
+      // for (var item in json['categoryData']!) {
+      //   categoryData!.add(item.toString());
+      // }
+      //
+      // jobData = [];
+      // for (var item in json['jobData']!) {
+      //   jobData!.add(item.toString());
+      // }
+      //
+      // updateTime = DateTime.parse(json['updateTime']!.toString());
+      // createTime = DateTime.parse(json['createTime']!.toString());
 
-      commentData   = {};
-      socialData    = {};
-      blockData     = {};
-      billingData   = {};
+      //-----------------------------------------------------------------
 
-      categoryData  = [];
-      jobData       = [];
+      password    = STR(json['password'   ]);
+      loginType   = STR(json['loginType'  ]);
+      loginId     = STR(json['loginId'    ]);
 
-      for (var item in json['historyData']!) {
-        var itemId = item['id'].toString();
-        historyData![itemId] = HistoryItem.fromJson(item);
-      }
+      name        = STR(json['name'       ]);
+      nameEx      = STR(json['nameEx'     ]);
+      birth       = STR(json['birth'      ]);
+      email       = STR(json['email'      ]);
+      phone       = STR(json['phone'      ]);
+      gender      = INT(json['gender'     ]);
 
-      for (var item in json['storeData']!) {
-        var itemId = item['id'].toString();
-        storeData![itemId] ??= item['value']!;
-      }
+      pushId      = STR(json['pushId'     ]);
+      token       = STR(json['token'      ]);
 
-      for (var item in json['goodsData']!) {
-        var itemId = item['id'].toString();
-        goodsData![itemId] = GoodsItem.fromJson(item);
-      }
-
-      for (var item in json['optionData']!) {
-        var itemId = item['id'].toString();
-        optionData![itemId] ??= item['value']!;
-      }
-
-      for (var item in json['followingData']!) {
-        var itemId = item['id'].toString();
-        followingData![itemId] = FollowItem.fromJson(item);
-      }
-
-      for (var item in json['followerData']!) {
-        var itemId = item['id'].toString();
-        followerData![itemId] = FollowItem.fromJson(item);
-      }
-
-      for (var item in json['commentData']!) {
-        var itemId = item['id'].toString();
-        commentData![itemId] = CommentItem.fromJson(item);
-      }
-
-      for (var item in json['reviewData']!) {
-        var itemId = item['id'].toString();
-        reviewData![itemId] = ReviewItem.fromJson(item);
-      }
-
-      for (var item in json['blockData']!) {
-        var itemId = item['id'].toString();
-        blockData![itemId] = BlockItem.fromJson(item);
-      }
-
-      for (var item in json['billingData']!) {
-        var itemId = item['id'].toString();
-        billingData![itemId] = BillingItem.fromJson(item);
-      }
-
-      for (var item in json['transData']!) {
-        var itemId = item['id'].toString();
-        transData![itemId] = TransItem.fromJson(item);
-      }
-
-      for (var item in json['shipAddrData']!) {
-        var itemId = item['id'].toString();
-        shipAddrData![itemId] = ShipAddrItem.fromJson(item);
-      }
-
-      for (var item in json['socialData']!) {
-        var itemId = item['id'].toString();
-        socialData![itemId] = ListItem.fromJson(item);
-      }
-
-      for (var item in json['couponData']!) {
-        var itemId = item['id'].toString();
-        couponData![itemId] = ListItem.fromJson(item);
-      }
-
-      for (var item in json['categoryData']!) {
-        categoryData!.add(item.toString());
-      }
-
-      for (var item in json['jobData']!) {
-        jobData!.add(item.toString());
-      }
-
-      loginTime     = DateTime.parse(json['loginTime' ].toString());
-      logoutTime    = DateTime.parse(json['logoutTime'].toString());
-      createTime    = DateTime.parse(json['createTime'].toString());
-      deleteTime    = DateTime.parse(json['deleteTime'].toString());
-
+      // optionData = {};
+      // for (var item in json['optionData']!) {
+      //   var itemId = item['id'].toString();
+      //   optionData![itemId] ??= item['value']!;
+      // }
+      //
+      // reviewData = {};
+      // for (var item in json['reviewData']!) {
+      //   var itemId = item['id'].toString();
+      //   reviewData![itemId] ??= ReviewItem.fromJson(item);
+      // }
+      //
+      // blockData = {};
+      // for (var item in json['blockData']!) {
+      //   var itemId = item['id'].toString();
+      //   blockData![itemId] ??= BlockItem.fromJson(item);
+      // }
+      //
+      // billingData = {};
+      // for (var item in json['billingData']!) {
+      //   var itemId = item['id'].toString();
+      //   billingData![itemId] ??= BillingItem.fromJson(item);
+      // }
+      //
+      // transData = {};
+      // for (var item in json['transData']!) {
+      //   var itemId = item['id'].toString();
+      //   transData![itemId] ??= TransItem.fromJson(item);
+      // }
+      //
+      // shipAddrData = {};
+      // for (var item in json['shipAddrData']!) {
+      //   var itemId = item['id'].toString();
+      //   shipAddrData![itemId] ??= AddressItem.fromJson(item);
+      // }
+      //
+      // cartData = {};
+      // for (var item in json['cartData']!) {
+      //   var itemId = item['id'].toString();
+      //   cartData![itemId] ??= CartItem.fromJson(item);
+      // }
+      //
+      // orderData = {};
+      // for (var item in json['orderData']!) {
+      //   var itemId = item['id'].toString();
+      //   orderData![itemId] ??= OrderItem.fromJson(item);
+      // }
+      //
+      // socialData = {};
+      // for (var item in json['socialData']!) {
+      //   var itemId = item['id'].toString();
+      //   socialData![itemId] ??= ListItem.fromJson(item);
+      // }
+      //
+      // couponData = {};
+      // for (var item in json['couponData']!) {
+      //   var itemId = item['id'].toString();
+      //   couponData![itemId] ??= ListItem.fromJson(item);
+      // }
+      //
+      // goodsShowData = {};
+      // for (var item in json['goodsShowData']!) {
+      //   var itemId = item['id'].toString();
+      //   goodsShowData![itemId] ??= ListItem.fromJson(item);
+      // }
+      //
+      // loginTime     = DateTime.parse(json['loginTime' ]!.toString());
+      // logoutTime    = DateTime.parse(json['logoutTime']!.toString());
+      // deleteTime    = DateTime.parse(json['deleteTime']!.toString());
     } catch(e) {
       print("--> UserItem error : $e");
     }
-
-    // optionData = json['option'],
-    // followingData = json['following'],
-    // followerData = json['follower'],
-    // commentData = json['comments'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
 
-    data['id']            = id;
-    data['status']        = status;
-    data['nickname']      = nickname;
+    data['id'           ] ??= id;
+    data['status'       ] ??= status;
+    data['nickname'     ] ??= nickName;
 
-    data['name']          = name;
-    data['nameEx']        = nameEx;
-    data['birth']         = birth;
-    data['email']         = email;
-    data['phone']         = phone;
-    data['gender']        = gender;
+    data['pic'          ] ??= pic;
+    data['picBack'      ] ??= picBack;
+    data['message'      ] ??= message;
 
-    data['pic']           = pic;
-    data['picBack']       = picBack;
-    data['message']       = message;
+    data['likes'        ] ??= likes;
+    data['comments'     ] ??= comments;
 
-    data['pushId']        = pushId;
-    data['token']         = token;
-    data['likes']         = likes;
-    data['comments']      = comments;
+    data['historyData'  ] ??= historyData;
+    data['storeData'    ] ??= storeData;
+    data['goodsData'    ] ??= goodsData;
+    data['followingData'] ??= followingData;
+    data['followerData' ] ??= followerData;
 
-    data['history']       = historyData;
-    data['store']         = goodsData;
-    data['storeData']     = storeData;
+    data['commentData'  ] ??= commentData;
+    data['searchData'   ] ??= searchData;
 
-    data['following']     = followingData;
-    data['follower']      = followerData;
-    data['comments']      = commentData;
-    data['categoryData']  = categoryData;
-    data['socialData']    = socialData;
-    data['blockData']     = blockData;
-    data['billingData']   = billingData;
+    data['categoryData' ] ??= categoryData;
+    data['jobData'      ] ??= jobData;
 
-    data['option']        = optionData;
-    data['jobData']       = jobData;
+    data['updateTime'   ] ??= updateTime;
+    data['createTime'   ] ??= createTime;
+
+    //---------------------------------------------------------------
+
+    data['password'     ] ??= password;
+    data['loginId'      ] ??= loginId;
+    data['loginType'    ] ??= loginType;
+
+    data['name'         ] ??= name;
+    data['nameEx'       ] ??= nameEx;
+    data['birth'        ] ??= birth;
+    data['email'        ] ??= email;
+    data['phone'        ] ??= phone;
+    data['gender'       ] ??= gender;
+
+    data['pushId'       ] ??= pushId;
+    data['token'        ] ??= token;
+
+    data['optionData'   ] ??= optionData;
+    data['reviewData'   ] ??= reviewData;
+
+    data['blockData'    ] ??= blockData;
+    data['billingData'  ] ??= billingData;
+    data['transData'    ] ??= transData;
+    data['shipAddrData' ] ??= shipAddrData;
+    data['cartData'     ] ??= cartData;
+    data['orderData'    ] ??= orderData;
+
+    data['socialData'   ] ??= socialData;
+    data['couponData'   ] ??= couponData;
+    data['viewData'     ] ??= viewData;
+
+    data['loginTime'    ] ??= loginTime;
+    data['logoutTime'   ] ??= logoutTime;
+    data['deleteTime'   ] ??= deleteTime;
 
     return data;
   }

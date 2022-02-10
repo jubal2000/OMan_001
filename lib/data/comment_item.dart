@@ -1,10 +1,10 @@
 class CommentItem {
-  int? id;
-  int? status;
-  int? targetType; // 0: user, 1: content, 2: goods, 3: shop, 4: message...
-  int? targetId;
-  int? userId;
-  int? vote;
+  String? id;
+  int?    status;
+  String? targetType; // 0: user, 1: content, 2: goods, 3: shop, 4: message...
+  String? targetId;
+  String? userId;
+  int?    vote;
   String? message;
   DateTime? createTime;
 
@@ -20,15 +20,16 @@ class CommentItem {
       );
 
   CommentItem.fromJson(Map<dynamic, dynamic> json) {
+    if (json['id'] == null) return;
     try {
-      id          = int.parse(json['id'].toString());
-      status      = int.parse(json['status'].toString());
-      targetType  = int.parse(json['targetType'].toString());
-      targetId    = int.parse(json['targetId'].toString());
-      userId      = int.parse(json['userId'].toString());
-      vote        = int.parse(json['vote'].toString());
-      message     = json['message']!;
-      createTime  = DateTime.parse(json['type'].toString());
+      id          = json['id'       ]!;
+      status      = int.parse(json['status'     ]!.toString());
+      targetType  = json['targetType' ]!;
+      targetId    = json['targetId'   ]!;
+      userId      = json['userId'     ]!;
+      message     = json['message'    ]!;
+      vote        = int.parse(json['vote']!.toString());
+      createTime  = DateTime.parse(json['createTime']!.toString());
     } catch (e) {
       print("--> CommentItem error : $id -> $e");
     }
@@ -36,14 +37,14 @@ class CommentItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id']          = id;
-    data['status']      = status;
-    data['targetType']  = targetType;
-    data['targetId']    = targetId;
-    data['userId']      = userId;
-    data['vote']        = vote;
-    data['message']     = message;
-    data['createTime']  = createTime;
+    data['id'         ] ??= id;
+    data['status'     ] ??= status;
+    data['targetType' ] ??= targetType;
+    data['targetId'   ] ??= targetId;
+    data['userId'     ] ??= userId;
+    data['vote'       ] ??= vote;
+    data['message'    ] ??= message;
+    data['createTime' ] ??= createTime;
     return data;
   }
 }
