@@ -178,7 +178,7 @@ class MainAppBarState extends State<MainAppBar> {
                                               controller: _searchTextController,
                                               maxLines: 1,
                                               keyboardType: TextInputType.text,
-                                              style: AppData.MainTheme.textTheme.headline2,
+                                              style: Theme.of(context).textTheme.headline2,
                                               decoration: InputDecoration(
                                                 hintText: '검색',
                                                 hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
@@ -264,7 +264,7 @@ class MainAppBarState extends State<MainAppBar> {
                                               padding: EdgeInsets.only(left: 5.0),
                                               child: SingleChildScrollView(
                                                 child: TextField(
-                                                  style: AppData.MainTheme.textTheme.headline2,
+                                                  style: Theme.of(context).textTheme.headline2,
                                                   // focusNode: _focusNode2,
                                                   controller: _searchTextController,
                                                   maxLines: 1,
@@ -345,9 +345,9 @@ class MainAppBarState extends State<MainAppBar> {
                                     margin: EdgeInsets.only(bottom: 1),
                                     child: Row(
                                         children: [
-                                          Text("재능", style: AppData.storeMode == StoreMode.talent ? AppData.MainTheme.textTheme.subtitle1 : AppData.MainTheme.textTheme.subtitle2),
+                                          Text("재능", style: AppData.storeMode == StoreMode.talent ? Theme.of(context).textTheme.subtitle1 : Theme.of(context).textTheme.subtitle2),
                                           SizedBox(width: 9),
-                                          Text("상품", style: AppData.storeMode == StoreMode.goods ? AppData.MainTheme.textTheme.subtitle1 : AppData.MainTheme.textTheme.subtitle2),
+                                          Text("상품", style: AppData.storeMode == StoreMode.goods ? Theme.of(context).textTheme.subtitle1 : Theme.of(context).textTheme.subtitle2),
                                       ]
                                     ),
                                   ),
@@ -461,7 +461,7 @@ class MainAppBarState extends State<MainAppBar> {
                         Container(
                           margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
                           alignment: Alignment.centerLeft,
-                          child: Text(_newHistoryList[index], style: AppData.MainTheme.textTheme.headline1),
+                          child: Text(_newHistoryList[index], style: Theme.of(context).textTheme.headline1),
                         ),
                         Visibility(
                           visible: index < _newHistoryList.length-1,

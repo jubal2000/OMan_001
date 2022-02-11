@@ -114,7 +114,7 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'OMan v0.0.1',
-      theme: AppData.MainTheme,
+      theme: MainTheme,
       // home: MainMenu()
       home: FutureBuilder(
         future: _calculation,
@@ -216,7 +216,7 @@ class MainMenuState extends State<MainMenu> {
           },
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: AppData.MainTheme,
+            theme: MainTheme,
             home: Stack(
               children: [
                 DefaultTabController(

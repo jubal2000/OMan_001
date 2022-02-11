@@ -24,6 +24,36 @@ class StoreMode {
   static int get goods  => 1;
 }
 
+const SCROLL_SPEED = 250;
+const PLAYER_DESC_LINE_MAX = 5;
+
+
+var MainTheme = ThemeData(
+  canvasColor: Colors.white,
+  backgroundColor: Colors.black,
+  brightness: Brightness.dark,
+  primaryColor: Colors.black,
+  unselectedWidgetColor: Colors.grey,
+  toggleableActiveColor: Colors.purple,
+  iconTheme: IconThemeData(color: Colors.black),
+  fontFamily: 'NotoSansKR',
+  textTheme: TextTheme(
+    headline1: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.black),
+    headline2: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black),
+    headline3: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.grey),
+    headline4: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Colors.white,
+      shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
+    ),
+    headline5: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.grey[200],
+      shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
+    ),
+    subtitle1: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.black),
+    subtitle2: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.black),
+    bodyText1: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.normal, color: Colors.black),
+    bodyText2: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.normal, color: Colors.grey),
+  ),
+);
+
 class AppData {
   static final AppData _singleton = AppData._internal();
 
@@ -35,12 +65,11 @@ class AppData {
   static var useLanguage = 'kr';
   static var deviceType = 'test';
 
-  final int SCROLL_SPEED = 250;
   static var isMainDataReady = false;
   static var isStoreDataReady = false;
   static var isShowPlayerInfo = true;
   static var isMainPlay = true;
-  static var isAutoPlay = true; // start auto play..
+  static var isAutoPlay = false; // start auto play..
   static var isSearchOn = false;
 
   static var loginUUID = '';
@@ -51,32 +80,6 @@ class AppData {
   static var myProfileTabViewHeight = 1200.0;
   static var searchWidgetKey = GlobalKey();
   static var mainScreenKey = GlobalKey<ScaffoldState>();
-
-  static var MainTheme = ThemeData(
-    canvasColor: Colors.white,
-    backgroundColor: Colors.black,
-    brightness: Brightness.dark,
-    primaryColor: Colors.black,
-    unselectedWidgetColor: Colors.grey,
-    toggleableActiveColor: Colors.purple,
-    iconTheme: IconThemeData(color: Colors.black),
-    fontFamily: 'NotoSansKR',
-    textTheme: TextTheme(
-      headline1: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.black),
-      headline2: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black),
-      headline3: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.grey),
-      headline4: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Colors.white,
-        shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
-      ),
-      headline5: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.grey[200],
-        shadows: outlinedText(strokeWidth: 1, strokeColor: Colors.black.withOpacity(0.1)),
-      ),
-      subtitle1: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.black),
-      subtitle2: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.black),
-      bodyText1: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.normal, color: Colors.black),
-      bodyText2: const TextStyle(fontSize: 11.0, fontWeight: FontWeight.normal, color: Colors.grey),
-    ),
-  );
 
   static List<GoodsItemCard> goodsList = [];
 

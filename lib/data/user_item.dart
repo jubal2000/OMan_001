@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:oman_001/utils/utils.dart';
 
 import 'message_item.dart';
@@ -167,56 +169,45 @@ class UserItem {
       comments    = INT(json['comments'   ]);
 
       historyData = {};
-      MAP(json['historyData'], HistoryItem);
-
-      // historyData = {};
-      // for (var item in json['historyData']!) {
-      //   var itemId = item['id'].toString();
-      //   historyData![itemId] ??= HistoryItem.fromJson(item);
-      // }
+      json['historyData']!.forEach((key, item) {
+        historyData![key.toString()] ??= HistoryItem.fromJson(item);
+      });
 
       // storeData = {};
-      // for (var item in json['storeData']!) {
-      //   var itemId = item['id'].toString();
-      //   storeData![itemId] ??= item['value']!;
-      // }
+      // json['storeData']!.forEach((key, item) {
+      //   storeData![key.toString()] ??= StoreItem.fromJson(item);
+      // });
       //
       // goodsData = {};
-      // for (var item in json['goodsData']!) {
-      //   var itemId = item['id'].toString();
-      //   goodsData![itemId] ??= GoodsItem.fromJson(item);
-      // }
+      // json['goodsData']!.forEach((key, item) {
+      //   goodsData![key.toString()] ??= GoodsItem.fromJson(item);
+      // });
       //
       // followingData = {};
-      // for (var item in json['followingData']!) {
-      //   var itemId = item['id'].toString();
-      //   followingData![itemId] ??= FollowItem.fromJson(item);
-      // }
+      // json['followingData']!.forEach((key, item) {
+      //   followingData![key.toString()] ??= FollowItem.fromJson(item);
+      // });
       //
       // followerData = {};
-      // for (var item in json['followerData']!) {
-      //   var itemId = item['id'].toString();
-      //   followerData![itemId] ??= FollowItem.fromJson(item);
-      // }
+      // json['followerData']!.forEach((key, item) {
+      //   followerData![key.toString()] ??= FollowItem.fromJson(item);
+      // });
       //
       // commentData = {};
-      // for (var item in json['commentData']!) {
-      //   var itemId = item['id'].toString();
-      //   commentData![itemId] ??= CommentItem.fromJson(item);
-      // }
+      // json['commentData']!.forEach((key, item) {
+      //   commentData![key.toString()] ??= CommentItem.fromJson(item);
+      // });
       //
       // searchData = {};
-      // for (var item in json['searchData']!) {
-      //   var itemId = item['id'].toString();
-      //   searchData![itemId] ??= SearchItem.fromJson(item);
-      // }
+      // json['searchData']!.forEach((key, item) {
+      //   searchData![key.toString()] ??= SearchItem.fromJson(item);
+      // });
       //
       // messageData = {};
-      // for (var item in json['messageData']!) {
-      //   var itemId = item['id'].toString();
-      //   messageData![itemId] ??= MessageItem.fromJson(item);
-      // }
-      //
+      // json['messageData']!.forEach((key, item) {
+      //   messageData![key.toString()] ??= MessageItem.fromJson(item);
+      // });
+
       // categoryData = [];
       // for (var item in json['categoryData']!) {
       //   categoryData!.add(item.toString());

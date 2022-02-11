@@ -79,7 +79,7 @@ class _NumberInputWidgetState extends State<NumberInputWidget> {
                   ),
                 ),
                 Expanded(
-                  child: Text("${widget.number}", style: AppData.MainTheme.textTheme.headline1, textAlign: TextAlign.center, maxLines: 1),
+                  child: Text("${widget.number}", style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center, maxLines: 1),
                 ),
                 SizedBox(
                   width: _width * 0.3,

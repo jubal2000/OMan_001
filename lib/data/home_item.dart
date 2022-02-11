@@ -4,17 +4,20 @@ import 'user_item.dart';
 class HomeItem {
   String? id;
   UserItem? user;
+  UserItem? creator;
 
   HomeItem(
       this.id,
       this.user,
+      this.creator,
       );
 
   HomeItem.fromJson(Map<dynamic, dynamic> json) {
     if (json['id'] == null) return;
     try {
-      id    = STR(json['id']);
-      user  = UserItem.fromJson(json['user']!);
+      id      = STR(json['id']);
+      user    = UserItem.fromJson(json['owner'  ]!);
+      creator = UserItem.fromJson(json['creator']!);
     } catch (e) {
       print("--> HomeItem error : $id -> $e");
     }

@@ -28,7 +28,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(defaultTargetPlatform == TargetPlatform.android ? 20 : 50), // here the desired height
           child: AppBar(
-            title: Text('채팅', style: AppData.MainTheme.textTheme.headline1),
+            title: Text('채팅', style: Theme.of(context).textTheme.headline1),
             titleSpacing: 0,
             elevation: 1,
             primary: false,
@@ -166,8 +166,8 @@ class MessageItemGroupState extends State<MessageItemGroup> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.userName, style: AppData.MainTheme.textTheme.subtitle1),
-                Text(widget.message, style: AppData.MainTheme.textTheme.subtitle2),
+                Text(widget.userName, style: Theme.of(context).textTheme.subtitle1),
+                Text(widget.message, style: Theme.of(context).textTheme.subtitle2),
               ],
             ),
           ),
@@ -175,7 +175,7 @@ class MessageItemGroupState extends State<MessageItemGroup> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("12:00", style: AppData.MainTheme.textTheme.bodyText1),
+              Text("12:00", style: Theme.of(context).textTheme.bodyText1),
               SizedBox(height: 5),
               Container(
                 width: 16,

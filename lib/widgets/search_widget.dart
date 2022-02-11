@@ -119,7 +119,7 @@ class SearchWidgetState extends State<SearchWidget> {
                                 controller: _searchTextController,
                                 maxLines: 1,
                                 keyboardType: TextInputType.text,
-                                style: AppData.MainTheme.textTheme.headline2,
+                                style: Theme.of(context).textTheme.headline2,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(bottom: 15),
                                   hintText: '검색',
@@ -203,7 +203,7 @@ class SearchWidgetState extends State<SearchWidget> {
                             margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
                             alignment: Alignment.centerLeft,
                             child: Text(_newHistoryList[index],
-                                style: AppData.MainTheme.textTheme.headline1),
+                                style: Theme.of(context).textTheme.headline1),
                           ),
                           Visibility(
                               visible: index < _newHistoryList.length - 1,

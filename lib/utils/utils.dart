@@ -7,18 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:oman_001/data/app_data.dart';
+import 'package:oman_001/data/history_item.dart';
 
-// class INT {
-//   INT(this.value, {this.defaultValue = 1});
-//   final dynamic value;
-//   final dynamic defaultValue;
-//
-//   parse() {
-//     return value != null ? int.parse(value!.toString()) : defaultValue != null
-//       ? int.parse(defaultValue!.toString())
-//       : 0;
-//   }
-// }
 
 INT(dynamic value, {int defaultValue = 0}) {
   return value != null && value.toString().isNotEmpty ? int.parse(value.toString()) : defaultValue;
@@ -43,16 +33,23 @@ TME(dynamic value, {dynamic defaultValue = ''}) {
   return result;
 }
 
-MAP(dynamic value, dynamic data) {
-  if (value != null) {
-    for (var item in value) {
-      if (item['id'] != null) {
-        var itemId = item['id'].toString();
-        data![itemId] ??= data.fromJson(item);
-      }
-    }
-  }
-}
+// MAP(dynamic value, dynamic type) {
+//   Map<String, type> result = {};
+//   if (value != null && value.length > 0) {
+//     try {
+//       for (var item in value) {
+//         if (item['id'] != null) {
+//           var itemId = item['id'].toString();
+//           result[itemId] = item;
+//           print("--> MAP add : ${item.toString()} -> $itemId");
+//         }
+//       }
+//     } catch (e) {
+//       print("--> MAP error : ${value.toString()} -> $e");
+//     }
+//   }
+//   return result;
+// }
 
 ARR(dynamic value, dynamic data) {
   if (value != null) {
@@ -188,7 +185,7 @@ class ListItemEx extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(title, style: AppData.MainTheme.textTheme.headline1),
+              Text(title, style: Theme.of(context).textTheme.headline1),
             ],
           )
       );
@@ -204,7 +201,7 @@ class ListItemEx extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 25),
                     child: Row(
                       children: [
-                        Text(title, style: AppData.MainTheme.textTheme.headline2),
+                        Text(title, style: Theme.of(context).textTheme.headline2),
                         Expanded(child: SizedBox(height: 1)),
                         Image.asset("assets/ui/arrow_right_00.png", width: 15, height: 40, color: Colors.black.withOpacity(0.75)),
                       ],
@@ -275,7 +272,7 @@ class MenuItems {
                     size: 22
                 ),
                 SizedBox(width: 10),
-                Text(item.text, style: AppData.MainTheme.textTheme.headline2),
+                Text(item.text, style: MainTheme.textTheme.headline2),
               ],
             ),
           ),
@@ -322,10 +319,10 @@ class SecondPageRoute extends CupertinoPageRoute {
 }
 
 /// Outlines a text using shadows.
-List<Shadow> outlinedText({double strokeWidth = 2, Color strokeColor = Colors.black, int precision = 4}) {
+List<Shadow> outlinedText({double strokeWidth = 1, Color strokeColor = Colors.black, int precision = 4}) {
   Set<Shadow> result = HashSet();
   for (int x = 1; x < strokeWidth + precision; x++) {
-  for(int y = 1; y < strokeWidth + precision; y++) {
+    for(int y = 1; y < strokeWidth + precision; y++) {
       double offsetX = x.toDouble();
       double offsetY = y.toDouble();
       result.add(Shadow(offset: Offset(-strokeWidth / offsetX, -strokeWidth / offsetY), color: strokeColor));

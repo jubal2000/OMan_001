@@ -36,12 +36,12 @@ class MainMyState extends State<MainMyScreen> with AutomaticKeepAliveClientMixin
   Widget build(BuildContext context) {
     return  MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppData.MainTheme,
+        theme: MainTheme,
         home: DefaultTabController(
           length: _tabList.length,
           child: Scaffold(
             appBar: AppBar(
-              title: Text("마이 페이지", style: AppData.MainTheme.textTheme.headline2),
+              title: Text("마이 페이지", style: Theme.of(context).textTheme.headline2),
               toolbarHeight: defaultTargetPlatform == TargetPlatform.android ? 0 : 50,
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
@@ -188,7 +188,7 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                               )
                             )
                           ),
-                          Text("Lady35me@oman", style: AppData.MainTheme.textTheme.headline2),
+                          Text("Lady35me@oman", style: Theme.of(context).textTheme.headline2),
                           Container(
                             width: 130,
                             padding: EdgeInsets.symmetric(vertical: 10),
@@ -210,20 +210,20 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                               children: [
                                 Column(
                                   children: [
-                                    Text("73.1K", style: AppData.MainTheme.textTheme.headline1),
-                                    Text("팔로우", style: AppData.MainTheme.textTheme.bodyText2),
+                                    Text("73.1K", style: Theme.of(context).textTheme.headline1),
+                                    Text("팔로우", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Text("2.2M", style: AppData.MainTheme.textTheme.headline1),
-                                    Text("팔로워", style: AppData.MainTheme.textTheme.bodyText2),
+                                    Text("2.2M", style: Theme.of(context).textTheme.headline1),
+                                    Text("팔로워", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Text("480", style: AppData.MainTheme.textTheme.headline1),
-                                    Text("좋아요", style: AppData.MainTheme.textTheme.bodyText2),
+                                    Text("480", style: Theme.of(context).textTheme.headline1),
+                                    Text("좋아요", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
                               ],
@@ -232,7 +232,7 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                             TextField(
                               readOnly: true,
                               controller: _msgTextController,
-                              style: AppData.MainTheme.textTheme.bodyText1,
+                              style: Theme.of(context).textTheme.bodyText1,
                               maxLines: 5,
                             ),
                             Container(
@@ -329,9 +329,9 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("진행중인 주문", style: AppData.MainTheme.textTheme.headline1),
+                    Text("진행중인 주문", style: Theme.of(context).textTheme.headline1),
                     SizedBox(width: 5),
-                    Text("(최근 3개월)", style: AppData.MainTheme.textTheme.bodyText1),
+                    Text("(최근 3개월)", style: Theme.of(context).textTheme.bodyText1),
                   ],
                 ),
               ),

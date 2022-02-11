@@ -205,7 +205,7 @@ class MainStoreTabState extends State<MainStoreTab> with AutomaticKeepAliveClien
                 CategoryViewer(
                   _categoryItem!,
                   title: "카테고리",
-                  titleStyle: AppData.MainTheme.textTheme.headline2!
+                  titleStyle: Theme.of(context).textTheme.headline2!
                 ),
                 SizedBox(height: 10),
                 Column(
@@ -232,7 +232,7 @@ class MainStoreTabState extends State<MainStoreTab> with AutomaticKeepAliveClien
                 CategoryViewer(
                     _categoryItem!,
                     title: "카테고리",
-                    titleStyle: AppData.MainTheme.textTheme.headline2!
+                    titleStyle: Theme.of(context).textTheme.headline2!
                 ),
                 SizedBox(height: 10),
                 Column(

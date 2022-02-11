@@ -66,7 +66,7 @@ class CategoryViewerState extends State<CategoryViewer> {
         item.height = _itemHeight;
         item.width  = _itemHeight;
         item.backgroundColor = Colors.grey.withOpacity(0.1);
-        item.textStyle = AppData.MainTheme.textTheme.bodyText1!;
+        item.textStyle = Theme.of(context).textTheme.bodyText1!;
         item.textAlignment = Alignment.bottomCenter;
         item.textMargin = EdgeInsets.symmetric(vertical: _itemHeight * 0.1);
         if (count > 1) _itemLineList.add(SizedBox(width: widget.space, height: widget.space));

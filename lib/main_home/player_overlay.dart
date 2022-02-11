@@ -70,7 +70,7 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
           _width = MediaQuery
               .of(context)
               .size
-              .width * 0.8;
+              .width * 0.82;
           _maxPos = widget.controller!.value.duration;
 
           List<LineMetrics> lines = _textSize(widget.itemData.title!, Theme.of(context).textTheme.headline1!, 2).computeLineMetrics();
@@ -79,9 +79,8 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
           return Container(
               height: _height,
               width: _width,
-              margin: EdgeInsets.only(bottom: 10, left: 10),
-              padding: EdgeInsets.all(10),
-              color: Colors.grey.withOpacity(0),
+              padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
+              color: Colors.grey.withAlpha(0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   verticalDirection: VerticalDirection.down,
@@ -134,24 +133,24 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
                       )
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          widget.itemData.title!,
-                          style: Theme.of(context).textTheme.headline4,
-                          maxLines: 1,
-                        ),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        widget.itemData.title!,
+                        style: Theme.of(context).textTheme.headline4,
+                        maxLines: 1,
+                      ),
                     ),
                     Text(
-                        widget.itemData.desc!,
-                        maxLines: 5 - titleLines,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.headline5,
+                      widget.itemData.desc!,
+                      maxLines: PLAYER_DESC_LINE_MAX + 1 - titleLines,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                 ]
-            )
-          );
-        });
+              )
+            );
+          });
   }
 
   TextPainter _textSize(String text, TextStyle style, int maxLine) {

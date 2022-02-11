@@ -22,13 +22,13 @@ class RowScrollState extends State<RowScrollViewer> {
 
   void moveBack() {
     _controller.animateToPage(_controller.page!.toInt() - 1,
-        duration: Duration(milliseconds: AppData().SCROLL_SPEED),
+        duration: Duration(milliseconds: SCROLL_SPEED),
         curve: Curves.easeInQuad);
   }
 
   void moveNext() {
     _controller.animateToPage(_controller.page!.toInt() + 1,
-        duration: Duration(milliseconds: AppData().SCROLL_SPEED),
+        duration: Duration(milliseconds: SCROLL_SPEED),
         curve: Curves.easeInQuad);
   }
 
@@ -59,7 +59,7 @@ class RowScrollState extends State<RowScrollViewer> {
               alignment: Alignment.centerLeft,
               child: Text(
                   widget.title,
-                  style: AppData.MainTheme.textTheme.headline2
+                  style: Theme.of(context).textTheme.headline2
               ),
             ),
             Container(

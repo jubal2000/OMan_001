@@ -129,6 +129,7 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    print("--> MainHomeCardPlayer : ${widget.userInfo.name}");
     return Scaffold(
       body: FutureBuilder(
         future: widget.initializeVideoPlayerFuture,

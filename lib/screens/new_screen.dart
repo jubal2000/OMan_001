@@ -41,7 +41,7 @@ class NewScreenState extends State<NewScreen> with AutomaticKeepAliveClientMixin
           primary: false,
           titleSpacing: 0,
           elevation: 1,
-          title: Text('설정', style: AppData.MainTheme.textTheme.headline1),
+          title: Text('설정', style: Theme.of(context).textTheme.headline1),
           backgroundColor: Colors.white,
           foregroundColor: Colors.grey,
         ),

@@ -78,7 +78,7 @@ class UserOverlayState extends State<UserOverlayScreen> {
                           Image.asset("assets/ui/main_right/Comment.png"),
                           SizedBox(height: 2),
                           Text(
-                            "${widget.userInfo.commentData!.length}",
+                            "${widget.userInfo.comments}",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,

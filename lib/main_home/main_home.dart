@@ -5,6 +5,7 @@ import 'package:oman_001/data/home_item.dart';
 import 'package:oman_001/data/videos_firebase.dart';
 import 'package:oman_001/main_home/main_home_card.dart';
 import 'package:oman_001/screens/feed_viewmodel.dart';
+import 'package:oman_001/utils/network_utils.dart';
 import 'package:stacked/stacked.dart';
 
 class MainHomeScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
   void initState() {
     super.initState();
     if (!AppData.isMainDataReady) {
-      _calculation = MainListAPI().getAsyncLocalHomeList();
+      _calculation = getMainHomeData();
     }
   }
 
@@ -40,7 +41,8 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _calculation,
-      builder: (BuildContext context, AsyncSnapshot<List<HomeItem>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print("--> MainHomeState : ${snapshot.hasData} / ${AppData.isMainDataReady}");
         if (snapshot.hasData || AppData.isMainDataReady) {
           if (!AppData.isMainDataReady) {
             _homeList.clear();
@@ -81,9 +83,9 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
                         if (!_isDragging) return;
                         // print("--> page : ${controller.page!.toInt()} / ${_startPos.dx} < ${pos.localPosition.dx}");
                         if (_startPos.dy < pos.localPosition.dy) {
-                          _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
+                          _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.easeInQuad);
                         } else {
-                          _controller.animateToPage(_controller.page!.toInt()+1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.easeInQuad);
+                          _controller.animateToPage(_controller.page!.toInt()+1, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.easeInQuad);
                         }
                         _isDragging = false;
                       },

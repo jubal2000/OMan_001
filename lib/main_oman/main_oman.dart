@@ -45,7 +45,7 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppData.MainTheme,
+        theme: MainTheme,
         home: SingleChildScrollView(
         controller: _controller,
           physics: BouncingScrollPhysics(),
@@ -57,7 +57,7 @@ class MainOmanState extends State<MainOmanScreen> with AutomaticKeepAliveClientM
                 BannerScrollViewer(
                     _bannerList,
                     title: "투데이핫이슈",
-                    titleStyle: AppData.MainTheme.textTheme.headline2!,
+                    titleStyle: Theme.of(context).textTheme.headline2!,
                     showArrow: true
                 ),
                 RowScrollViewer(

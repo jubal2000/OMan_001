@@ -33,7 +33,7 @@ class _CartScreenState extends State<MainCartScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(defaultTargetPlatform == TargetPlatform.android ? 20 : 50), // here the desired height
           child: AppBar(
-            title: Text('장바구니', style: AppData.MainTheme.textTheme.headline1),
+            title: Text('장바구니', style: Theme.of(context).textTheme.headline1),
             titleSpacing: 0,
             elevation: 1,
             primary: false,
@@ -224,7 +224,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("총 주문 금액", style: Theme.of(context).textTheme.headline2),
-                                    Text("${priceFormat.format(_sumPrice)}원", style: AppData.MainTheme.textTheme.headline2),
+                                    Text("${priceFormat.format(_sumPrice)}원", style: Theme.of(context).textTheme.headline2),
                                   ],
                                 ),
                                 SizedBox(height: 5),
@@ -232,7 +232,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("총 쿠폰할인", style: Theme.of(context).textTheme.headline2),
-                                    Text("${priceFormat.format(_couponPrice)}원", style: AppData.MainTheme.textTheme.headline2),
+                                    Text("${priceFormat.format(_couponPrice)}원", style: Theme.of(context).textTheme.headline2),
                                   ],
                                 ),
                                 SizedBox(height: 5),
@@ -240,7 +240,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("총 배송비", style: Theme.of(context).textTheme.headline2),
-                                    Text("${priceFormat.format(_transPee)}원", style: AppData.MainTheme.textTheme.headline2),
+                                    Text("${priceFormat.format(_transPee)}원", style: Theme.of(context).textTheme.headline2),
                                   ],
                                 ),
                                 SizedBox(height: 5),
@@ -248,7 +248,7 @@ class _MainCartTabState extends State<MainCartTab> with AutomaticKeepAliveClient
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("총 결제 금액", style: Theme.of(context).textTheme.headline1),
-                                    Text("${priceFormat.format(_totalPrice)}원", style: AppData.MainTheme.textTheme.headline1),
+                                    Text("${priceFormat.format(_totalPrice)}원", style: Theme.of(context).textTheme.headline1),
                                   ],
                                 ),
                               ]

@@ -44,11 +44,11 @@ class BannerScrollState extends State<BannerScrollViewer> {
   Timer? _timer;
 
   void bannerBack() {
-    _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.fastOutSlowIn);
+    _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.fastOutSlowIn);
   }
 
   void bannerNext() {
-    _controller.animateToPage(_controller.page!.toInt()+1, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.fastOutSlowIn);
+    _controller.animateToPage(_controller.page!.toInt()+1, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.fastOutSlowIn);
   }
 
   @override
@@ -56,7 +56,7 @@ class BannerScrollState extends State<BannerScrollViewer> {
     if (widget.autoScroll && _timer == null) {
       _timer = Timer.periodic(Duration(seconds: widget.autoScrollTime), (timer) {
         if (_controller.page!.toInt()+1 >= widget.itemList.length) {
-          _controller.animateToPage(0, duration: Duration(milliseconds: AppData().SCROLL_SPEED), curve: Curves.fastOutSlowIn);
+          _controller.animateToPage(0, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.fastOutSlowIn);
         } else {
           bannerNext();
         }
