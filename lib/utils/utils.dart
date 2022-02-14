@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,10 @@ import 'package:oman_001/data/history_item.dart';
 
 INT(dynamic value, {int defaultValue = 0}) {
   return value != null && value.toString().isNotEmpty ? int.parse(value.toString()) : defaultValue;
+}
+
+DBL(dynamic value, {double defaultValue = 0.0}) {
+  return value != null && value.toString().isNotEmpty ? double.parse(value.toString()) : defaultValue;
 }
 
 STR(dynamic value, {dynamic defaultValue = ''}) {
@@ -57,6 +62,18 @@ ARR(dynamic value, dynamic data) {
         data!.add(data.fromJson(item));
     }
   }
+}
+
+NUMBER_K(int number) {
+  String result = "";
+  if (number > 1000) {
+    var num1 = number / 1000;
+    result = num1.toStringAsFixed(1);
+    result += 'K';
+  } else {
+    result = '$number';
+  }
+  return result;
 }
 
 
@@ -168,12 +185,16 @@ class _WidgetSizeState extends State<WidgetSize> {
   }
 }
 
-class ListItemEx extends StatelessWidget {
-  ListItemEx(this.title, {Key? key, this.isTitle = false, this.isLast = false}) : super(key: key);
+typedef ListItemExCallback = void Function(int);
 
+class ListItemEx extends StatelessWidget {
+  ListItemEx(this.title, {Key? key, this.code = 0, this.isTitle = false, this.isLast = false, this.callback}) : super(key: key);
+
+  int code;
   String title;
   bool isTitle;
   bool isLast;
+  ListItemExCallback? callback;
 
   @override
   Widget build(BuildContext context) {
@@ -193,31 +214,39 @@ class ListItemEx extends StatelessWidget {
       return Container(
           height: 50,
           color: Colors.white,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    child: Row(
-                      children: [
-                        Text(title, style: Theme.of(context).textTheme.headline2),
-                        Expanded(child: SizedBox(height: 1)),
-                        Image.asset("assets/ui/arrow_right_00.png", width: 15, height: 40, color: Colors.black.withOpacity(0.75)),
-                      ],
+          child: GestureDetector(
+            onTap: () {
+              print("--> ListItemEx onTap : $code -> $title");
+              if (callback != null) {
+                callback!(code);
+              }
+            },
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      child: Row(
+                        children: [
+                          Text(title, style: Theme.of(context).textTheme.headline2),
+                          Expanded(child: SizedBox(height: 1)),
+                          Image.asset("assets/ui/arrow_right_00.png", width: 15, height: 40, color: Colors.black.withOpacity(0.75)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: !isLast,
-                  child: Divider(
-                    height: 1,
-                    color: Colors.grey.withOpacity(0.3),
-                    indent: 0,
-                    endIndent: 0,
+                  Visibility(
+                    visible: !isLast,
+                    child: Divider(
+                      height: 1,
+                      color: Colors.grey.withOpacity(0.3),
+                      indent: 0,
+                      endIndent: 0,
+                    ),
                   ),
-                ),
-              ]
+                ]
+            )
           )
       );
       // return Padding(
@@ -332,4 +361,43 @@ List<Shadow> outlinedText({double strokeWidth = 1, Color strokeColor = Colors.bl
     }
   }
   return result.toList();
+}
+
+Widget getCircleImage(String url, double size) {
+  if (url.contains("http")) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size),
+      child: CachedNetworkImage(
+        placeholder: (context, url) => getLoadingCircle(30),
+        imageUrl: url,
+      ),
+    );
+  } else {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size),
+      child: Image.asset(url),
+    );
+  }
+}
+
+
+Widget getRectImage(String url) {
+  if (url.contains("http")) {
+    return CachedNetworkImage(
+      placeholder: (context, url) => getLoadingCircle(30),
+      imageUrl: url,
+    );
+  } else {
+    return Image.asset(url);
+  }
+}
+
+Widget getLoadingCircle(double size) {
+  return Center(
+          child: SizedBox(
+              width: size,
+              height: size,
+              child: CircularProgressIndicator()
+          )
+        );
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:oman_001/data/app_data.dart';
 import 'package:oman_001/data/goods_item.dart';
+import 'package:oman_001/data/history_item.dart';
 import 'package:oman_001/screens/banner_scrollviewer.dart';
-import 'package:oman_001/screens/goods_item_card.dart';
+import 'package:oman_001/widgets/goods_item_card.dart';
 import 'package:oman_001/utils/utils.dart';
+import 'package:oman_001/widgets/history_item_card.dart';
 
 class MainMyScreen extends StatefulWidget {
   const MainMyScreen({ Key? key }) : super(key: key);
@@ -119,6 +122,7 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
   final _scrollController = PageController(viewportFraction: 1, keepPage: true);
 
   var _tabviewHeight = 1600.0;
+  var _imageSize = 150.0;
 
   List<Widget> _shareLink = [];
   var _currentTab = 0;
@@ -141,14 +145,11 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                 )
             ),
         )).toList();
-    _msgTextController.text =
-      "할 말이 없을 때도 쓰기도 한다."
-      "왜 하필 asdf인가 하면, QWERTY 자판 기준으로 키보드에 제일 먼저 왼손이 닿는 부위가 순서대로 A, S, D, F이기 때문이다.[1] 드보락 자판에서는 이 부분이 aoeu가 되며, 콜맥 자판에서는 arst가 된다. 비슷한 경우로 ㅁㄴㅇㄹ과 qwer 따위도 존재한다."
-      "HTML에서 색상코드를 #asdf로 주면 이런 색상(■, 실제 코드 #A0DF00)으로 인식한다. 색상코드가 4자리로 주어진 경우 HTML에서는 앞 2자리를 R,";
+    _msgTextController.text = AppData.userInfo!.message!;
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       setState(() {
         _tabviewHeight = AppData.myProfileTabViewHeight;
-        print("--> $_tabviewHeight");
+        print("--> _tabviewHeight : $_tabviewHeight");
       });
     });
   }
@@ -176,19 +177,17 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                       padding: EdgeInsets.only(left: 50, right: 20),
                       child: Column(
                         children : [
-                          Container(
-                            width: 120,
-                            height: 120,
-                              margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage("assets/sample/face_01.jpeg")
-                              )
-                            )
+                          SizedBox(
+                            width: _imageSize,
+                            height: _imageSize,
+                            child: getCircleImage(AppData.userInfo!.pic!, 80),
                           ),
-                          Text("Lady35me@oman", style: Theme.of(context).textTheme.headline2),
+                          Column(
+                            children: [
+                              Text(AppData.userInfo!.nickName!, style: Theme.of(context).textTheme.headline2),
+                              Text('[${AppData.userInfo!.loginId!}]', style: Theme.of(context).textTheme.bodyText2),
+                            ],
+                          ),
                           Container(
                             width: 130,
                             padding: EdgeInsets.symmetric(vertical: 10),
@@ -210,19 +209,19 @@ class MainMyTabState extends State<MainMyTab> with AutomaticKeepAliveClientMixin
                               children: [
                                 Column(
                                   children: [
-                                    Text("73.1K", style: Theme.of(context).textTheme.headline1),
+                                    Text(NUMBER_K(AppData.userInfo!.following!), style: Theme.of(context).textTheme.headline1),
                                     Text("팔로우", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Text("2.2M", style: Theme.of(context).textTheme.headline1),
+                                    Text(NUMBER_K(AppData.userInfo!.follower!), style: Theme.of(context).textTheme.headline1),
                                     Text("팔로워", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Text("480", style: Theme.of(context).textTheme.headline1),
+                                    Text(NUMBER_K(AppData.userInfo!.likes!), style: Theme.of(context).textTheme.headline1),
                                     Text("좋아요", style: Theme.of(context).textTheme.bodyText2),
                                   ],
                                 ),
@@ -491,6 +490,8 @@ class MyProfileTabState extends State<MyProfileTab> {
     GoodsItem("8", 1, "01", "01", title: "9.새로운 상품을 소개합니다!!", desc: "핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!핫한 새로운 상품을 소개합니다!! 내용이 들어갑니다!", imageUrl: "assets/sample/9.jpeg", ribbon: "", price: 8000.0, priceOrg: 10000.0, saleRatio: 5.0, likes: 124, comments: 132),
   ];
 
+  List<HistoryItem> _historyList = [];
+
   final _tabController1 = PageController(viewportFraction: 1, keepPage: true);
   final _tabController2 = PageController(viewportFraction: 1, keepPage: true);
   final _edgeInsets = EdgeInsets.fromLTRB(20, 10, 20, 20);
@@ -501,6 +502,13 @@ class MyProfileTabState extends State<MyProfileTab> {
   @override
   void initState() {
     super.initState();
+
+    _historyList = [];
+    AppData.userInfo!.historyData!.forEach((key, value) {
+      if (value.url != null) {
+        _historyList.add(value);
+      }
+    });
   }
 
   @override
@@ -510,11 +518,12 @@ class MyProfileTabState extends State<MyProfileTab> {
         var axisMax = 3;
         var axisSpacing = 10.0;
         var itemHeight = MediaQuery.of(context).size.width / axisMax;
-        var itemCount = _imageList.length / axisMax;
-        AppData.myProfileTabViewHeight = itemHeight * itemCount - (axisSpacing * (itemCount - 1)) + _edgeInsets.top + _edgeInsets.bottom + 30;
+        var itemCount = _historyList.length / axisMax;
+        AppData.myProfileTabViewHeight = itemHeight * itemCount + _edgeInsets.top + _edgeInsets.bottom + 30;
+
         return GridView.builder(
             controller: _tabController1,
-            itemCount: _imageList.length,
+            itemCount: _historyList.length,
             physics: NeverScrollableScrollPhysics(),
             padding: _edgeInsets,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -523,36 +532,20 @@ class MyProfileTabState extends State<MyProfileTab> {
               crossAxisSpacing: axisSpacing, //수직 Padding
             ),
             itemBuilder: (BuildContext context, int index) =>
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Container(
-                  color: Colors.grey.withOpacity(0.1),
-                    child: Image.asset(_imageList[index]),
-                  )
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Container(
+                color: Colors.grey.withOpacity(0.3),
+                  child: HistoryItemCard(_historyList[index]),
                 )
+              )
         );
-      //   return MasonryGridView.count(
-      //     controller: _tabController1,
-      //     itemCount: imageList.length,
-      //     crossAxisCount: 3,
-      //     mainAxisSpacing: 2,
-      //     crossAxisSpacing: 2,
-      //     padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-      //     itemBuilder: (BuildContext context, int index) {
-      //       return Card(
-      //           child: ClipRRect(
-      //             borderRadius: BorderRadius.circular(8.0),
-      //             child: Image.asset(imageList[index]),
-      //           )
-      //       );
-      //     }
-      //   );
       }
       case 2: {
         var axisMax = 2;
         var axisSpacing = 10.0;
         var itemHeight = MediaQuery.of(context).size.width / axisMax;
-        var itemCount = _imageList.length / axisMax;
+        var itemCount = _goodsList.length / axisMax;
         AppData.myProfileTabViewHeight = itemHeight * itemCount - (axisSpacing * (itemCount - 1)) + _edgeInsets.top + _edgeInsets.bottom + 30;
         return GridView.builder(
             controller: _tabController2,

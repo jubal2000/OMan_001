@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oman_001/data/app_data.dart';
+import 'package:oman_001/utils/login_utils.dart';
 import 'package:oman_001/utils/utils.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -26,7 +27,11 @@ class SetupScreenState extends State<SetupScreen> with AutomaticKeepAliveClientM
     ListItemEx("문의하기"),
     ListItemEx("서비스 이용 약관"),
     ListItemEx("의견 보내기"),
-    ListItemEx("로그아웃"),
+    ListItemEx("로그아웃", code: 900, callback: (code) {
+      if (AppData.userInfo != null) {
+        signOutWithGoogle();
+      }
+    }),
     ListItemEx("회원탈퇴"),
   ];
 

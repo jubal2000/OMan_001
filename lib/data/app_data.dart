@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oman_001/data/user_item.dart';
-import 'package:oman_001/screens/goods_item_card.dart';
+import 'package:oman_001/widgets/goods_item_card.dart';
 import 'package:oman_001/utils/utils.dart';
 import 'package:oman_001/widgets/search_widget.dart';
 

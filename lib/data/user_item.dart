@@ -34,6 +34,8 @@ class UserItem {
 
   int   ? likes;
   int   ? comments;
+  int   ? following;
+  int   ? follower;
 
   Map<String, HistoryItem>?     historyData;    // 히스토리 목록..
   Map<String, StoreItem>?       storeData;      // 샵정보 목록..  user > store > goods
@@ -101,6 +103,8 @@ class UserItem {
 
         this.likes,
         this.comments,
+        this.following,
+        this.follower,
 
         this.historyData,
         this.storeData,
@@ -167,6 +171,8 @@ class UserItem {
 
       likes       = INT(json['likes'      ]);
       comments    = INT(json['comments'   ]);
+      following   = INT(json['following'  ]);
+      follower    = INT(json['follower'   ]);
 
       historyData = {};
       json['historyData']!.forEach((key, item) {

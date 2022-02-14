@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:oman_001/utils/utils.dart';
 
 class GoodsItem {
   String? id;
@@ -70,34 +71,34 @@ class GoodsItem {
   GoodsItem.fromJson(Map<dynamic, dynamic> json) {
     if (json['id'] == null) return;
     try {
-      id          = json['id'       ]!;
-      status      = int.parse(json['status']!.toString());
-      userId      = json['userId'   ]!;
-      shopId      = json['shopId'   ]!;
+      id          = STR(json['id'       ]);
+      status      = INT(json['status'   ]);
+      userId      = STR(json['userId'   ]);
+      shopId      = STR(json['shopId'   ]);
 
-      title       = json['title'    ]!;
-      desc        = json['desc'     ]!;
-      ribbon      = json['ribbon'   ]!;
-      imageUrl    = json['imageUrl' ]!;
+      title       = STR(json['title'    ]);
+      desc        = STR(json['desc'     ]);
+      ribbon      = STR(json['ribbon'   ]);
+      imageUrl    = STR(json['imageUrl' ]);
 
-      category1   = json['category1']!;
-      category2   = json['category2']!;
+      category1   = STR(json['category1']);
+      category2   = STR(json['category2']);
 
-      price       = json['price'    ]!;
-      priceOrg    = json['priceOrg' ]!;
-      saleRatio   = json['saleRatio']!;
-      distance    = json['distance' ]!;
+      price       = DBL(json['price'    ]);
+      priceOrg    = DBL(json['priceOrg' ]);
+      saleRatio   = DBL(json['saleRatio']);
+      distance    = DBL(json['distance' ]);
 
-      commentData  = json['commentData' ]!;
-      imageData    = json['imageData'   ]!;
-      optionData   = json['optionData'  ]!;
+      trades      = INT(json['trades'   ]);
+      comments    = INT(json['comments' ]);
+      likes       = INT(json['likes'    ]);
 
-      trades      = json['trades'   ]!;
-      comments    = json['comments' ]!;
-      likes       = json['likes'    ]!;
+      // commentData  = json['commentData' ]!;
+      // imageData    = json['imageData'   ]!;
+      // optionData   = json['optionData'  ]!;
 
-      updateTime  = DateTime.parse(json['updateTime']!.toString());
-      createTime  = DateTime.parse(json['createTime']!.toString());
+      updateTime  = TME(json['updateTime']);
+      createTime  = TME(json['createTime']);
     } catch (e) {
       print("--> GoodsItem error : $id -> $e");
     }

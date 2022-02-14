@@ -16,7 +16,7 @@ var funcGetMainHomeData     = 'getMainHomeData';  // main home list data..
 //    get start info..
 //
 
-Future<UserItem> getStartInfo(deviceType) async {
+Future<StartInfo> getStartInfo(deviceType) async {
   // print('--> getStartInfo : ${AppData.deviceType}');
   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(funcGetStartInfoItem);
   final resp = await callable.call(<String, dynamic>{
@@ -25,8 +25,9 @@ Future<UserItem> getStartInfo(deviceType) async {
   print("--> getStartInfo.data: ${resp.data.toString()}");
   AppData.startInfo = StartInfo.fromJson(resp.data);
   // var loginId = auth.currentUser?.uid;
-  const loginId = "user0005@mail.kr";
-  return getUserInfo(loginId);
+  // const loginId = "user0005@mail.kr";
+  // return getUserInfo(loginId);
+  return AppData.startInfo!;
 }
 
 //----------------------------------------------------------------------------------------
@@ -40,11 +41,8 @@ Future<UserItem> getUserInfo(loginId) async {
   final resp = await callable.call(<String, dynamic>{
     'loginId': loginId,
   });
-  try {
-    AppData.userInfo = UserItem.fromJson(jsonDecode(resp.data.toString()));
-  } catch (e) {
-    print("  --> getUserInfo error: $e");
-  }
+  AppData.userInfo = UserItem.fromJson(jsonDecode(resp.data.toString()));
+  print('--> AppData.userInfo : ${AppData.userInfo!.loginId}');
   return AppData.userInfo!;
 }
 

@@ -63,24 +63,16 @@ Future<void> main() async {
   //   print(e);
   // }
 
-  FirebaseAuth.instance
-      .authStateChanges()
-      .listen((user) {
-        if (user == null) {
-          print('--> User is currently signed out!');
-        } else {
-          AppData.loginUUID = user.uid;
-          print('--> User is signed in! : ${AppData.loginUUID}');
-        }
-      });
-
   // signInWithGoogle().then((signInInfo) {
   //   print('--> signInInfo : ${signInInfo}');
   // });
 
   AppData.isMainPlay = AppData.isAutoPlay;
 
-  runApp(const MyApp());
+  getStartInfo(AppData.deviceType).then((value) => {
+    print('--> serverMain : ${AppData.startInfo!.serverMain}'),
+    runApp(const MyApp())
+  });
 }
 
 // void setUpLocator()
@@ -99,39 +91,163 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  Future<UserItem>? _calculation;
+  Future<UserItem>? _calculationLogin;
+  Key key = UniqueKey();
 
   @override
   void initState() {
     super.initState();
-    _calculation = getStartInfo(AppData.deviceType);
+    // get user login..
+    FirebaseAuth.instance
+    .authStateChanges()
+    .listen((user) {
+      setState(() {
+        if (user == null) {
+          if (AppData.userInfo != null) {
+            print('--> User is currently signed out!');
+            AppData.isMainDataReady = false;
+            AppData.userInfo = null;
+            _calculationLogin = null;
+            restartApp();
+          }
+        } else {
+            AppData.loginUUID = user.uid;
+            print('--> User is signed in! : ${AppData.loginUUID} / ${user.email}');
+            _calculationLogin = getUserInfo(AppData.loginUUID);
+        }
+      });
+    });
+  }
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // Make Fullscreen Mode..
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'OMan v0.0.1',
-      theme: MainTheme,
-      // home: MainMenu()
-      home: FutureBuilder(
-        future: _calculation,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // print('--> snapshot : ${snapshot.hasData}');
-          if (snapshot.hasData) {
-            print('--> serverMain : ${AppData.startInfo!.serverMain}');
-            print('--> user name  : ${AppData.userInfo!.name}');
-            return MainMenu();
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        }
-      ),
+
+    return KeyedSubtree(
+        key: key,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'OMan v0.0.1',
+          theme: MainTheme,
+          // home: MainMenu()
+          home: FutureBuilder(
+            future: _calculationLogin,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              // print('--> snapshot : ${snapshot.hasData}');
+              if (snapshot.hasData) {
+                return MainMenu();
+              } else {
+                if (AppData.userInfo == null) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text("OMAN Login"),
+                    ),
+                    body: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          //해당 부분은 email의 유무에 따라 로그인이 됐는지 안됐는지를 판단하고 해당 로그인이 제대로 됐다면
+                          //구글의 프로필 이미지, 닉네임, 이메일을 가져와 출력을 시켜줄것이다.
+                          // AppData.userInfo!.email!.isEmpty
+                          //     ? Container()
+                          //     : Column(
+                          //   children: <Widget>[
+                          //     Image.network(AppData.userInfo!.pic!),
+                          //     Text(AppData.userInfo!.name!),
+                          //     Text(AppData.userInfo!.email!),
+                          //   ],
+                          // ),
+                          ElevatedButton(
+                            onPressed: () {
+                              signInWithGoogle();
+                            },
+                            //여기또한 이메일의 존재 여부를 통해 해당 버튼의 텍스트를 바꾸어 준다.
+                            child: Container(
+                                width: 150,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: const <Widget>[
+                                    Icon(Icons.subdirectory_arrow_right),
+                                    Text('Google Login')
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }
+            }
+          ),
+      )
     );
   }
 }
+
+// Widget get checkLogin {
+//   if (AppData.userInfo == null) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("OMAN Login"),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             //해당 부분은 email의 유무에 따라 로그인이 됐는지 안됐는지를 판단하고 해당 로그인이 제대로 됐다면
+//             //구글의 프로필 이미지, 닉네임, 이메일을 가져와 출력을 시켜줄것이다.
+//             // AppData.userInfo!.email!.isEmpty
+//             //     ? Container()
+//             //     : Column(
+//             //   children: <Widget>[
+//             //     Image.network(AppData.userInfo!.pic!),
+//             //     Text(AppData.userInfo!.name!),
+//             //     Text(AppData.userInfo!.email!),
+//             //   ],
+//             // ),
+//             ElevatedButton(
+//               onPressed: () {
+//                 signInWithGoogle();
+//               },
+//               //여기또한 이메일의 존재 여부를 통해 해당 버튼의 텍스트를 바꾸어 준다.
+//               child: Container(
+//                   width: 150,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: const <Widget>[
+//                       Icon(Icons.subdirectory_arrow_right),
+//                       Text('Google Login')
+//                     ],
+//                   )),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   } else {
+//     return FutureBuilder(
+//         future: _calculationLogin,
+//         builder: (BuildContext context, AsyncSnapshot snapshot) {
+//           // print('--> snapshot : ${snapshot.hasData}');
+//           if (snapshot.hasData) {
+//             return MainMenu();
+//           } else {
+//             return Center(child: CircularProgressIndicator());
+//           }
+//         }
+//     );
+//   }
+// }
 
 // var url = Uri.parse(AppData.funcGetStartInfoItem);
 // var response = await http.post(
@@ -218,41 +334,41 @@ class MainMenuState extends State<MainMenu> {
             debugShowCheckedModeBanner: false,
             theme: MainTheme,
             home: Stack(
-              children: [
-                DefaultTabController(
-                    length: _buildScreens.length,
-                    child: Scaffold(
-                      key: AppData.mainScreenKey,
-                      backgroundColor: Colors.black,
-                      // drawer: Drawer(
-                      //   child: SetupScreen(),
-                      // ),
-                      body: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-                        children: _buildScreens,
-                      ),
-                      bottomNavigationBar: TabBar(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(width: 2.0, color: Colors.purple),
-                            insets: EdgeInsets.symmetric(horizontal:20.0)
+                children: [
+                  DefaultTabController(
+                      length: _buildScreens.length,
+                      child: Scaffold(
+                        key: AppData.mainScreenKey,
+                        backgroundColor: Colors.black,
+                        // drawer: Drawer(
+                        //   child: SetupScreen(),
+                        // ),
+                        body: TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
+                          children: _buildScreens,
                         ),
-                        onTap: (index) {
-                          setState(() {
-                            _currentMenu = index;
-                          });
-                        },
-                        controller: _controller,
-                        tabs: _navBarsItems()
-                    ),
-                  )
-                ),
-                MainAppBar(_buildScreens, _currentMenu),
-              ]
+                        bottomNavigationBar: TabBar(
+                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(width: 2.0, color: Colors.purple),
+                                insets: EdgeInsets.symmetric(horizontal:20.0)
+                            ),
+                            onTap: (index) {
+                              setState(() {
+                                _currentMenu = index;
+                              });
+                            },
+                            controller: _controller,
+                            tabs: _navBarsItems()
+                        ),
+                      )
+                  ),
+                  MainAppBar(_buildScreens, _currentMenu),
+                ]
+            )
           )
-        )
-      ),
-    );
+        ),
+      );
   }
 
   @override

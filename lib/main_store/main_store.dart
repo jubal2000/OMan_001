@@ -5,7 +5,7 @@ import 'package:oman_001/data/goods_item.dart';
 import 'package:oman_001/data/videos_firebase.dart';
 import 'package:oman_001/screens/banner_scrollviewer.dart';
 import 'package:oman_001/screens/category_viewer.dart';
-import 'package:oman_001/screens/goods_item_card.dart';
+import 'package:oman_001/widgets/goods_item_card.dart';
 
 class MainStoreScreen extends StatefulWidget {
   MainStoreScreen({ Key? key }) : super(key: key);

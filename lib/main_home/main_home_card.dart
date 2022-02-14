@@ -7,6 +7,7 @@ import 'package:oman_001/data/home_item.dart';
 import 'package:oman_001/data/user_item.dart';
 import 'package:oman_001/main_home/player_overlay.dart';
 import 'package:oman_001/main_home/user_overlay.dart';
+import 'package:oman_001/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
@@ -201,7 +202,7 @@ class MainHomeCardPlayerState extends State<MainHomeCardPlayer> {
             );
             // return VideoPlayer(_controller!);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return getLoadingCircle(30);
           }
         },
       ),

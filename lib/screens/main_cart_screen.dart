@@ -10,7 +10,7 @@ import 'package:oman_001/data/videos_firebase.dart';
 import 'package:oman_001/utils/tik_tok_icons_icons.dart';
 import 'package:oman_001/widgets/search_widget.dart';
 
-import 'goods_item_card.dart';
+import '../widgets/goods_item_card.dart';
 
 class MainCartScreen extends StatefulWidget {
   MainCartScreen({Key? key}) : super(key: key);

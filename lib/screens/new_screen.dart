@@ -12,8 +12,8 @@ class NewScreen extends StatefulWidget {
 
 class NewScreenState extends State<NewScreen> with AutomaticKeepAliveClientMixin<NewScreen> {
   final List<ListItemEx> _itemList = [
-    ListItemEx("프로필 편집"),
-    ListItemEx("개인정보 수정"),
+    ListItemEx("프로필 편집", code: 0),
+    ListItemEx("개인정보 수정", code: 1),
     ListItemEx("비밀번호 변경"),
     ListItemEx("알림 설정"),
     ListItemEx("자동 재생 설정"),
@@ -25,7 +25,9 @@ class NewScreenState extends State<NewScreen> with AutomaticKeepAliveClientMixin
     ListItemEx("문의하기"),
     ListItemEx("서비스 이용 약관"),
     ListItemEx("의견 보내기"),
-    ListItemEx("로그아웃"),
+    ListItemEx("로그아웃", code: 900, callback: (code) {
+      print("--> do logout");
+    }),
     ListItemEx("회원탈퇴"),
   ];
 
