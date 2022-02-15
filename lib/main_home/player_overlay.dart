@@ -36,7 +36,6 @@ class PlayerOverlayState extends State<PlayerOverlayScreen> {
         _isPlaying = widget.controller!.value.isPlaying;
         _curPos = widget.controller!.value.position;
         // print("--> _listener : $_isPlaying - $_curPos / $_maxPos");
-
         if (_curPos == _maxPos) {
           _curPos = Duration();
           _isPlaying = false;

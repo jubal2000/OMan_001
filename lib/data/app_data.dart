@@ -69,8 +69,12 @@ class AppData {
   static var isStoreDataReady = false;
   static var isShowPlayerInfo = true;
   static var isMainPlay = true;
-  static var isAutoPlay = false; // start auto play..
   static var isSearchOn = false;
+
+  // history..
+  static var freeloadingHistoryMax = 3; // main screen history freeloading count max..
+  static var defaultVolum = 0.2;        // main screen history volumn..
+  static var isAutoPlay = false;        // main screen start auto play..
 
   static var loginUUID = '';
 

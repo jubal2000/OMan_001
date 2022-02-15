@@ -6,6 +6,7 @@ import 'package:oman_001/data/videos_firebase.dart';
 import 'package:oman_001/main_home/main_home_card.dart';
 import 'package:oman_001/screens/feed_viewmodel.dart';
 import 'package:oman_001/utils/network_utils.dart';
+import 'package:oman_001/utils/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class MainHomeScreen extends StatefulWidget {
@@ -25,6 +26,14 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
   var _startPos = Offset(0, 0);
   var _isDragging = false;
   var _orgPageIndex = -1;
+
+  historyFreeloading(int start, int end) {
+    for (var j=0; j<AppData.freeloadingHistoryMax; j++) {
+      var index = j + start;
+      if (index >= end) return;
+      _homeList[index].load();
+    }
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -50,6 +59,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
               _homeList.add(MainHomeCard(item));
             }
             AppData.isMainDataReady = true;
+            historyFreeloading(0, _homeList.length);
           }
           return Stack(
             children: [
@@ -59,9 +69,12 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
                 onPageChanged: (index) {
                   print("--> onPageChanged : $index");
                   index = index % _homeList.length;
-                  for (var i=0; i<snapshot.data!.length; i++) {
+                  historyFreeloading(index, _homeList.length);
+                  for (var i=0; i<_homeList.length; i++) {
                     if (i == index) {
-                      _homeList[index].play();
+                      if (AppData.isMainPlay) {
+                        _homeList[index].play();
+                      }
                     } else if (_orgPageIndex >= 0) {
                       _homeList[_orgPageIndex].stop();
                     }
@@ -80,7 +93,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
                         _isDragging = true;
                       },
                       onVerticalDragUpdate: (pos) {
-                        if (!_isDragging) return;
+                        if (!_isDragging || (_startPos.dy - pos.localPosition.dy).abs() < 20.0) return;
                         // print("--> page : ${controller.page!.toInt()} / ${_startPos.dx} < ${pos.localPosition.dx}");
                         if (_startPos.dy < pos.localPosition.dy) {
                           _controller.animateToPage(_controller.page!.toInt()-1, duration: Duration(milliseconds: SCROLL_SPEED), curve: Curves.easeInQuad);
@@ -126,11 +139,7 @@ class MainHomeState extends State<MainHomeScreen> with AutomaticKeepAliveClientM
               ]
             );
           } else {
-            return Center(
-              child: Text(
-                "Loading..."
-              )
-            );
+            return getLoadingCircle(50);
           }
         }
      );
